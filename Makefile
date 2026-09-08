@@ -32,6 +32,11 @@ restart: ## Перезапустить контейнеры
 clean: ## Снести контейнеры и volumes
 	$(DC) down -v
 
+.PHONY: ingest
+ingest: ## Собрать parquet-кеш из папки hackathon
+	$(DC) exec backend python -m data_layer.loaders
+	$(DC) exec backend python -m data_layer.time_join
+
 .PHONY: train
 train: ## Обучить ML-модели
 	$(DC) exec backend python -m ml.training.train_all
