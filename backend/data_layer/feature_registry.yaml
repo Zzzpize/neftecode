@@ -1,0 +1,10 @@
+# Реестр фичей и таргетов. Заполняется по мере разработки.
+#
+# T55:
+#   source: avt_tags.csv
+#   unit: C
+#   description: Температура на выходе из печи П3
+#   controllable: true
+#   range_min: 340
+#   range_max: 370
+#   role: feature
