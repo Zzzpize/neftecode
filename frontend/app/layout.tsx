@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { Providers } from '@/components/Providers';
+import { TimeProvider } from '@/components/TimeStore';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -14,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className="bg-neutral-950 text-neutral-100 antialiased">
-        {children}
+        <Providers>
+          <TimeProvider>{children}</TimeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -47,14 +47,14 @@ def build_master_frame(cache_dir: Path, force: bool = False) -> Path:
     pak_sulfur = pak_sulfur.rename(columns={"value": "pak_sulfur_ppm"})
     master = pd.merge_asof(
         master, pak_sulfur, on="date",
-        tolerance=pd.Timedelta("10min"), direction="nearest",
+        tolerance=pd.Timedelta("10min"), direction="backward",
     )
 
     pak_d15 = pd.read_parquet(cache_dir / "pak_d15.parquet").sort_values("date")
     pak_d15 = pak_d15.rename(columns={"value": "pak_d15"})
     master = pd.merge_asof(
         master, pak_d15, on="date",
-        tolerance=pd.Timedelta("10min"), direction="nearest",
+        tolerance=pd.Timedelta("10min"), direction="backward",
     )
 
     lims_wide = _build_lims_wide(cache_dir, force)
