@@ -105,6 +105,13 @@ class VAKFormula:
         if reference_aliases:
             aliases.update(reference_aliases)
 
+        # TODO: узнать нормальную формулу для ВАК, пока что так
+        if name == "AVT6:240-350:CFPP":
+            source = source.replace(
+                "F65/F32+F30))",
+                "F65/(F32+F30))",
+            )
+        
         normalized = _normalize_expression(source)
         normalized, reference_columns = _replace_special_references(
             normalized,
