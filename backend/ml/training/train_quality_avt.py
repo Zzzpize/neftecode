@@ -14,7 +14,15 @@ TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
 
 
 def main() -> None:
-    frame = pd.read_parquet(DATA_DIR / "master.parquet")
+    feature_path = DATA_DIR / "ml_features.parquet"
+
+    if not feature_path.exists():
+        raise FileNotFoundError(
+            "ml_features.parquet is missing; "
+            "run python -m ml.training.prepare_features"
+        )
+
+    frame = pd.read_parquet(feature_path)
     frame["date"] = pd.to_datetime(frame["date"])
 
     train = frame.loc[

@@ -117,7 +117,10 @@ class QualityHydroModel:
             avt_delay_steps=avt_delay_steps,
         )
 
-        feature_columns = cls._select_features(train)
+        feature_columns = cls._select_features(
+            train,
+            avt_delay_steps=avt_delay_steps,
+        )
 
         if not feature_columns:
             raise ValueError(
@@ -521,34 +524,27 @@ class QualityHydroModel:
     @staticmethod
     def _select_features(
         frame: pd.DataFrame,
+        *,
+        avt_delay_steps: int,
     ) -> list[str]:
-        """
-        Таргеты ПАК и значения ЛИМС не попадают во вход модели.
-
-        Разрешены:
-        - текущая телеметрия гидроочистки;
-        - задержанные признаки АВТ;
-        - возраст анализов ЛИМС.
-        """
-
         result: list[str] = []
+
+        avt_delay_prefix = (
+            f"avt_lag_{avt_delay_steps}__"
+        )
 
         for column in frame.columns:
             allowed = (
                 column.startswith("hydro_")
-                or column.startswith("avt_lag_")
+                or column.startswith(avt_delay_prefix)
                 or column in RELEVANT_LIMS_AGE_COLUMNS
             )
 
             if (
                 allowed
-                and pd.api.types.is_numeric_dtype(
-                    frame[column]
-                )
+                and pd.api.types.is_numeric_dtype(frame[column])
                 and frame[column].notna().any()
-                and frame[column].nunique(
-                    dropna=True
-                ) > 1
+                and frame[column].nunique(dropna=True) > 1
             ):
                 result.append(column)
 

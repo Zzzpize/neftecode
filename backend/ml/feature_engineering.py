@@ -5,6 +5,209 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from collections.abc import Sequence
+
+
+LAG_STEPS: dict[str, int] = {
+    "10m": 1,
+    "30m": 3,
+    "60m": 6,
+}
+
+ROLLING_STEPS: dict[str, int] = {
+    "30m": 3,
+    "60m": 6,
+    "120m": 12,
+}
+
+# Ключевые технологические признаки выбираются из тегов,
+# отмеченных controllable в feature_registry.yaml,
+# и тегов, используемых формулами ВАК.
+AVT_KEY_FEATURES: tuple[str, ...] = (
+    "avt_F3",
+    "avt_F5",
+    "avt_F19",
+    "avt_F26",
+    "avt_F27",
+    "avt_F28",
+    "avt_F29",
+    "avt_F30",
+    "avt_F32",
+    "avt_F34",
+    "avt_F65",
+    "avt_T33",
+    "avt_T55",
+)
+
+HYDRO_KEY_FEATURES: tuple[str, ...] = (
+    "hydro_F14",
+    "hydro_T5",
+    "hydro_T6",
+    "hydro_T11",
+    "hydro_P13",
+    "hydro_Q20",
+    "hydro_Q21",
+)
+
+
+def _prepare_time_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(frame, pd.DataFrame):
+        raise TypeError("frame must be a pandas DataFrame")
+
+    if frame.empty:
+        raise ValueError("frame must not be empty")
+
+    if "date" not in frame.columns:
+        raise ValueError("frame must contain the date column")
+
+    result = frame.copy()
+    result["date"] = pd.to_datetime(
+        result["date"],
+        errors="raise",
+    )
+
+    return (
+        result.sort_values("date")
+        .reset_index(drop=True)
+    )
+
+
+def add_causal_time_features(
+    frame: pd.DataFrame,
+    feature_columns: Sequence[str],
+) -> pd.DataFrame:
+    """
+    Добавляет лаги и rolling-признаки без утечки будущего.
+
+    Для строки T статистики строятся по значениям до T.
+    Текущее значение T остаётся отдельной исходной фичей.
+    """
+
+    result = _prepare_time_frame(frame)
+    generated: dict[str, pd.Series] = {}
+
+    for column in feature_columns:
+        if column not in result.columns:
+            continue
+
+        values = pd.to_numeric(
+            result[column],
+            errors="coerce",
+        )
+
+        # Только история до текущего момента.
+        history = values.shift(1)
+
+        installation, short_name = column.split(
+            "_",
+            maxsplit=1,
+        )
+
+        for lag_name, lag_steps in LAG_STEPS.items():
+            generated[
+                f"{installation}_lag_{lag_name}__{short_name}"
+            ] = values.shift(lag_steps)
+
+        for window_name, window_steps in ROLLING_STEPS.items():
+            rolling = history.rolling(
+                window=window_steps,
+                min_periods=2,
+            )
+
+            generated[
+                f"{installation}_roll_mean_{window_name}__{short_name}"
+            ] = rolling.mean()
+
+            generated[
+                f"{installation}_roll_std_{window_name}__{short_name}"
+            ] = rolling.std()
+
+            # Среднее изменение за один 10-минутный шаг.
+            generated[
+                f"{installation}_roll_slope_{window_name}__{short_name}"
+            ] = (
+                history.diff()
+                .rolling(
+                    window=max(window_steps - 1, 2),
+                    min_periods=2,
+                )
+                .mean()
+            )
+
+    if not generated:
+        return result
+
+    generated_frame = pd.DataFrame(
+        generated,
+        index=result.index,
+    )
+
+    return pd.concat(
+        [result, generated_frame],
+        axis=1,
+    )
+
+
+def add_runtime_proxies(
+    frame: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Добавляет кумулятивные признаки наработки.
+
+    При больших пропусках времени один переход ограничивается часом,
+    чтобы простой источника не считался полной наработкой установки.
+    """
+
+    result = _prepare_time_frame(frame)
+
+    step_hours = (
+        result["date"]
+        .diff()
+        .dt.total_seconds()
+        .div(3600.0)
+        .fillna(0.0)
+        .clip(lower=0.0, upper=1.0)
+    )
+
+    cumulative_hours = step_hours.cumsum()
+
+    result["avt_runtime_proxy_h"] = cumulative_hours
+    result["hydro_catalyst_runtime_proxy_h"] = cumulative_hours
+
+    return result
+
+
+def build_quality_features(
+    frame: pd.DataFrame,
+    *,
+    avt_delay_steps: int,
+) -> pd.DataFrame:
+    """
+    Единый feature pipeline для обучения и инференса.
+
+    Порядок важен:
+    1. причинные лаги и rolling;
+    2. кумулятивные признаки;
+    3. физическая задержка АВТ -> гидроочистка.
+    """
+
+    result = add_causal_time_features(
+        frame,
+        feature_columns=(
+            *AVT_KEY_FEATURES,
+            *HYDRO_KEY_FEATURES,
+        ),
+    )
+
+    result = add_runtime_proxies(result)
+
+    result = build_hydro_features(
+        result,
+        avt_delay_steps=avt_delay_steps,
+    )
+
+    return result
+
 
 def estimate_avt_hydro_delay(
     frame: pd.DataFrame,
@@ -128,8 +331,8 @@ def build_hydro_features(
 
     avt_columns = [
         column
-        for column in result.columns
-        if column.startswith("avt_")
+        for column in AVT_KEY_FEATURES
+        if column in result.columns
         and pd.api.types.is_numeric_dtype(result[column])
     ]
 

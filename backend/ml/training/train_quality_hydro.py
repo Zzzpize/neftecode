@@ -1,11 +1,8 @@
+import json
 from pathlib import Path
 
 import pandas as pd
 
-from ml.feature_engineering import (
-    build_hydro_features,
-    estimate_avt_hydro_delay,
-)
 from ml.models.quality_hydro import QualityHydroModel
 from ml.vak import VAKCatalog
 
@@ -20,9 +17,16 @@ TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
 
 
 def main() -> None:
-    frame = pd.read_parquet(
-        DATA_DIR / "master.parquet"
-    )
+    feature_path = DATA_DIR / "ml_features.parquet"
+
+    if not feature_path.exists():
+        raise FileNotFoundError(
+            "ml_features.parquet is missing; "
+            "run python -m ml.training.prepare_features"
+        )
+
+    frame = pd.read_parquet(feature_path)
+
     frame["date"] = pd.to_datetime(frame["date"])
     frame = frame.sort_values("date")
 
@@ -31,12 +35,20 @@ def main() -> None:
         & frame["date"].lt(TRAIN_END_EXCLUSIVE)
     ].copy()
 
-    # Задержка определяется исключительно на train.
-    avt_delay_steps = estimate_avt_hydro_delay(
-        train,
-        target_column="pak_sulfur_ppm",
-        min_delay_steps=1,
-        max_delay_steps=72,
+    config_path = DATA_DIR / "ml_features_config.json"
+
+    if not config_path.exists():
+        raise FileNotFoundError(
+            "ml_features_config.json is missing; "
+            "run python -m ml.training.prepare_features"
+        )
+
+    feature_config = json.loads(
+        config_path.read_text(encoding="utf-8")
+    )
+
+    avt_delay_steps = int(
+        feature_config["avt_delay_steps"]
     )
 
     vak_catalog = VAKCatalog.load(
