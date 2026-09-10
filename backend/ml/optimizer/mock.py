@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from ml.types import Interval, QualityPrediction, Variant
+from app.schemas import Interval, QualityPrediction, Variant
 
 
 def _load_registry(path: Path) -> dict:
