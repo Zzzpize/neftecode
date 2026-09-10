@@ -3,15 +3,20 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTime } from '@/components/TimeStore';
-import { scoreVariant, useWeights } from '@/components/WeightsStore';
+import { scoreVariant, useWeights, type Weights } from '@/components/WeightsStore';
 import { api, type Variant } from '@/lib/api';
 
-const METRIC_META: Record<string, { label: string; color: string }> = {
-  safety: { label: 'Безопасность', color: 'text-emerald-400' },
-  yield:  { label: 'Выход',        color: 'text-sky-400' },
-  energy: { label: 'Энергия',      color: 'text-amber-400' },
-  wear:   { label: 'Износ',        color: 'text-fuchsia-400' },
-};
+const METRIC_META: {
+  key: keyof Weights;
+  label: string;
+  color: string;
+  bar: string;
+}[] = [
+  { key: 'safety', label: 'Безопасность', color: 'text-emerald-400', bar: 'bg-emerald-500' },
+  { key: 'yield',  label: 'Выход',        color: 'text-sky-400',     bar: 'bg-sky-500' },
+  { key: 'energy', label: 'Энергия',      color: 'text-amber-400',   bar: 'bg-amber-500' },
+  { key: 'wear',   label: 'Износ',        color: 'text-fuchsia-400', bar: 'bg-fuchsia-500' },
+];
 
 export function RecommendationCard() {
   const { timestamp, setDecisionId } = useTime();
@@ -58,6 +63,8 @@ export function RecommendationCard() {
     );
   }
 
+  const totalScore = scoreVariant(best.metrics, weights);
+
   return (
     <Card mode="recommend" title="Рекомендация">
       <div className="mb-4 text-xs text-neutral-500">{rec.data.explanation_text}</div>
@@ -65,21 +72,24 @@ export function RecommendationCard() {
       <div className="mb-4">
         <div className="mb-1 text-xs uppercase tracking-wider text-neutral-500">Изменить</div>
         <div className="space-y-1">
-          {Object.entries(best.action).map(([tag, val]) => {
-            const d = best.delta[tag];
-            return (
-              <div key={tag} className="flex justify-between font-mono text-xs">
-                <span className="text-neutral-400">{tag}</span>
-                <span>
-                  <span className="text-neutral-500">→ </span>
-                  <span className="text-neutral-100">{val}</span>
-                  <span className={`ml-2 ${d > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                    ({d > 0 ? '+' : ''}{d.toFixed(2)})
+          {Object.entries(best.action)
+            .sort((a, b) => Math.abs(best.delta[b[0]] ?? 0) - Math.abs(best.delta[a[0]] ?? 0))
+            .slice(0, 5)
+            .map(([tag, val]) => {
+              const d = best.delta[tag] ?? 0;
+              return (
+                <div key={tag} className="flex justify-between font-mono text-xs">
+                  <span className="text-neutral-400">{tag}</span>
+                  <span>
+                    <span className="text-neutral-500">→ </span>
+                    <span className="text-neutral-100">{val}</span>
+                    <span className={`ml-2 ${d > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      ({d > 0 ? '+' : ''}{d.toFixed(2)})
+                    </span>
                   </span>
-                </span>
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
         </div>
       </div>
 
@@ -100,21 +110,46 @@ export function RecommendationCard() {
         </div>
       )}
 
-      <div className="mb-4 grid grid-cols-4 gap-2">
-        {(['safety', 'yield', 'energy', 'wear'] as const).map((k) => {
-          const meta = METRIC_META[k];
-          const v = best.metrics[k];
-          return (
-            <div key={k} className="rounded border border-neutral-800 bg-neutral-950 p-2">
-              <div className="text-[10px] uppercase tracking-wider text-neutral-500">{meta.label}</div>
-              <div className={`mt-0.5 text-sm font-semibold ${meta.color}`}>{(v * 100).toFixed(0)}%</div>
-            </div>
-          );
-        })}
+      <div className="mb-2">
+        <div className="mb-1.5 flex items-baseline justify-between">
+          <span className="text-xs uppercase tracking-wider text-neutral-500">
+            Из чего складывается score этого варианта
+          </span>
+          <span className="text-sm font-mono">
+            {(totalScore * 100).toFixed(1)}%
+          </span>
+        </div>
+
+        <div className="space-y-1">
+          {METRIC_META.map(({ key, label, color, bar }) => {
+            const value = best.metrics[key] ?? 0;
+            const weight = weights[key];
+            const contribution = value * weight;
+            return (
+              <div key={key} className="text-xs">
+                <div className="flex justify-between mb-0.5">
+                  <span className="text-neutral-400">{label}</span>
+                  <span className="font-mono text-neutral-500">
+                    <span className="text-neutral-400">вес {(weight * 100).toFixed(0)}%</span>
+                    <span className="mx-1">×</span>
+                    <span className={color}>значение {(value * 100).toFixed(0)}%</span>
+                    <span className="mx-1">=</span>
+                    <span className="text-neutral-100">{(contribution * 100).toFixed(1)}%</span>
+                  </span>
+                </div>
+                <div className="h-1 rounded bg-neutral-800 overflow-hidden">
+                  <div className={`h-full ${bar}`} style={{ width: `${contribution / Math.max(0.01, totalScore) * 100}%` }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="text-xs text-neutral-600">
-        Из {rec.data.variants.length} вариантов Парето-фронта. Двигай приоритеты слева — выбор меняется.
+      <div className="mt-3 text-[11px] text-neutral-500">
+        Из {rec.data.variants.length} вариантов Парето-фронта.
+        «Значение» — оценка этого варианта по метрике. «Вес» — как её задал ты слева.
+        Score = сумма вкладов. Двигаешь ползунки — вклад меняется, побеждает другой вариант.
       </div>
     </Card>
   );
