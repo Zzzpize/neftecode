@@ -34,6 +34,9 @@ services:
       - /app/.next
     env_file:
       - .env
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     command: pnpm dev
     depends_on:
       - backend

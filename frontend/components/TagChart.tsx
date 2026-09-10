@@ -37,6 +37,7 @@ export function TagChart({ tag = 'pak_sulfur_ppm', hoursBack = 12 }: { tag?: str
             <Tooltip
               contentStyle={{ background: '#171717', border: '1px solid #262626', fontSize: 12 }}
               labelStyle={{ color: '#a3a3a3' }}
+              itemStyle={{ color: '#e5e5e5' }}
             />
             {tag === 'pak_sulfur_ppm' && (
               <ReferenceLine y={SULFUR_LIMIT} stroke="#dc2626" strokeDasharray="3 3" />
