@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
 
+from data_layer.feature_registry import model_feature_names
 from ml.feature_engineering import build_hydro_features
 from ml.types import Explanation, Interval, QualityPrediction
 from ml.vak import (
@@ -527,28 +528,20 @@ class QualityHydroModel:
         *,
         avt_delay_steps: int,
     ) -> list[str]:
-        result: list[str] = []
-
-        avt_delay_prefix = (
-            f"avt_lag_{avt_delay_steps}__"
+        registered_features = set(
+            model_feature_names("quality_hydro")
         )
 
-        for column in frame.columns:
-            allowed = (
-                column.startswith("hydro_")
-                or column.startswith(avt_delay_prefix)
-                or column in RELEVANT_LIMS_AGE_COLUMNS
-            )
-
+        return [
+            column
+            for column in frame.columns
             if (
-                allowed
+                column in registered_features
                 and pd.api.types.is_numeric_dtype(frame[column])
                 and frame[column].notna().any()
                 and frame[column].nunique(dropna=True) > 1
-            ):
-                result.append(column)
-
-        return result
+            )
+        ]
 
     @classmethod
     def _make_target(
@@ -835,6 +828,20 @@ class QualityHydroModel:
             baseline + residuals[quantile]
             for quantile in QUANTILES
         )
+
+        calibrated_half_width = self.artifact.get(
+            "interval_half_width",
+            {},
+        ).get(target)
+
+        if calibrated_half_width is not None:
+            mean = float(values[1])
+            half_width = float(calibrated_half_width)
+            values = [
+                mean - half_width,
+                mean,
+                mean + half_width,
+            ]
 
         return (
             Interval(

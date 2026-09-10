@@ -152,6 +152,51 @@ class AnomalyDetector:
         q999 = train.quantile(0.999)
         envelope_width = (q999 - q001).replace(0.0, 1.0)
 
+        normal_prepared = prepared.loc[normal_rows]
+        change_rate = (
+            train.diff().abs().gt(1e-9).mean()
+        )
+        stale_feature_columns = (
+            change_rate[change_rate >= 0.01]
+            .index
+            .tolist()
+        )
+        stale_thresholds: dict[str, float] = {}
+
+        for feature in stale_feature_columns:
+            stale_column = f"anomaly_stale_h__{feature}"
+            values = pd.to_numeric(
+                normal_prepared[stale_column],
+                errors="coerce",
+            ).dropna()
+            historical_limit = (
+                float(values.quantile(0.9999))
+                if not values.empty
+                else 0.0
+            )
+            stale_thresholds[feature] = max(
+                float(stale_threshold_hours),
+                historical_limit,
+            )
+
+        rolling_z_thresholds: dict[str, float] = {}
+        for column in normal_prepared.columns:
+            if not column.startswith("anomaly_z__"):
+                continue
+            values = pd.to_numeric(
+                normal_prepared[column],
+                errors="coerce",
+            ).abs().dropna()
+            historical_limit = (
+                float(values.quantile(0.9999))
+                if not values.empty
+                else 0.0
+            )
+            rolling_z_thresholds[column] = max(
+                float(z_threshold),
+                historical_limit,
+            )
+
         artifact: dict[str, Any] = {
             "version": 1,
             "trained": True,
@@ -171,6 +216,9 @@ class AnomalyDetector:
             "stale_threshold_hours": float(
                 stale_threshold_hours
             ),
+            "stale_feature_columns": stale_feature_columns,
+            "stale_thresholds": stale_thresholds,
+            "rolling_z_thresholds": rolling_z_thresholds,
             "contamination": float(contamination),
             "n_samples": int(len(train)),
         }
@@ -360,9 +408,6 @@ class AnomalyDetector:
         self,
         state: pd.DataFrame,
     ) -> list[str]:
-        threshold = float(
-            self.artifact["z_threshold"]
-        )
         flagged: set[str] = set()
 
         for feature in self.artifact["feature_columns"]:
@@ -373,6 +418,16 @@ class AnomalyDetector:
 
                 if column not in state.columns:
                     continue
+
+                threshold = float(
+                    self.artifact.get(
+                        "rolling_z_thresholds",
+                        {},
+                    ).get(
+                        column,
+                        self.artifact["z_threshold"],
+                    )
+                )
 
                 value = pd.to_numeric(
                     state[column],
@@ -392,18 +447,26 @@ class AnomalyDetector:
         self,
         state: pd.DataFrame,
     ) -> list[str]:
-        threshold = float(
-            self.artifact[
-                "stale_threshold_hours"
-            ]
-        )
         stale: list[str] = []
 
-        for feature in self.artifact["feature_columns"]:
+        for feature in self.artifact.get(
+            "stale_feature_columns",
+            self.artifact["feature_columns"],
+        ):
             column = f"anomaly_stale_h__{feature}"
 
             if column not in state.columns:
                 continue
+
+            threshold = float(
+                self.artifact.get(
+                    "stale_thresholds",
+                    {},
+                ).get(
+                    feature,
+                    self.artifact["stale_threshold_hours"],
+                )
+            )
 
             value = pd.to_numeric(
                 state[column],

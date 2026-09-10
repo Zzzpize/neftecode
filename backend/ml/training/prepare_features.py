@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from data_layer.feature_registry import sync_feature_registry
 from ml.feature_engineering import (
     build_quality_features,
     estimate_avt_hydro_delay,
@@ -45,6 +46,11 @@ def prepare_features(
 
     featured = build_quality_features(
         frame,
+        avt_delay_steps=avt_delay_steps,
+    )
+
+    sync_feature_registry(
+        featured,
         avt_delay_steps=avt_delay_steps,
     )
 

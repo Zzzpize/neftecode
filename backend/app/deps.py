@@ -15,11 +15,11 @@ log = logging.getLogger(__name__)
 
 @lru_cache(maxsize=1)
 def _simulator() -> Simulator:
-    master = settings.data_dir / "master.parquet"
-    if not master.exists():
+    features = settings.data_dir / "ml_features.parquet"
+    if not features.exists():
         raise RuntimeError(
-            f"master.parquet не найден в {settings.data_dir}. "
-            "Запустите 'make ingest' для сборки кеша."
+            f"ml_features.parquet не найден в {settings.data_dir}. "
+            "Запустите 'make train' для сборки causal-признаков."
         )
     return get_simulator(settings.data_dir)
 
