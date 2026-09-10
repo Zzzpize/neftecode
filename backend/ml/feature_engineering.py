@@ -143,3 +143,104 @@ def build_hydro_features(
         )
 
     return result
+
+ANOMALY_WINDOWS: dict[str, int] = {
+    "30m": 3,
+    "60m": 6,
+    "120m": 12,
+}
+
+
+def build_anomaly_features(
+    frame: pd.DataFrame,
+    feature_columns: list[str],
+) -> pd.DataFrame:
+    if not isinstance(frame, pd.DataFrame):
+        raise TypeError("frame must be a pandas DataFrame")
+
+    if "date" not in frame.columns:
+        raise ValueError("frame must contain the date column")
+
+    missing = [
+        column
+        for column in feature_columns
+        if column not in frame.columns
+    ]
+    if missing:
+        raise ValueError(
+            "Missing anomaly feature columns: "
+            + ", ".join(missing)
+        )
+
+    result = (
+        frame.copy()
+        .sort_values("date")
+        .reset_index(drop=True)
+    )
+    result["date"] = pd.to_datetime(result["date"])
+
+    generated: dict[str, pd.Series] = {}
+
+    for column in feature_columns:
+        values = pd.to_numeric(
+            result[column],
+            errors="coerce",
+        )
+
+        history = values.shift(1)
+
+        for window_name, window_steps in ANOMALY_WINDOWS.items():
+            min_periods = max(2, window_steps // 2)
+
+            rolling_mean = history.rolling(
+                window_steps,
+                min_periods=min_periods,
+            ).mean()
+
+            rolling_std = history.rolling(
+                window_steps,
+                min_periods=min_periods,
+            ).std()
+
+            z_score = (
+                (values - rolling_mean)
+                / rolling_std.replace(0.0, np.nan)
+            )
+
+            generated[
+                f"anomaly_z__{window_name}__{column}"
+            ] = z_score.replace(
+                [np.inf, -np.inf],
+                np.nan,
+            )
+
+        previous = values.shift(1)
+        changed = (
+            values.ne(previous)
+            | values.isna()
+            | previous.isna()
+        )
+
+        last_change_time = (
+            result["date"]
+            .where(changed)
+            .ffill()
+        )
+
+        stale_hours = (
+            result["date"] - last_change_time
+        ).dt.total_seconds() / 3600.0
+
+        generated[
+            f"anomaly_stale_h__{column}"
+        ] = stale_hours.where(values.notna())
+
+    generated_frame = pd.DataFrame(
+        generated,
+        index=result.index,
+    )
+
+    return pd.concat(
+        [result, generated_frame],
+        axis=1,
+    )
