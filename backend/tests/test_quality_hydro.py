@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from data_layer.feature_registry import model_feature_names
 from ml.feature_engineering import (
     build_hydro_features,
     estimate_avt_hydro_delay,
@@ -69,21 +70,27 @@ def test_delay_is_estimated_only_from_past_avt_values():
     assert delay == expected_delay
 
 def test_hydro_selects_only_transport_delayed_avt_features():
+    transport_feature = next(
+        name
+        for name in model_feature_names("quality_hydro")
+        if name.startswith("avt_lag_") and name.endswith("__T55")
+    )
+    registered_delay = int(transport_feature.split("__")[0].removeprefix("avt_lag_"))
     frame = pd.DataFrame(
         {
             "hydro_T5": [300.0, 301.0, 302.0],
-            "avt_lag_2__T55": [340.0, 341.0, 342.0],
+            transport_feature: [340.0, 341.0, 342.0],
             "avt_lag_10m__T55": [345.0, 346.0, 347.0],
         }
     )
 
     selected = QualityHydroModel._select_features(
         frame,
-        avt_delay_steps=2,
+        avt_delay_steps=registered_delay,
     )
 
     assert "hydro_T5" in selected
-    assert "avt_lag_2__T55" in selected
+    assert transport_feature in selected
     assert "avt_lag_10m__T55" not in selected
 
 def test_sulfur_calibration_is_forward_only():

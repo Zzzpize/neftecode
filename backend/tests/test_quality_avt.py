@@ -10,7 +10,7 @@ from ml.vak import VAKCatalog
 
 def make_training_frame(n_rows: int = 40) -> pd.DataFrame:
     avt_f30 = np.linspace(10.0, 20.0, n_rows)
-    baseline = 100.0 + 2.0 * avt_f30
+    baseline = 280.0 + 2.0 * avt_f30
 
     return pd.DataFrame(
         {
@@ -34,7 +34,7 @@ def make_vak_catalog() -> VAKCatalog:
                 {
                     "block": "ЭЛОУ-АВТ-6. 240-350",
                     "name": "AVT6:240-350:T50",
-                    "formula": "100 + 2*F30",
+                    "formula": "280 + 2*F30",
                 }
             ]
         )
@@ -65,7 +65,7 @@ def test_avt_model_is_trained_on_vak_residual(monkeypatch):
 
     assert interval.low <= interval.mean <= interval.high
     assert interval.mean == pytest.approx(
-        100.0 + 2.0 * state.iloc[0]["avt_F30"] + 3.0,
+        280.0 + 2.0 * state.iloc[0]["avt_F30"] + 3.0,
         abs=1.0,
     )
 

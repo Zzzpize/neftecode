@@ -1,8 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
-import yaml
-
+from data_layer.feature_registry import model_feature_names
 from ml.models.anomaly import AnomalyDetector
 
 
@@ -21,20 +20,10 @@ TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
 def load_feature_columns(
     frame: pd.DataFrame,
 ) -> list[str]:
-    with REGISTRY_PATH.open(
-        encoding="utf-8",
-    ) as file:
-        registry = yaml.safe_load(file)
-
     return [
         name
-        for name, metadata in registry.items()
-        if metadata.get("role") == "feature"
-        and (
-            name.startswith("avt_")
-            or name.startswith("hydro_")
-        )
-        and name in frame.columns
+        for name in model_feature_names("anomaly", REGISTRY_PATH)
+        if name in frame.columns
     ]
 
 

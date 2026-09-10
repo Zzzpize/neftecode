@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from lightgbm import LGBMRegressor
 
+from data_layer.feature_registry import model_feature_names
 from ml.types import Explanation, Interval, QualityPrediction
 from ml.vak import VAKCatalog, VAKFormula, VAKMissingFeatureError
 
@@ -19,12 +20,13 @@ from ml.vak import VAKCatalog, VAKFormula, VAKMissingFeatureError
 log = logging.getLogger(__name__)
 
 
-TARGET_CONFIG: dict[str, dict[str, str | None]] = {
+TARGET_CONFIG: dict[str, dict[str, Any]] = {
     "T50": {
         "target_column": "lims__авт__pt1__50_t",
         "age_column": "lims__авт__pt1__50_t_age_h",
         "vak_name": "AVT6:240-350:T50",
         "unit": "C",
+        "absolute_range": (150.0, 450.0),
     },
     "T90": {
         "target_column": "lims__авт__pt1__90_t",
@@ -32,18 +34,21 @@ TARGET_CONFIG: dict[str, dict[str, str | None]] = {
         # В справочнике ВАК отдельной формулы T90 нет.
         "vak_name": None,
         "unit": "C",
+        "absolute_range": (200.0, 500.0),
     },
     "D15": {
         "target_column": "lims__авт__pt1__d15",
         "age_column": "lims__авт__pt1__d15_age_h",
         "vak_name": "AVT6:240-350:D15",
         "unit": "kg/m3",
+        "absolute_range": (600.0, 1000.0),
     },
     "CFPP": {
         "target_column": "lims__авт__pt1__cfpp",
         "age_column": "lims__авт__pt1__cfpp_age_h",
         "vak_name": "AVT6:240-350:CFPP",
         "unit": "C",
+        "absolute_range": (-80.0, 50.0),
     },
 }
 
@@ -81,10 +86,11 @@ class QualityAVTModel:
         # В baseline-версии используем только телеметрию АВТ.
         # ЛИМС-колонки сюда не входят, иначе текущий таргет попадёт
         # во вход модели и возникнет утечка.
+        registered_features = set(model_feature_names("quality_avt"))
         feature_columns = [
             column
             for column in train.columns
-            if column.startswith("avt_")
+            if column in registered_features
             and pd.api.types.is_numeric_dtype(train[column])
             and train[column].notna().any()
             and train[column].nunique(dropna=True) > 1
@@ -156,7 +162,12 @@ class QualityAVTModel:
                 )
             )
 
-            fallback = float(y.loc[is_new_lab_sample].median())
+            absolute_range = config["absolute_range"]
+            physically_valid = y.between(*absolute_range)
+
+            fallback = float(
+                y.loc[is_new_lab_sample & physically_valid].median()
+            )
             artifact["fallback_baselines"][target] = fallback
 
             formula: VAKFormula | None = None
@@ -173,6 +184,7 @@ class QualityAVTModel:
 
             valid = (
                 is_new_lab_sample
+                & physically_valid
                 & baseline.notna()
                 & np.isfinite(y)
                 & np.isfinite(baseline)
@@ -404,6 +416,20 @@ class QualityAVTModel:
             baseline + residual_predictions[quantile]
             for quantile in QUANTILES
         )
+
+        calibrated_half_width = self.artifact.get(
+            "interval_half_width",
+            {},
+        ).get(target)
+
+        if calibrated_half_width is not None:
+            mean = float(values[1])
+            half_width = float(calibrated_half_width)
+            values = [
+                mean - half_width,
+                mean,
+                mean + half_width,
+            ]
 
         return (
             Interval(

@@ -472,15 +472,12 @@ optimizer = ParetoOptimizer(
     blending=blending,
 )
 
-constraints = OptimizationConstraints(
+constraints = optimizer.constraints_from_registry(
     hard={
         "sulfur_ppm": (0.0, 10.0),
         "D15": (820.0, 845.0),
     },
-    controllable_ranges={
-        "T55": (340.0, 370.0),
-        "F30": (40.0, 50.0),
-    },
+    tags=["avt_T55", "avt_F30"],
     max_deviation_pct=5.0,
 )
 
@@ -496,6 +493,10 @@ variants = optimizer.find_pareto(
 - `hard` — допустимый диапазон выходного показателя качества;
 - `controllable_ranges` — абсолютные допустимые диапазоны управляемых тегов;
 - `max_deviation_pct` — максимальное отклонение предлагаемой уставки от текущего значения в процентах.
+
+Исходные `controllable_ranges` всегда создаются методом
+`constraints_from_registry`. Агент надёжности может только сузить полученные
+диапазоны перед вызовом `find_pareto`, но не расширить границы registry.
 
 Смысл результата:
 

@@ -116,6 +116,25 @@ def test_stale_signal_is_detected(
     assert "avt_T55" in report.stale_tags
 
 
+def test_nearly_constant_training_tag_is_not_stale_monitored(
+    history: pd.DataFrame,
+):
+    frame = history.copy()
+    frame["avt_constant"] = 1.0
+    frame.loc[frame.index[-1], "avt_constant"] = 1.1
+
+    detector = AnomalyDetector.fit(
+        frame,
+        feature_columns=["avt_T55", "avt_constant"],
+        contamination=0.01,
+    )
+
+    assert (
+        "avt_constant"
+        not in detector.artifact["stale_feature_columns"]
+    )
+
+
 def test_missing_feature_is_reported(
     detector: AnomalyDetector,
 ):

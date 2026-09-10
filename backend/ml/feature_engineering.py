@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from collections.abc import Sequence
+from data_layer.feature_registry import engineered_time_feature_sources
 
 
 LAG_STEPS: dict[str, int] = {
@@ -20,34 +21,14 @@ ROLLING_STEPS: dict[str, int] = {
     "120m": 12,
 }
 
-# Ключевые технологические признаки выбираются из тегов,
-# отмеченных controllable в feature_registry.yaml,
-# и тегов, используемых формулами ВАК.
-AVT_KEY_FEATURES: tuple[str, ...] = (
-    "avt_F3",
-    "avt_F5",
-    "avt_F19",
-    "avt_F26",
-    "avt_F27",
-    "avt_F28",
-    "avt_F29",
-    "avt_F30",
-    "avt_F32",
-    "avt_F34",
-    "avt_F65",
-    "avt_T33",
-    "avt_T55",
-)
+def _key_features(prefix: str) -> tuple[str, ...]:
+    """Registry is authoritative for lag/rolling source selection."""
 
-HYDRO_KEY_FEATURES: tuple[str, ...] = (
-    "hydro_F14",
-    "hydro_T5",
-    "hydro_T6",
-    "hydro_T11",
-    "hydro_P13",
-    "hydro_Q20",
-    "hydro_Q21",
-)
+    return tuple(
+        name
+        for name in engineered_time_feature_sources()
+        if name.startswith(prefix)
+    )
 
 
 def _prepare_time_frame(frame: pd.DataFrame) -> pd.DataFrame:
@@ -194,8 +175,8 @@ def build_quality_features(
     result = add_causal_time_features(
         frame,
         feature_columns=(
-            *AVT_KEY_FEATURES,
-            *HYDRO_KEY_FEATURES,
+            *_key_features("avt_"),
+            *_key_features("hydro_"),
         ),
     )
 
@@ -331,7 +312,7 @@ def build_hydro_features(
 
     avt_columns = [
         column
-        for column in AVT_KEY_FEATURES
+        for column in _key_features("avt_")
         if column in result.columns
         and pd.api.types.is_numeric_dtype(result[column])
     ]

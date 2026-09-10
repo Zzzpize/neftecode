@@ -8,6 +8,7 @@ from dataclasses import dataclass
 import optuna
 import pandas as pd
 
+from data_layer.feature_registry import controllable_ranges
 from ml.models.blending import BlendingModel
 from ml.models.quality_avt import QualityAVTModel
 from ml.models.quality_hydro import QualityHydroModel
@@ -56,6 +57,21 @@ class ParetoOptimizer:
         self.quality_avt = quality_avt
         self.quality_hydro = quality_hydro
         self.blending = blending
+
+    @staticmethod
+    def constraints_from_registry(
+        *,
+        hard: dict[str, tuple[float, float]],
+        max_deviation_pct: float,
+        tags: list[str] | None = None,
+    ) -> OptimizationConstraints:
+        """Builds optimizer constraints from authoritative registry ranges."""
+
+        return OptimizationConstraints(
+            hard=hard,
+            controllable_ranges=controllable_ranges(tags),
+            max_deviation_pct=max_deviation_pct,
+        )
 
     def find_pareto(
         self,
