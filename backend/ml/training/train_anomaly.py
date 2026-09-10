@@ -1,0 +1,85 @@
+from pathlib import Path
+
+import pandas as pd
+import yaml
+
+from ml.models.anomaly import AnomalyDetector
+
+
+DATA_DIR = Path("../data")
+REGISTRY_PATH = Path(
+    "data_layer/feature_registry.yaml"
+)
+ARTIFACT_PATH = Path(
+    "ml/artifacts/anomaly.pkl"
+)
+
+TRAIN_START = pd.Timestamp("2023-01-01")
+TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
+
+
+def load_feature_columns(
+    frame: pd.DataFrame,
+) -> list[str]:
+    with REGISTRY_PATH.open(
+        encoding="utf-8",
+    ) as file:
+        registry = yaml.safe_load(file)
+
+    return [
+        name
+        for name, metadata in registry.items()
+        if metadata.get("role") == "feature"
+        and (
+            name.startswith("avt_")
+            or name.startswith("hydro_")
+        )
+        and name in frame.columns
+    ]
+
+
+def main() -> None:
+    frame = pd.read_parquet(
+        DATA_DIR / "master.parquet"
+    )
+    frame["date"] = pd.to_datetime(frame["date"])
+    frame = frame.sort_values("date")
+
+    train = frame.loc[
+        frame["date"].ge(TRAIN_START)
+        & frame["date"].lt(TRAIN_END_EXCLUSIVE)
+    ].copy()
+
+    feature_columns = load_feature_columns(train)
+
+    # Когда появится разметка инцидентов:
+    #
+    # normal_mask = ~train["is_known_incident"]
+    #
+    # Пока разметки нет, используется весь train-период.
+    normal_mask = None
+
+    detector = AnomalyDetector.fit(
+        frame=train,
+        feature_columns=feature_columns,
+        normal_mask=normal_mask,
+        contamination=0.01,
+        z_threshold=4.0,
+        stale_threshold_hours=1.0,
+    )
+
+    detector.save(str(ARTIFACT_PATH))
+
+    print(f"Model saved to {ARTIFACT_PATH}")
+    print(
+        "Training samples:",
+        detector.artifact["n_samples"],
+    )
+    print(
+        "Feature count:",
+        len(detector.artifact["feature_columns"]),
+    )
+
+
+if __name__ == "__main__":
+    main()

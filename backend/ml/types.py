@@ -1,49 +1,54 @@
-from __future__ import annotations
-
+from dataclasses import dataclass
 from typing import Literal
 
-from pydantic import BaseModel, Field
-
-
-class Interval(BaseModel):
+@dataclass
+class Interval:
     mean: float
-    low: float
-    high: float
+    low: float          # квантиль 0.1
+    high: float         # квантиль 0.9
     unit: str
 
+@dataclass
+class QualityPrediction:
+    predictions: dict[str, Interval]      # например {"sulfur_ppm": Interval(...), "T50": Interval(...)}
+    spec_risk: dict[str, float]           # вероятность выхода за спеку, например {"sulfur_over_10": 0.27}
+    confidence: Literal["high", "medium", "low"]
+    warnings: list[str]                   # человекочитаемые предупреждения
 
-class QualityPrediction(BaseModel):
-    sulfur: Interval | None = None
-    t50: Interval | None = None
-    t90: Interval | None = None
-    d15: Interval | None = None
-    confidence: Literal["high", "medium", "low"] = "medium"
-    spec_risk: dict[str, float] = Field(default_factory=dict)
+@dataclass
+class Explanation:
+    top_features: list[tuple[str, float]] # (имя фичи, значение SHAP), отсортировано по |value|
+    base_value: float                     # базовое предсказание модели
 
+@dataclass
+class AnomalyReport:
+    is_anomaly: bool
+    anomaly_score: float                  # 0..1
+    flagged_tags: list[str]
+    is_out_of_envelope: bool
+    stale_tags: list[str]                 # теги, не менявшиеся больше порога
 
-class Variant(BaseModel):
-    id: str
-    action: dict[str, float]
-    delta: dict[str, float]
-    metrics: dict[str, float]
-    predicted: QualityPrediction | None = None
-    feasible: bool = True
-    infeasible_reason: str | None = None
+@dataclass
+class Component:
+    name: str
+    properties: dict[str, float]          # {"sulfur_ppm": 8.2, "D15": 831.5, "T50": 285, ...}
+    mass_flow: float                      # т/ч
 
+@dataclass
+class BlendedProduct:
+    properties: dict[str, float]
+    total_mass: float
 
-class TraceStep(BaseModel):
-    agent: str
-    duration_ms: float
-    input_summary: str
-    output: dict
+@dataclass
+class OptimizationConstraints:
+    hard: dict[str, tuple[float, float]]           # жёсткие спеки, например {"sulfur_ppm": (0, 10)}
+    controllable_ranges: dict[str, tuple[float, float]]  # диапазоны управляемых тегов
+    max_deviation_pct: float                       # максимальное отклонение от текущего значения
 
-
-class RecommendationResponse(BaseModel):
-    decision_id: str
-    mode: Literal["recommend", "silent", "refuse"]
-    timestamp: str
-    variants: list[Variant] = Field(default_factory=list)
-    default_weights: dict[str, float] = Field(default_factory=dict)
-    trace: list[TraceStep] = Field(default_factory=list)
-    explanation_text: str = ""
-    warnings: list[str] = Field(default_factory=list)
+@dataclass
+class Variant:
+    action: dict[str, float]              # {"T55": 348.0, "F30": 44.5, ...}
+    expected: QualityPrediction
+    metrics: dict[str, float]             # {"sulfur": 6.4, "yield": 0.85, "energy": 1.11, "severity": 0.3}
+    feasible: bool
+    infeasible_reason: str | None

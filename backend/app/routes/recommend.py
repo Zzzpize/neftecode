@@ -11,8 +11,8 @@ from pydantic import BaseModel
 
 from app.config import settings
 from app.deps import SimulatorDep
+from app.schemas import RecommendationResponse, TraceStep
 from ml.optimizer.mock import generate_pareto_front
-from ml.types import RecommendationResponse, TraceStep
 
 router = APIRouter(tags=["recommend"])
 
