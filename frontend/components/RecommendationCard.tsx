@@ -48,17 +48,30 @@ export function RecommendationCard() {
   if (rec.data.mode === 'silent') {
     return (
       <Card mode="silent" title="Режим стабилен">
-        <p className="text-sm text-neutral-400">
-          {rec.data.explanation_text || 'Вмешательство не требуется.'}
-        </p>
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0 mt-0.5">
+            <div className="h-8 w-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+              <span className="text-emerald-400 text-lg">✓</span>
+            </div>
+          </div>
+          <div>
+            <p className="text-sm text-neutral-200">
+              {rec.data.explanation_text || 'Вмешательство не требуется.'}
+            </p>
+            <p className="mt-2 text-xs text-neutral-500">
+              Все ключевые показатели в норме, риск нарушения спецификации низкий.
+              Система не предлагает изменений режима.
+            </p>
+          </div>
+        </div>
       </Card>
     );
   }
 
   if (rec.data.mode === 'refuse' || !best) {
     return (
-      <Card mode="refuse" title="Рекомендация невозможна">
-        <p className="text-sm text-neutral-400">{rec.data.explanation_text}</p>
+      <Card mode="refuse" title="Рекомендация не выдана">
+        <RefuseView explanation={rec.data.explanation_text} />
       </Card>
     );
   }
@@ -67,7 +80,7 @@ export function RecommendationCard() {
 
   return (
     <Card mode="recommend" title="Рекомендация">
-      <div className="mb-4 text-xs text-neutral-500">{rec.data.explanation_text}</div>
+      <ExplanationBlock text={rec.data.explanation_text} />
 
       <div className="mb-4">
         <div className="mb-1 text-xs uppercase tracking-wider text-neutral-500">Изменить</div>
@@ -153,6 +166,104 @@ export function RecommendationCard() {
       </div>
     </Card>
   );
+}
+
+const SECTION_KEYS = [
+  'Время', 'Проблема', 'Действие', 'Эффект',
+  'Проверки', 'Проверка', 'Уверенность', 'Обоснование',
+];
+
+function ExplanationBlock({ text }: { text: string }) {
+  if (!text) return null;
+  const sections = parseExplanation(text);
+  if (sections.length === 0) {
+    return <div className="mb-4 text-xs text-neutral-400 leading-relaxed">{text}</div>;
+  }
+  return (
+    <div className="mb-4 space-y-1.5">
+      {sections.map((s, i) => (
+        <div key={i} className="text-xs">
+          <span className="text-neutral-500 uppercase tracking-wider text-[10px]">{s.key}</span>
+          <div className="text-neutral-300 leading-snug">{s.value}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function parseExplanation(text: string): { key: string; value: string }[] {
+  const pattern = new RegExp(`(${SECTION_KEYS.join('|')})\\s*:`, 'g');
+  const matches = [...text.matchAll(pattern)];
+  if (matches.length === 0) return [];
+  const out: { key: string; value: string }[] = [];
+  for (let i = 0; i < matches.length; i++) {
+    const start = matches[i].index! + matches[i][0].length;
+    const end = i + 1 < matches.length ? matches[i + 1].index! : text.length;
+    const value = text.slice(start, end).trim().replace(/[.,;]+$/, '');
+    if (value) out.push({ key: matches[i][1], value });
+  }
+  return out;
+}
+
+function RefuseView({ explanation }: { explanation: string }) {
+  const reasons = parseRefuseReasons(explanation);
+  return (
+    <div className="flex items-start gap-3">
+      <div className="flex-shrink-0 mt-0.5">
+        <div className="h-8 w-8 rounded-full bg-red-500/20 flex items-center justify-center">
+          <span className="text-red-400 text-lg">⚠</span>
+        </div>
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="mb-3 text-sm text-neutral-200">
+          Данные текущего момента непригодны для безопасной рекомендации.
+        </p>
+        {reasons.length > 0 && (
+          <ul className="space-y-1.5">
+            {reasons.map((r, i) => (
+              <li key={i} className="text-xs text-neutral-400 flex gap-2">
+                <span className="text-red-400 mt-0.5">•</span>
+                <span>
+                  <span className="text-neutral-300">{r.title}</span>
+                  {r.detail && (
+                    <span className="text-neutral-500"> — {r.detail}</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <p className="mt-3 text-[11px] text-neutral-500">
+          Правильное поведение системы: при плохих данных лучше молчать, чем советовать наугад.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function parseRefuseReasons(text: string): { title: string; detail?: string }[] {
+  if (!text) return [];
+  const parts: { title: string; detail?: string }[] = [];
+  const anomaly = text.match(/аномалия[^)]*\)/i);
+  if (anomaly) parts.push({ title: 'Обнаружена аномалия', detail: anomaly[0] });
+  if (/вне исторического/i.test(text)) {
+    parts.push({ title: 'Состояние вне исторического диапазона режимов' });
+  }
+  const stale = text.match(/[Зз]астывшие теги:\s*([^У]+?)(?=\s*(?:Устаревшие|$))/);
+  if (stale) {
+    const tags = stale[1].trim().replace(/,\s*$/, '').split(',').map((s) => s.trim());
+    parts.push({
+      title: `Застывшие теги (${tags.length})`,
+      detail: tags.slice(0, 4).join(', ') + (tags.length > 4 ? ` и ещё ${tags.length - 4}` : ''),
+    });
+  }
+  if (/[Уу]старевшие лаб/i.test(text)) {
+    parts.push({ title: 'Устаревшие лабораторные значения', detail: 'старше 24 часов' });
+  }
+  if (parts.length === 0 && text) {
+    parts.push({ title: text });
+  }
+  return parts;
 }
 
 function Card({

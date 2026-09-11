@@ -5,6 +5,7 @@ import { TimeMachine } from '@/components/TimeMachine';
 import { TagChart } from '@/components/TagChart';
 import { WeightSliders } from '@/components/WeightSliders';
 import { ParetoChart } from '@/components/ParetoChart';
+import { QAChat } from '@/components/QAChat';
 
 export default function Home() {
   return (
@@ -34,7 +35,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="col-span-3">
+        <section className="col-span-3 space-y-4">
+          <QAChat />
           <AgentTrace />
         </section>
       </div>

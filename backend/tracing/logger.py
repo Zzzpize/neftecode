@@ -15,7 +15,7 @@ from typing import Any
 
 from tracing import store
 
-SUMMARY_LIMIT = 500
+SUMMARY_LIMIT = 2000
 
 
 @dataclass
