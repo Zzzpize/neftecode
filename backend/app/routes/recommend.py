@@ -10,7 +10,8 @@ from pathlib import Path
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from app.deps import SimulatorDep
+from app.ai_adapter import to_recommendation_response
+from app.deps import OrchestratorDep, SimulatorDep, TracerDep
 from app.ml_adapter import artifacts_ready, real_recommend
 from app.schemas import RecommendationResponse, TraceStep
 from ml.optimizer.mock import generate_pareto_front
@@ -32,13 +33,20 @@ def _rand_id() -> str:
 
 
 @router.post("/recommend", response_model=RecommendationResponse)
-async def recommend(req: RecommendRequest, sim: SimulatorDep) -> RecommendationResponse:
-    if artifacts_ready():
-        try:
+async def recommend(
+    req: RecommendRequest,
+    sim: SimulatorDep,
+    orch: OrchestratorDep,
+    tracer: TracerDep,
+) -> RecommendationResponse:
+    try:
+        out = await orch.decide(req.timestamp)
+        return to_recommendation_response(out, req.timestamp, sim, tracer)
+    except Exception:
+        log.exception("orchestrator.decide failed, falling back to direct ML/mock path")
+        if artifacts_ready():
             return real_recommend(req.timestamp, sim)
-        except Exception:
-            log.exception("real_recommend failed, falling back to mock")
-    return _mock_recommend(req.timestamp, sim)
+        return _mock_recommend(req.timestamp, sim)
 
 
 def _mock_recommend(timestamp: datetime, sim) -> RecommendationResponse:
