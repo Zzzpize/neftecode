@@ -2,17 +2,22 @@
 from __future__ import annotations
 
 import asyncio
+import json
+
+import pytest
 
 from llm.gigachat_client import LLMResponse, ToolCall
-from llm.qa_handler import QaHandler, answer
+from llm.qa_handler import DecisionNotFoundError, QaHandler, _summarize_tool_result, answer
 
 
 class ScriptedClient:
     def __init__(self, responses):
         self.responses = list(responses)
         self.calls = 0
+        self.messages = []
 
-    async def complete(self, system, messages, tools=None, temperature=0.0):
+    async def complete(self, system, messages, tools=None, temperature=0.0, use_cache=True):
+        self.messages.append(messages)
         idx = min(self.calls, len(self.responses) - 1)
         self.calls += 1
         return self.responses[idx]
@@ -101,3 +106,52 @@ def test_module_level_answer():
     )
 
     assert result.answer == "Сера растёт."
+
+
+class EmptyTracer:
+    def get_trace(self, decision_id):
+        return []
+
+
+class TimestampTracer:
+    def get_trace(self, decision_id):
+        return [
+            FakeEntry("data", '{"timestamp": "2025-08-01T12:00:00", "is_stale": false}'),
+            FakeEntry("orchestrator", '{"mode": "recommend"}'),
+        ]
+
+
+def test_answer_raises_on_missing_decision():
+    client = ScriptedClient([_final_response()])
+    handler = QaHandler(client=client, mcp=FakeMCP(), tracer=EmptyTracer())
+
+    with pytest.raises(DecisionNotFoundError):
+        asyncio.run(handler.answer("unknown", "Что с серой?"))
+
+
+def test_context_includes_recommendation_timestamp():
+    client = ScriptedClient([_final_response()])
+    handler = QaHandler(client=client, mcp=FakeMCP(), tracer=TimestampTracer())
+
+    asyncio.run(handler.answer("d1", "Что с серой?"))
+
+    user_content = client.messages[0][0]["content"]
+    assert "Время рекомендации (timestamp): 2025-08-01T12:00:00" in user_content
+
+
+def test_summarize_tool_result_trims_history_points():
+    result = {"tag": "hydro_T5", "points": [{"t": i} for i in range(300)]}
+
+    data = json.loads(_summarize_tool_result(result, "get_history"))
+
+    assert data["omitted_points"] == 200
+    assert len(data["points"]) == 100
+
+
+def test_summarize_tool_result_truncates_long_result():
+    big = {"value": "x" * 5000}
+
+    text = _summarize_tool_result(big)
+
+    assert text.endswith("…(обрезано)")
+    assert len(text) <= 2000 + len("…(обрезано)")

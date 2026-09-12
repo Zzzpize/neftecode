@@ -14,7 +14,7 @@ from llm.guardrails import (
     validate_numbers,
 )
 from llm.mcp_server import MCPServer
-from llm.qa_handler import QaHandler, answer
+from llm.qa_handler import DecisionNotFoundError, QaHandler, answer
 
 __all__ = [
     "GigaChatClient",
@@ -29,6 +29,7 @@ __all__ = [
     "extract_numbers",
     "find_invented_numbers",
     "validate_numbers",
+    "DecisionNotFoundError",
     "QaHandler",
     "answer",
 ]

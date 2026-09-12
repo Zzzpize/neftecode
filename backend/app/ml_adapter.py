@@ -173,13 +173,14 @@ def _iv(x) -> ApiInterval | None:
     return ApiInterval(mean=float(x.mean), low=float(x.low), high=float(x.high), unit=x.unit)
 
 
-def real_recommend(timestamp, simulator) -> RecommendationResponse:
+def real_recommend(timestamp, simulator, weights: dict[str, float] | None = None) -> RecommendationResponse:
     """Гоняет реальные модели и оптимизатор, приводит к API-формату."""
     from ml.types import OptimizationConstraints
 
     decision_id = _decision_id()
     trace: list[TraceStep] = []
     warnings: list[str] = []
+    weights = dict(weights or DEFAULT_WEIGHTS)
 
     avt, hydro, anom, blending, optimizer = _load_bundle()
 
@@ -304,7 +305,7 @@ def real_recommend(timestamp, simulator) -> RecommendationResponse:
             warnings=warnings,
         )
 
-    best = max(api_variants, key=lambda v: sum(DEFAULT_WEIGHTS[k] * v.metrics[k] for k in DEFAULT_WEIGHTS))
+    best = max(api_variants, key=lambda v: sum(w * v.metrics.get(k, 0.0) for k, w in weights.items()))
     changes = ", ".join(f"{t} {d:+.2f}" for t, d in list(best.delta.items())[:3])
     pred = best.predicted.sulfur.mean if best.predicted and best.predicted.sulfur else "?"
     explanation = (
@@ -318,7 +319,7 @@ def real_recommend(timestamp, simulator) -> RecommendationResponse:
         mode="recommend",
         timestamp=timestamp.isoformat(),
         variants=api_variants,
-        default_weights=DEFAULT_WEIGHTS,
+        default_weights=weights,
         trace=trace,
         explanation_text=explanation,
         warnings=warnings,

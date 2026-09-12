@@ -79,10 +79,10 @@ export const api = {
       `/history?tag=${encodeURIComponent(tag)}&ts_from=${encodeURIComponent(ts_from)}&ts_to=${encodeURIComponent(ts_to)}`,
     ),
   scenarios: () => request<Scenario[]>('/scenarios'),
-  recommend: (timestamp: string) =>
+  recommend: (timestamp: string, weights?: Record<string, number>) =>
     request<Recommendation>('/recommend', {
       method: 'POST',
-      body: JSON.stringify({ timestamp }),
+      body: JSON.stringify({ timestamp, weights }),
     }),
   ask: (decision_id: string, question: string) =>
     request<{ answer: string }>('/ask', {

@@ -79,6 +79,35 @@ def test_cache_returns_cached_second_time(monkeypatch):
     assert fake.calls == 1
 
 
+def test_use_cache_false_bypasses_cache(monkeypatch):
+    fake = FakeSDK()
+    client = _client(monkeypatch, fake)
+
+    first = asyncio.run(
+        client.complete("sys", [{"role": "user", "content": "hi"}], use_cache=False)
+    )
+    second = asyncio.run(
+        client.complete("sys", [{"role": "user", "content": "hi"}], use_cache=False)
+    )
+
+    assert first.cached is False
+    assert second.cached is False
+    assert fake.calls == 2
+
+
+def test_cache_ttl_expires_entry(monkeypatch):
+    fake = FakeSDK()
+    client = _client(monkeypatch, fake)
+    client.cache_ttl_seconds = 0.0  # просрочка наступает сразу
+
+    first = asyncio.run(client.complete("sys", [{"role": "user", "content": "hi"}]))
+    second = asyncio.run(client.complete("sys", [{"role": "user", "content": "hi"}]))
+
+    assert first.cached is False
+    assert second.cached is False
+    assert fake.calls == 2
+
+
 def test_rate_limit_keeps_five_concurrent(monkeypatch):
     fake = FakeSDK()
     client = _client(monkeypatch, fake)

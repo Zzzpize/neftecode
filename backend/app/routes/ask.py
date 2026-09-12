@@ -9,7 +9,7 @@ from app.deps import (
 )
 from llm.gigachat_client import LLMUnavailableError
 from llm.mcp_server import MCPServer
-from llm.qa_handler import QaHandler
+from llm.qa_handler import DecisionNotFoundError, QaHandler
 
 router = APIRouter(tags=["llm"])
 
@@ -36,6 +36,8 @@ async def ask(
 
     try:
         result = await handler.answer(req.decision_id, req.question)
+    except DecisionNotFoundError:
+        raise HTTPException(status_code=404, detail="Рекомендация не найдена")
     except LLMUnavailableError as exc:
         raise HTTPException(status_code=503, detail=f"GigaChat недоступен: {exc}") from exc
 

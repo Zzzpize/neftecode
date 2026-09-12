@@ -58,6 +58,12 @@ def test_validate_numbers_uses_tolerance():
     assert validate_numbers("выход 0.8500000001", source) is True
 
 
+def test_validate_numbers_allows_one_decimal_rounding():
+    source = {"sulfur": 7.98}
+
+    assert validate_numbers("сера 8.0", source) is True
+
+
 # ---------- Formatter: fallback / guardrail ----------
 
 def _decision(payload):
@@ -152,7 +158,7 @@ class _ScriptedClient:
         self.responses = list(responses)
         self.calls = 0
 
-    async def complete(self, system, messages, tools=None, temperature=0.0):
+    async def complete(self, system, messages, tools=None, temperature=0.0, use_cache=True):
         idx = min(self.calls, len(self.responses) - 1)
         self.calls += 1
         return self.responses[idx]
@@ -170,9 +176,15 @@ class _MCP:
         return {"ok": True}
 
 
+class _FakeEntry:
+    def __init__(self, agent, summary):
+        self.agent = agent
+        self.output_summary = summary
+
+
 class _Tracer:
     def get_trace(self, decision_id):
-        return []
+        return [_FakeEntry("orchestrator", '{"mode": "recommend"}')]
 
 
 def test_qa_respects_hard_tool_call_limit():

@@ -23,8 +23,8 @@ export function RecommendationCard() {
   const { weights } = useWeights();
 
   const rec = useQuery({
-    queryKey: ['recommend', timestamp],
-    queryFn: () => api.recommend(timestamp),
+    queryKey: ['recommend', timestamp, weights],
+    queryFn: () => api.recommend(timestamp, weights),
     enabled: !!timestamp,
   });
 

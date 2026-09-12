@@ -26,6 +26,7 @@ REGISTRY_PATH = Path(__file__).resolve().parent.parent.parent / "data_layer" / "
 
 class RecommendRequest(BaseModel):
     timestamp: datetime
+    weights: dict[str, float] | None = None
 
 
 def _rand_id() -> str:
@@ -40,17 +41,18 @@ async def recommend(
     tracer: TracerDep,
 ) -> RecommendationResponse:
     try:
-        out = await orch.decide(req.timestamp)
+        out = await orch.decide(req.timestamp, weights=req.weights)
         return to_recommendation_response(out, req.timestamp, sim, tracer)
     except Exception:
         log.exception("orchestrator.decide failed, falling back to direct ML/mock path")
         if artifacts_ready():
-            return real_recommend(req.timestamp, sim)
-        return _mock_recommend(req.timestamp, sim)
+            return real_recommend(req.timestamp, sim, weights=req.weights)
+        return _mock_recommend(req.timestamp, sim, weights=req.weights)
 
 
-def _mock_recommend(timestamp: datetime, sim) -> RecommendationResponse:
+def _mock_recommend(timestamp: datetime, sim, weights: dict[str, float] | None = None) -> RecommendationResponse:
     decision_id = _rand_id()
+    weights = dict(weights or DEFAULT_WEIGHTS)
     trace: list[TraceStep] = []
 
     t0 = time.perf_counter()
@@ -90,17 +92,17 @@ def _mock_recommend(timestamp: datetime, sim) -> RecommendationResponse:
     if sulfur < 7 and not variants:
         return RecommendationResponse(
             decision_id=decision_id, mode="silent", timestamp=timestamp.isoformat(),
-            trace=trace, default_weights=DEFAULT_WEIGHTS,
+            trace=trace, default_weights=weights,
             explanation_text="Режим стабильный, вмешательство не требуется.",
         )
     if not variants:
         return RecommendationResponse(
             decision_id=decision_id, mode="refuse", timestamp=timestamp.isoformat(),
-            trace=trace, default_weights=DEFAULT_WEIGHTS,
+            trace=trace, default_weights=weights,
             explanation_text="Нет допустимых вариантов в рамках жёстких ограничений.",
         )
 
-    best = max(variants, key=lambda v: sum(DEFAULT_WEIGHTS[k] * v.metrics[k] for k in DEFAULT_WEIGHTS))
+    best = max(variants, key=lambda v: sum(w * v.metrics.get(k, 0.0) for k, w in weights.items()))
     changes = ", ".join(f"{t} {d:+.2f}" for t, d in list(best.delta.items())[:3])
     pred = best.predicted.sulfur.mean if best.predicted and best.predicted.sulfur else "?"
     explanation = (
@@ -109,6 +111,6 @@ def _mock_recommend(timestamp: datetime, sim) -> RecommendationResponse:
     )
     return RecommendationResponse(
         decision_id=decision_id, mode="recommend", timestamp=timestamp.isoformat(),
-        variants=variants, default_weights=DEFAULT_WEIGHTS, trace=trace,
+        variants=variants, default_weights=weights, trace=trace,
         explanation_text=explanation,
     )

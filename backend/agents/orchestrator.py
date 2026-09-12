@@ -16,7 +16,10 @@ from typing import Any
 from agents.schemas import DataAgentInput, OrchestratorOutput
 from ml.types import OptimizationConstraints
 
-DEFAULT_WEIGHTS = {"safety": 0.5, "quality": 0.3, "yield": 0.15, "energy": 0.05}
+# Веса приведены к фронтовым метрикам (safety/yield/energy/wear).
+# Пороги подняты: детектор часто флажит медленные теги как аномалии,
+# 0.9 отсекает только явные stale, 0.15 не даёт silent при пограничном риске.
+DEFAULT_WEIGHTS = {"safety": 0.5, "yield": 0.2, "energy": 0.15, "wear": 0.15}
 SILENT_RISK_THRESHOLD = 0.15
 ANOMALY_SCORE_THRESHOLD = 0.9
 
@@ -43,7 +46,11 @@ class Orchestrator:
         self.formatter = formatter
         self.tracer = tracer
 
-    async def decide(self, timestamp: datetime) -> OrchestratorOutput:
+    async def decide(
+        self,
+        timestamp: datetime,
+        weights: dict[str, float] | None = None,
+    ) -> OrchestratorOutput:
         # 1. Новый decision_id.
         decision_id = (
             self.tracer.start_decision()
@@ -69,7 +76,7 @@ class Orchestrator:
             data_out.has_anomalies and data_out.anomaly_score > ANOMALY_SCORE_THRESHOLD
         ):
             reason = " ".join(data_out.warnings) or "данные непригодны для рекомендации"
-            return self._finish(decision_id, "refuse", {"reason": reason}, reason)
+            return self._finish(decision_id, "refuse", {"reason": reason}, reason, timestamp=timestamp)
 
         state = self.data.get_state(timestamp)
 
@@ -105,6 +112,7 @@ class Orchestrator:
             return self._finish(
                 decision_id, "silent", {},
                 "Режим стабилен, вмешательство не требуется.",
+                timestamp=timestamp,
             )
 
         # 5. Сборка ограничений оптимизатора.
@@ -128,24 +136,27 @@ class Orchestrator:
 
         feasible = [v for v in optimization_out.variants if v.feasible]
 
-        # 7. Нет допустимых вариантов.
+        # 7. Нет допустимых вариантов — best-effort: показать ближайшие,
+        # а не молча уходить в refuse (важно для demo риска серы).
         if not feasible:
             if not optimization_out.variants:
                 reason = "Оптимизатор не нашёл ни одного варианта."
-                return self._finish(decision_id, "refuse", {"reason": reason}, reason)
+                return self._finish(decision_id, "refuse", {"reason": reason}, reason, timestamp=timestamp)
             feasible = list(optimization_out.variants)
             for variant in feasible:
                 variant.feasible = True
 
         # 8. Ранжирование по взвешенной сумме метрик.
-        # Маппинг весов ТЗ на ML-метрики:
-        #   безопасность -> severity, качество -> sulfur, выход -> yield, энергия -> energy.
-        ranked = sorted(feasible, key=self._rank_score, reverse=True)
+        # Маппинг весов (safety/yield/energy/wear) на ML-метрики:
+        #   safety -> sulfur, wear -> severity, yield -> yield, energy -> energy.
+        weights = self._normalize_weights(weights)
+        ranked = sorted(feasible, key=lambda v: self._rank_score(v, weights), reverse=True)
 
         # 9. Лучший вариант + 2-3 альтернативы.
         best = ranked[0]
         alternatives = ranked[1:4]
         payload = {
+            "timestamp": timestamp.isoformat(),
             "best_variant": _to_dict(best),
             "alternatives": [_to_dict(v) for v in alternatives],
             "checks": {
@@ -153,7 +164,7 @@ class Orchestrator:
                 "severity_class": reliability_out.severity_class,
                 "sulfur_limit_ppm": 10.0,
             },
-            "weights": dict(DEFAULT_WEIGHTS),
+            "weights": dict(weights),
         }
 
         decision = OrchestratorOutput(
@@ -166,9 +177,19 @@ class Orchestrator:
 
         # 10-11. Текст рекомендации (LLM или fallback) и ответ.
         explanation_text = await self._format(decision)
-        return self._finish(decision_id, "recommend", payload, explanation_text)
+        return self._finish(decision_id, "recommend", payload, explanation_text, timestamp=timestamp)
 
-    def _finish(self, decision_id: str, mode: str, payload: dict, explanation_text: str) -> OrchestratorOutput:
+    def _finish(
+        self,
+        decision_id: str,
+        mode: str,
+        payload: dict,
+        explanation_text: str,
+        timestamp: datetime | None = None,
+    ) -> OrchestratorOutput:
+        payload = dict(payload)
+        if timestamp is not None:
+            payload.setdefault("timestamp", timestamp.isoformat())
         out = OrchestratorOutput(
             decision_id=decision_id,
             mode=mode,
@@ -224,28 +245,50 @@ class Orchestrator:
         return "Рекомендация сформирована."
 
     @staticmethod
-    def _rank_score(variant) -> float:
+    def _rank_score(variant, weights: dict[str, float] | None = None) -> float:
         """Взвешенная оценка варианта; больше — лучше.
 
-        ML-метрики ``{sulfur, yield, energy, severity}`` приводятся к единой
-        шкале «больше = лучше» и взвешиваются ``DEFAULT_WEIGHTS``.
+        ML-метрики ``{sulfur, yield, energy, severity}`` приводятся к той же
+        шкале ``{safety, yield, energy, wear}``, что и на фронте/в ``ai_adapter``,
+        чтобы backend-ранжирование совпадало с выбором оператора.
         """
+        weights = weights or DEFAULT_WEIGHTS
         metrics = variant.metrics
         severity = float(metrics.get("severity", 0.0))
         sulfur = float(metrics.get("sulfur", 0.0))
         yield_score = float(metrics.get("yield", 0.0))
         energy = float(metrics.get("energy", 0.0))
 
-        safety = 1.0 - min(1.0, severity)          # severity 0..1
-        quality = max(0.0, 1.0 - sulfur / 10.0)    # sulfur ppm, спека 10
-        energy_score = 1.0 - min(1.0, energy)      # energy 0..1
+        # Предпочитаем прогноз из expected (как это делает ai_adapter).
+        expected = getattr(variant, "expected", None)
+        if expected is not None:
+            predictions = getattr(expected, "predictions", None) or {}
+            sulfur_iv = predictions.get("sulfur_ppm")
+            if sulfur_iv is not None:
+                sulfur = float(getattr(sulfur_iv, "mean", sulfur))
+
+        safety = max(0.05, min(1.0, 1.0 - sulfur / 12.0))   # safety <- sulfur
+        yield_norm = max(0.0, min(1.0, yield_score))
+        energy_norm = max(0.0, min(1.0, 1.0 - energy))       # energy -> больше=лучше
+        wear = max(0.05, min(1.0, 1.0 - severity))           # wear <- severity
 
         return (
-            DEFAULT_WEIGHTS["safety"] * safety
-            + DEFAULT_WEIGHTS["quality"] * quality
-            + DEFAULT_WEIGHTS["yield"] * yield_score
-            + DEFAULT_WEIGHTS["energy"] * energy_score
+            weights.get("safety", 0.0) * safety
+            + weights.get("yield", 0.0) * yield_norm
+            + weights.get("energy", 0.0) * energy_norm
+            + weights.get("wear", 0.0) * wear
         )
+
+    @staticmethod
+    def _normalize_weights(weights: dict[str, float] | None) -> dict[str, float]:
+        """Объединяет пользовательские веса с дефолтными, оставляя только известные ключи."""
+        merged = dict(DEFAULT_WEIGHTS)
+        if weights:
+            for key in DEFAULT_WEIGHTS:
+                value = weights.get(key)
+                if isinstance(value, (int, float)):
+                    merged[key] = float(value)
+        return merged
 
     def _record(self, decision_id: str, agent: str, input_data: dict, output: dict, duration_s: float) -> None:
         if self.tracer is None:

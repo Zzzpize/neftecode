@@ -145,12 +145,13 @@ def to_recommendation_response(
         if reason:
             warnings.append(str(reason))
 
+    weights = out.payload.get("weights") or DEFAULT_WEIGHTS
     return RecommendationResponse(
         decision_id=out.decision_id,
         mode=out.mode,
         timestamp=timestamp.isoformat(),
         variants=variants,
-        default_weights=dict(DEFAULT_WEIGHTS),
+        default_weights=dict(weights),
         trace=trace_to_steps(tracer, out.decision_id),
         explanation_text=out.explanation_text,
         warnings=warnings,
