@@ -17,6 +17,7 @@ PROMPT_PATH = Path(__file__).parent / "prompts" / "qa_system.md"
 # состояния). Слишком длинный контекст GigaChat иногда игнорирует, поэтому
 # результат компактируем до разумного бюджета символов.
 MAX_TOOL_RESULT_CHARS = 2000
+TRUNCATION_MARKER = "…(обрезано)"
 
 
 class DecisionNotFoundError(LookupError):
@@ -29,18 +30,84 @@ def _load_prompt() -> str:
     return "Ты инженер НПЗ. Отвечай на русском, не выдумывай числа."
 
 
+def _dumps(value) -> str:
+    """Единый компактный формат сериализации результата инструмента."""
+    return json.dumps(value, ensure_ascii=False, separators=(",", ":"), default=str)
+
+
+def _fits(value, budget: int) -> bool:
+    return len(_dumps(value)) <= budget
+
+
+def _truncate_json(value, budget: int):
+    """Рекурсивно укорачивает данные так, чтобы их JSON укладывался в budget.
+
+    Возвращает значение, чья сериализация не длиннее ``budget`` символов.
+    Строки обрезаются с маркером ``TRUNCATION_MARKER``, списки и словари
+    сохраняют столько элементов, сколько помещается (последний невлезающий
+    элемент усекается рекурсивно). Гарантирует валидный JSON на выходе.
+    """
+    if _fits(value, budget):
+        return value
+
+    if isinstance(value, str):
+        # Грубо режем по числу символов, затем уточняем до точного бюджета.
+        cut = value[:budget]
+        while cut and not _fits(cut + TRUNCATION_MARKER, budget):
+            excess = len(_dumps(cut + TRUNCATION_MARKER)) - budget
+            cut = cut[: max(0, len(cut) - max(1, excess))]
+        if not _fits(TRUNCATION_MARKER, budget):
+            return ""  # не влезает даже маркер — отдаём пустую строку
+        return cut + TRUNCATION_MARKER
+
+    if isinstance(value, list):
+        out: list = []
+        for item in value:
+            if _fits(out + [item], budget):
+                out.append(item)
+                continue
+            room = budget - len(_dumps(out))
+            if room > len(_dumps("")):
+                truncated = _truncate_json(item, room)
+                if _fits(out + [truncated], budget):
+                    out.append(truncated)
+            break
+        return out
+
+    if isinstance(value, dict):
+        out: dict = {}
+        for key, item in value.items():
+            if _fits({**out, key: item}, budget):
+                out[key] = item
+                continue
+            room = budget - len(_dumps({**out, key: None}))
+            if room > 0:
+                truncated = _truncate_json(item, room)
+                if _fits({**out, key: truncated}, budget):
+                    out[key] = truncated
+            break
+        return out
+
+    return value
+
+
 def _summarize_tool_result(result, tool_name: str | None = None) -> str:
-    """Компактная JSON-сериализация результата инструмента."""
+    """Компактная JSON-сериализация результата инструмента.
+
+    Возвращает всегда валидный JSON: слишком длинные результаты укорачиваются
+    на уровне данных, а не обрезанием сериализованной строки (иначе GigaChat
+    падает с «invalid function result json string»).
+    """
     if tool_name == "get_history" and isinstance(result, dict):
         points = result.get("points")
         if isinstance(points, list) and len(points) > 100:
             omitted = len(points) - 100
             result = {**result, "points": points[:50] + points[-50:], "omitted_points": omitted}
 
-    text = json.dumps(result, ensure_ascii=False, separators=(",", ":"), default=str)
-    if len(text) > MAX_TOOL_RESULT_CHARS:
-        text = text[:MAX_TOOL_RESULT_CHARS] + "…(обрезано)"
-    return text
+    text = _dumps(result)
+    if len(text) <= MAX_TOOL_RESULT_CHARS:
+        return text
+    return _dumps(_truncate_json(result, MAX_TOOL_RESULT_CHARS))
 
 
 class QaHandler:

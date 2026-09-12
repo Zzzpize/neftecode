@@ -1,11 +1,12 @@
 """Тесты трейсера (Фаза 2)."""
 from __future__ import annotations
 
+import json
 import sqlite3
 
 import pytest
 
-from tracing.logger import AgentTracer, TraceEntry
+from tracing.logger import SUMMARY_LIMIT, AgentTracer, TraceEntry
 from tracing.store import connect, init_db
 
 
@@ -49,7 +50,9 @@ def test_output_summary_truncated_to_500_chars(tracer):
 
     entry = tracer.get_trace(decision_id)[0]
 
-    assert len(entry.output_summary) == 500
+    assert len(entry.output_summary) <= SUMMARY_LIMIT
+    data = json.loads(entry.output_summary)  # валидный JSON, не обрыв посреди строки
+    assert data["text"].endswith("…(обрезано)")
 
 
 def test_input_hash_is_deterministic(tracer):

@@ -7,7 +7,13 @@ import json
 import pytest
 
 from llm.gigachat_client import LLMResponse, ToolCall
-from llm.qa_handler import DecisionNotFoundError, QaHandler, _summarize_tool_result, answer
+from llm.qa_handler import (
+    MAX_TOOL_RESULT_CHARS,
+    DecisionNotFoundError,
+    QaHandler,
+    _summarize_tool_result,
+    answer,
+)
 
 
 class ScriptedClient:
@@ -152,6 +158,31 @@ def test_summarize_tool_result_truncates_long_result():
     big = {"value": "x" * 5000}
 
     text = _summarize_tool_result(big)
+    data = json.loads(text)  # валидный JSON
 
-    assert text.endswith("…(обрезано)")
-    assert len(text) <= 2000 + len("…(обрезано)")
+    assert len(text) <= MAX_TOOL_RESULT_CHARS
+    assert data["value"].endswith("…(обрезано)")
+
+
+def test_summarize_tool_result_keeps_valid_json_for_long_string():
+    # Регресс: GigaChat падал с «invalid function result json string»,
+    # когда строка обрезалась посреди JSON.
+    result = {"id": "123", "content": "Привет " * 1000}
+
+    text = _summarize_tool_result(result)
+    data = json.loads(text)
+
+    assert len(text) <= MAX_TOOL_RESULT_CHARS
+    assert data["id"] == "123"
+    assert data["content"].endswith("…(обрезано)")
+
+
+def test_summarize_tool_result_truncates_long_list():
+    result = [{"i": i, "payload": "y" * 200} for i in range(100)]
+
+    text = _summarize_tool_result(result)
+    data = json.loads(text)
+
+    assert len(text) <= MAX_TOOL_RESULT_CHARS
+    assert isinstance(data, list)
+    assert len(data) < 100

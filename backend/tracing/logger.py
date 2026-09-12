@@ -16,6 +16,7 @@ from typing import Any
 from tracing import store
 
 SUMMARY_LIMIT = 2000
+TRUNCATION_MARKER = "…(обрезано)"
 
 
 @dataclass
@@ -32,6 +33,69 @@ class TraceEntry:
 def _dump(value: Any) -> str:
     """Детерминированная JSON-сериализация с fallback на ``str``."""
     return json.dumps(value, sort_keys=True, ensure_ascii=False, default=str)
+
+
+def _fits(value: Any, budget: int) -> bool:
+    return len(_dump(value)) <= budget
+
+
+def _truncate_json(value: Any, budget: int):
+    """Рекурсивно укорачивает данные так, чтобы их JSON укладывался в budget.
+
+    Возвращает значение, чья сериализация не длиннее ``budget`` символов и
+    остаётся валидным JSON: строки режутся с маркером ``TRUNCATION_MARKER``,
+    списки и словари сохраняют столько элементов, сколько помещается.
+    """
+    if _fits(value, budget):
+        return value
+
+    if isinstance(value, str):
+        # Грубо режем по числу символов, затем уточняем до точного бюджета.
+        cut = value[:budget]
+        while cut and not _fits(cut + TRUNCATION_MARKER, budget):
+            excess = len(_dump(cut + TRUNCATION_MARKER)) - budget
+            cut = cut[: max(0, len(cut) - max(1, excess))]
+        if not _fits(TRUNCATION_MARKER, budget):
+            return ""  # не влезает даже маркер — отдаём пустую строку
+        return cut + TRUNCATION_MARKER
+
+    if isinstance(value, list):
+        out: list = []
+        for item in value:
+            if _fits(out + [item], budget):
+                out.append(item)
+                continue
+            room = budget - len(_dump(out))
+            if room > len(_dump("")):
+                truncated = _truncate_json(item, room)
+                if _fits(out + [truncated], budget):
+                    out.append(truncated)
+            break
+        return out
+
+    if isinstance(value, dict):
+        out: dict = {}
+        for key, item in value.items():
+            if _fits({**out, key: item}, budget):
+                out[key] = item
+                continue
+            room = budget - len(_dump({**out, key: None}))
+            if room > 0:
+                truncated = _truncate_json(item, room)
+                if _fits({**out, key: truncated}, budget):
+                    out[key] = truncated
+            break
+        return out
+
+    return value
+
+
+def _dump_summary(output: Any) -> str:
+    """Валидный JSON для ``output_summary``, уложенный в ``SUMMARY_LIMIT``."""
+    text = _dump(output)
+    if len(text) <= SUMMARY_LIMIT:
+        return text
+    return _dump(_truncate_json(output, SUMMARY_LIMIT))
 
 
 def _hash(value: Any) -> str:
@@ -76,7 +140,7 @@ class AgentTracer:
             decision_id=decision_id,
             agent=agent,
             input_hash=_hash(input_data),
-            output_summary=_dump(output)[:SUMMARY_LIMIT],
+            output_summary=_dump_summary(output),
             duration_ms=float(duration_ms),
             timestamp=now.isoformat(),
         )
