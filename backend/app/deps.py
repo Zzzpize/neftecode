@@ -60,6 +60,7 @@ def _gigachat_client() -> GigaChatClient:
         credentials=settings.gigachat_credentials,
         model=settings.gigachat_model,
         verify_ssl=settings.gigachat_verify_ssl,
+        cache_ttl_seconds=300,
     )
 
 

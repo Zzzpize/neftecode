@@ -61,7 +61,7 @@ def test_recommend_adapts_variants_and_trace():
                 "combined_spec_risk": {"sulfur_over_10": 0.15},
                 "severity_class": "normal",
             },
-            "weights": {"safety": 0.5, "quality": 0.3, "yield": 0.15, "energy": 0.05},
+            "weights": {"safety": 0.5, "yield": 0.2, "energy": 0.15, "wear": 0.15},
         },
         trace_id="d1",
         explanation_text="Рекомендация",
@@ -83,6 +83,7 @@ def test_recommend_adapts_variants_and_trace():
     assert api_v.predicted.sulfur.mean == 7.5
     assert set(api_v.metrics) == {"safety", "yield", "energy", "wear"}
     assert set(resp.default_weights) == {"safety", "yield", "energy", "wear"}
+    assert resp.default_weights == {"safety": 0.5, "yield": 0.2, "energy": 0.15, "wear": 0.15}
     assert resp.trace and resp.trace[0].agent == "data"
     assert resp.trace[0].output == {"is_stale": False}
 
