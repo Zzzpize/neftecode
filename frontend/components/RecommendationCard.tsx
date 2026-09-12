@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTime } from '@/components/TimeStore';
 import { scoreVariant, useWeights, type Weights } from '@/components/WeightsStore';
 import { api, type Variant } from '@/lib/api';
@@ -21,11 +21,19 @@ const METRIC_META: {
 export function RecommendationCard() {
   const { timestamp, setDecisionId } = useTime();
   const { weights } = useWeights();
+  const queryClient = useQueryClient();
 
   const rec = useQuery({
-    queryKey: ['recommend', timestamp, weights],
-    queryFn: () => api.recommend(timestamp, weights),
+    queryKey: ['recommend', timestamp],
+    queryFn: () => api.recommend(timestamp),
     enabled: !!timestamp,
+  });
+
+  const refreshText = useMutation({
+    mutationFn: () => api.recommend(timestamp, weights),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['recommend', timestamp], data);
+    },
   });
 
   const best = useMemo<Variant | null>(() => {
@@ -80,7 +88,19 @@ export function RecommendationCard() {
 
   return (
     <Card mode="recommend" title="Рекомендация">
-      <ExplanationBlock text={rec.data.explanation_text} />
+      <div className="mb-3 flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">
+          <ExplanationBlock text={rec.data.explanation_text} />
+        </div>
+        <button
+          onClick={() => refreshText.mutate()}
+          disabled={refreshText.isPending}
+          className="flex-shrink-0 rounded border border-neutral-800 bg-neutral-950 px-2 py-1 text-[10px] uppercase tracking-wider text-neutral-400 hover:border-neutral-700 hover:text-neutral-200 disabled:opacity-40"
+          title="Перегенерировать пояснение под текущие приоритеты"
+        >
+          {refreshText.isPending ? 'обновляю...' : '↻ под мои приоритеты'}
+        </button>
+      </div>
 
       <div className="mb-4">
         <div className="mb-1 text-xs uppercase tracking-wider text-neutral-500">Изменить</div>
