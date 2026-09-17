@@ -7,21 +7,19 @@ from ml.models.quality_hydro import QualityHydroModel
 from ml.vak import VAKCatalog
 
 
-DATA_DIR = Path("../data")
-ARTIFACT_PATH = Path(
-    "ml/artifacts/quality_hydro.pkl"
-)
+from ml.paths import DATA_DIR, ARTIFACT_DIR
+ARTIFACT_PATH = ARTIFACT_DIR / "quality_hydro.pkl"
 
 TRAIN_START = pd.Timestamp("2023-01-01")
 TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
 
 
 def main() -> None:
-    feature_path = DATA_DIR / "ml_features.parquet"
+    feature_path = DATA_DIR / "ml_training.parquet"
 
     if not feature_path.exists():
         raise FileNotFoundError(
-            "ml_features.parquet is missing; "
+            "ml_training.parquet is missing; "
             "run python -m ml.training.prepare_features"
         )
 
@@ -51,9 +49,7 @@ def main() -> None:
         feature_config["avt_delay_steps"]
     )
 
-    vak_catalog = VAKCatalog.load(
-        DATA_DIR / "vac_formulas.parquet"
-    )
+    vak_catalog = VAKCatalog.load_expert()
 
     model = QualityHydroModel.fit(
         frame=train,

@@ -6,9 +6,13 @@ import math
 from dataclasses import dataclass
 
 import optuna
+import numpy as np
 import pandas as pd
 
 from data_layer.feature_registry import controllable_ranges
+from data_layer.feature_registry import load_feature_registry
+from ml.envelope import outside_envelope
+from ml.scenario_blending import default_scenario, evaluate_blend
 from ml.models.blending import BlendingModel
 from ml.models.quality_avt import QualityAVTModel
 from ml.models.quality_hydro import QualityHydroModel
@@ -57,6 +61,7 @@ class ParetoOptimizer:
         self.quality_avt = quality_avt
         self.quality_hydro = quality_hydro
         self.blending = blending
+        self.registry = load_feature_registry()
 
     @staticmethod
     def constraints_from_registry(
@@ -91,6 +96,13 @@ class ParetoOptimizer:
         )
 
         evaluated: dict[int, _EvaluatedVariant] = {}
+        scenario = state.iloc[0].get("ml_blending_scenario", None)
+        if isinstance(scenario, (bool, np.bool_)):
+            scenario = default_scenario() if scenario else None
+        if scenario is not None and not isinstance(scenario, dict):
+            raise TypeError("ml_blending_scenario must be a boolean or configuration dictionary")
+        if scenario and not {"sulfur_ppm", "T95", "cetane_number"} <= set(constraints.hard):
+            raise ValueError("Blending requires explicit hard limits for sulfur_ppm, T95 and cetane_number")
 
         def constraints_func(
             trial: optuna.trial.FrozenTrial,
@@ -114,13 +126,13 @@ class ParetoOptimizer:
                 "maximize",  # yield
                 "minimize",  # energy
                 "minimize",  # severity
-            ],
+            ] + (["minimize"] if scenario else []),
             sampler=sampler,
         )
 
         def objective(
             trial: optuna.Trial,
-        ) -> tuple[float, float, float, float]:
+        ) -> tuple[float, ...]:
             action = {
                 tag: trial.suggest_float(
                     tag,
@@ -135,12 +147,13 @@ class ParetoOptimizer:
                 action=action,
             )
 
-            avt_prediction = self.quality_avt.predict(
-                changed_state
-            )
-            hydro_prediction = self.quality_hydro.predict(
-                changed_state
-            )
+            # Use the same consequence model exposed by the public ML API.
+            avt_prediction = (self.quality_avt.predict_after_action(state, action)
+                              if hasattr(self.quality_avt, "predict_after_action")
+                              else self.quality_avt.predict(changed_state))
+            hydro_prediction = (self.quality_hydro.predict_after_action(state, action)
+                                if hasattr(self.quality_hydro, "predict_after_action")
+                                else self.quality_hydro.predict(changed_state))
 
             expected = self._combine_predictions(
                 avt_prediction=avt_prediction,
@@ -165,6 +178,15 @@ class ParetoOptimizer:
                     search_ranges=search_ranges,
                 ),
             }
+            if scenario:
+                stored = trial.suggest_float("blend__stored_fraction", 0., float(scenario["max_stored_fraction"]))
+                share = trial.suggest_float("blend__tank_share", 0., 1.)
+                dose = trial.suggest_float("blend__additive_fraction", 0., min(.03, float(scenario["max_additive_fraction"])))
+                expected, blend_metrics = evaluate_blend(self.blending, expected, scenario, stored, share, dose)
+                metrics.update(blend_metrics)
+                metrics["sulfur"] = self._prediction_value(expected, "sulfur_ppm", fallback=1e6)
+                action.update({"blend__stored_fraction": stored, "blend__tank_share": share,
+                               "blend__additive_fraction": dose})
 
             infeasible_reason, violation = (
                 self._check_hard_constraints(
@@ -172,11 +194,13 @@ class ParetoOptimizer:
                     constraints=constraints,
                 )
             )
+            if metrics.get("tank_capacity_violation"):
+                infeasible_reason, violation = "tank_capacity_violation", 1.0
 
             if infeasible_reason is None:
                 is_low_density = self._is_low_historical_density(
                     changed_state=changed_state,
-                    action=action,
+                    action={k: v for k, v in action.items() if not k.startswith("blend__")},
                 )
 
                 if is_low_density:
@@ -211,7 +235,7 @@ class ParetoOptimizer:
                 metrics["yield"],
                 metrics["energy"],
                 metrics["severity"],
-            )
+            ) + ((metrics["cost"],) if scenario else ())
 
         deadline = (
             time.perf_counter()
@@ -324,6 +348,17 @@ class ParetoOptimizer:
                 )
 
             column = self._resolve_state_column(state, tag)
+            # Caller constraints may narrow, but never widen the registry.
+            # Synthetic adapters without trained quality artifacts retain their
+            # own test ranges; production trained models use canonical controls.
+            if any(isinstance(model, (QualityAVTModel, QualityHydroModel))
+                   and model.artifact.get("trained")
+                   for model in (self.quality_avt, self.quality_hydro)):
+                metadata = self.registry.get(column, {})
+                if not metadata.get("controllable"):
+                    raise ValueError(f"Tag {column!r} is not controllable in feature registry")
+                absolute_low = max(absolute_low, float(metadata["range_min"]))
+                absolute_high = min(absolute_high, float(metadata["range_max"]))
             current = float(state.iloc[0][column])
 
             if not math.isfinite(current):
@@ -493,16 +528,15 @@ class ParetoOptimizer:
         """
 
         contributions: list[float] = []
+        registry = self.registry
 
         for tag, (low, high) in search_ranges.items():
             column = self._resolve_state_column(state, tag)
             short_name = column.split("_", maxsplit=1)[-1]
 
-            is_energy_tag = (
-                short_name.startswith("T")
-                or short_name.startswith("Q")
-                or short_name == "F5"
-            )
+            metadata = registry.get(column, {})
+            is_energy_tag = (metadata.get("kind") == "temperature"
+                             or (column.startswith("avt_") and "пара" in metadata.get("description", "").lower()))
 
             if not is_energy_tag:
                 continue
@@ -586,6 +620,10 @@ class ParetoOptimizer:
             # границы интервала, а не только среднее.
             predicted_low = float(interval.low)
             predicted_high = float(interval.high)
+            if not all(math.isfinite(v) for v in (predicted_low, predicted_high, interval.mean)):
+                reasons.append(f"nonfinite_prediction:{property_name}")
+                total_violation += 1.0
+                continue
 
             if predicted_low < low:
                 width = max(high - low, 1e-12)
@@ -631,6 +669,10 @@ class ParetoOptimizer:
             self.quality_avt.artifact,
             self.quality_hydro.artifact,
         )
+        for artifact in artifacts:
+            envelope = artifact.get("joint_envelope")
+            if envelope and outside_envelope(changed_state, envelope):
+                return True
 
         for tag in action:
             column = self._resolve_state_column(
@@ -698,12 +740,14 @@ class ParetoOptimizer:
             -first.metrics["yield"],
             first.metrics["energy"],
             first.metrics["severity"],
+            first.metrics.get("cost", 0.),
         )
         second_values = (
             second.metrics["sulfur"],
             -second.metrics["yield"],
             second.metrics["energy"],
             second.metrics["severity"],
+            second.metrics.get("cost", 0.),
         )
 
         no_worse = all(

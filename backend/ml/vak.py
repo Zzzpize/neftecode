@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import json
 import operator
 import re
 from dataclasses import dataclass, field
@@ -31,6 +32,8 @@ class VAKMissingFeatureError(VAKError):
 # Нужно отдельно подтвердить у технолога, что Pipeline соответствует точке 2.
 # Если это точка 1, меняется только этот словарь.
 DEFAULT_REFERENCE_ALIASES: dict[str, str] = {
+    "LIMS.D15": "lims__гидроочистка__pt2__d15",
+    "LIMS.95%.T": "lims__гидроочистка__pt2__95_t",
     "LIMS:24-2000.Pipeline.D15": "lims__гидроочистка__pt2__d15",
     "LIMS:24-2000.Pipeline.95%.T": "lims__гидроочистка__pt2__95_t",
 }
@@ -105,7 +108,8 @@ class VAKFormula:
         if reference_aliases:
             aliases.update(reference_aliases)
 
-        # TODO: узнать нормальную формулу для ВАК, пока что так
+        # Compatibility with the malformed legacy XLSX. The new expert
+        # workbook explicitly confirms F65/(F32+F30).
         if name == "AVT6:240-350:CFPP":
             source = source.replace(
                 "F65/F32+F30))",
@@ -200,6 +204,14 @@ class VAKCatalog:
 
     def __init__(self, formulas: Mapping[str, VAKFormula]):
         self._formulas = dict(formulas)
+
+    @classmethod
+    def load_expert(cls) -> "VAKCatalog":
+        """Load the versioned, normalized copy of both supplied XLSX files."""
+        reference = json.loads(
+            Path(__file__).with_name("expert_reference.json").read_text(encoding="utf-8")
+        )
+        return cls.from_frame(pd.DataFrame(reference["formulas"]))
 
     @classmethod
     def load(
@@ -338,6 +350,8 @@ def _normalize_expression(expression: str) -> str:
                 "х": "*",
                 "Х": "*",
                 "×": "*",
+                "−": "-",
+                "–": "-",
             }
         )
     )

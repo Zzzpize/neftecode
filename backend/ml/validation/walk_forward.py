@@ -2,6 +2,8 @@
 # Train 2023-01..2024-12, Val 2025-01..2025-06, Test 2025-07..2026-08.
 
 from __future__ import annotations
+from ml.availability import label_column, inference_frame, LIMS_DELAY_HOURS
+from ml.feature_engineering import adjust_sulfur_history
 
 from time import perf_counter
 from typing import Any
@@ -98,7 +100,7 @@ def _fresh_label_mask(
         return pd.Series(False, index=frame.index)
 
     target = pd.to_numeric(
-        frame[target_column],
+        frame[label_column(frame, target_column)],
         errors="coerce",
     )
 
@@ -109,7 +111,7 @@ def _fresh_label_mask(
         return pd.Series(False, index=frame.index)
 
     age = pd.to_numeric(
-        frame[age_column],
+        frame[label_column(frame, age_column)],
         errors="coerce",
     )
 
@@ -260,6 +262,14 @@ def _batch_prediction_arrays(
         half_width = float(calibrated_half_width)
         low = predicted - half_width
         high = predicted + half_width
+    if target == "sulfur_ppm":
+        low, predicted, high = np.maximum(low, 0.), np.maximum(predicted, 0.), np.maximum(high, 0.)
+        if model.artifact.get("sulfur_online"):
+            predicted, low, high, _ = adjust_sulfur_history(
+                frame, predicted, low, high, model.artifact.get("sulfur_online_history", []),
+                **model.artifact["sulfur_online"])
+    if isinstance(model, QualityAVTModel) and model.artifact.get("n_samples", {}).get(target, 0) == 0:
+        low, high = np.full_like(predicted, np.nan), np.full_like(predicted, np.nan)
 
     return baseline, predicted, low, high
 
@@ -442,7 +452,7 @@ def evaluate_quality_model(
         target_column = str(config["target_column"])
         actual = (
             pd.to_numeric(
-                evaluation.iloc[positions][target_column],
+                evaluation.iloc[positions][label_column(evaluation, target_column)],
                 errors="coerce",
             )
             .to_numpy(dtype=float)
@@ -534,7 +544,7 @@ def evaluate_quality_model(
                             low=float(lower),
                             high=float(upper),
                             unit="ppm",
-                        )
+                        ), coverage=model.artifact.get("interval_coverage", .8)
                     )
                     for mean, lower, upper in zip(
                         predicted[valid],
@@ -569,6 +579,7 @@ def evaluate_quality_model(
                 {
                     "spec_precision": float(precision),
                     "spec_recall": float(recall),
+                    "n_actual_over_spec": int(actual_over_spec.sum()),
                     "spec_f1": float(f1),
                     "spec_threshold_ppm":
                         SULFUR_LIMIT_PPM,
@@ -585,6 +596,9 @@ def evaluate_quality_model(
             if metrics["ml_enabled"]
             else "baseline"
         )
+        metrics["baseline_kind"] = ("vak_formula_with_missing_input_fallback"
+                                    if model.artifact["vak_formulas"].get(target) is not None
+                                    else "train_median_no_vak_formula_available")
         disabled_reason = model.artifact.get(
             "disabled_ml_targets",
             {},
@@ -627,7 +641,7 @@ def _calibration_observations(
         config=config,
     )
     actual = pd.to_numeric(
-        evaluation.iloc[positions][str(config["target_column"])],
+        evaluation.iloc[positions][label_column(evaluation, str(config["target_column"]))],
         errors="coerce",
     ).to_numpy(dtype=float)
     valid = _physical_target_mask(actual, config)
@@ -647,6 +661,17 @@ def calibrate_quality_model(
     target_config: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
     """Выбирает predictor и калибрует его только на validation."""
+
+    validation = validation.copy()
+    cutoff = pd.to_datetime(validation["date"]).max() + pd.Timedelta(minutes=10)
+    for config in target_config.values():
+        age_name = config.get("age_column")
+        if age_name is None or age_name not in validation:
+            continue
+        age = pd.to_numeric(validation[label_column(validation, age_name)], errors="coerce")
+        sample_time = pd.to_datetime(validation["date"]) - pd.to_timedelta(age, unit="h")
+        unavailable = sample_time + pd.Timedelta(hours=LIMS_DELAY_HOURS) > cutoff
+        validation.loc[unavailable, label_column(validation, str(config["target_column"]))] = np.nan
 
     model.artifact.pop("interval_half_width", None)
     model.artifact.pop("sulfur_risk_threshold", None)
@@ -695,6 +720,7 @@ def calibrate_quality_model(
         interval_half_width[target] = _conformal_radius(errors)
 
     model.artifact["interval_half_width"] = interval_half_width
+    model.artifact["interval_coverage"] = .9
 
     if isinstance(model, QualityHydroModel):
         config = target_config["sulfur_ppm"]
@@ -725,7 +751,7 @@ def calibrate_quality_model(
                             low=float(lower),
                             high=float(upper),
                             unit="ppm",
-                        )
+                        ), coverage=model.artifact.get("interval_coverage", .8)
                     )
                     for mean, lower, upper in zip(
                         predicted,
@@ -744,6 +770,18 @@ def calibrate_quality_model(
                 )
             )
             model.artifact["sulfur_risk_threshold"] = threshold
+
+        if model.artifact.get("sulfur_online") and not validation.empty:
+            policy = model.artifact.pop("sulfur_online")
+            try:
+                _, base, raw_low, raw_high = _batch_prediction_arrays(
+                    model, validation, target="sulfur_ppm", config=config)
+            finally:
+                model.artifact["sulfur_online"] = policy
+            _, _, _, history = adjust_sulfur_history(
+                validation, base, raw_low, raw_high, **policy)
+            model.artifact["sulfur_online_history"] = history
+            model._sulfur_history = list(history)
 
     return {
         "candidate_metrics": candidate_metrics,
@@ -1032,7 +1070,7 @@ def measure_prediction_latency(
 
     for position in positions:
         started = perf_counter()
-        model.predict(frame.iloc[[int(position)]])
+        model.predict(inference_frame(frame.iloc[[int(position)]]))
         durations.append(
             (perf_counter() - started) * 1000.0
         )
@@ -1055,17 +1093,6 @@ def run_walk_forward_validation(
 ) -> dict[str, Any]:
     periods = split_by_time(frame)
 
-    avt_calibration_history = build_calibration_history(
-        quality_avt,
-        periods["validation"],
-        target_config=AVT_TARGET_CONFIG,
-    )
-    hydro_calibration_history = build_calibration_history(
-        quality_hydro,
-        periods["validation"],
-        target_config=HYDRO_TARGET_CONFIG,
-    )
-
     validation_metrics = {
         "quality_avt": evaluate_quality_model(
             quality_avt,
@@ -1080,17 +1107,21 @@ def run_walk_forward_validation(
     }
 
     test_metrics = {
+        "quality_hydro_lims_reference": evaluate_quality_model(
+            quality_hydro, periods["test"], target_config={
+                "sulfur_ppm": dict(HYDRO_TARGET_CONFIG["sulfur_ppm"],
+                    target_column="lims__гидроочистка__pt2__mg_sulfur",
+                    age_column="lims__гидроочистка__pt2__mg_sulfur_age_h")
+            }),
         "quality_avt": evaluate_quality_model(
             quality_avt,
             periods["test"],
             target_config=AVT_TARGET_CONFIG,
-            online_calibration_history=avt_calibration_history,
         ),
         "quality_hydro": evaluate_quality_model(
             quality_hydro,
             periods["test"],
             target_config=HYDRO_TARGET_CONFIG,
-            online_calibration_history=hydro_calibration_history,
         ),
         "anomaly": evaluate_anomaly_detector(
             anomaly,

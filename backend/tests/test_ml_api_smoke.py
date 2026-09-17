@@ -30,7 +30,7 @@ def state() -> pd.DataFrame:
     ("model_class", "expected_targets"),
     [
         (QualityAVTModel, {"T50", "T90", "D15", "CFPP"}),
-        (QualityHydroModel, {"sulfur_ppm", "T50", "T90", "D15"}),
+        (QualityHydroModel, {"sulfur_ppm", "T50", "T90", "D15", "T95", "cetane_number"}),
     ],
 )
 def test_quality_model_contract(model_class, expected_targets, state):
