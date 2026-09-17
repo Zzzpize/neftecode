@@ -14,6 +14,8 @@ from lightgbm import LGBMRegressor
 
 from data_layer.feature_registry import model_feature_names
 from ml.types import Explanation, Interval, QualityPrediction
+from ml.availability import label_column, validate_available_state, apply_lims_availability
+from ml.envelope import fit_envelope
 from ml.vak import VAKCatalog, VAKFormula, VAKMissingFeatureError
 
 
@@ -81,7 +83,7 @@ class QualityAVTModel:
         if "date" not in frame.columns:
             raise ValueError("frame must contain the date column")
 
-        train = frame.sort_values("date").reset_index(drop=True).copy()
+        train = apply_lims_availability(frame)
 
         # В baseline-версии используем только телеметрию АВТ.
         # ЛИМС-колонки сюда не входят, иначе текущий таргет попадёт
@@ -113,7 +115,9 @@ class QualityAVTModel:
         )
 
         artifact: dict[str, Any] = {
-            "version": 1,
+            "version": 3,
+            "reference_version": "expert_xlsx_2026_09_17",
+            "joint_envelope": fit_envelope(train),
             "trained": True,
             "feature_columns": feature_columns,
             "feature_q01": feature_q01,
@@ -126,6 +130,8 @@ class QualityAVTModel:
         }
 
         for target, config in TARGET_CONFIG.items():
+            name = config.get("vak_name")
+            artifact["vak_formulas"][target] = vak_catalog.get(name) if name in vak_catalog.names else None
             target_column = str(config["target_column"])
             age_column = str(config["age_column"])
             vak_name = config["vak_name"]
@@ -139,14 +145,14 @@ class QualityAVTModel:
                 artifact["n_samples"][target] = 0
                 continue
 
-            y = pd.to_numeric(train[target_column], errors="coerce")
+            y = pd.to_numeric(train[label_column(train, target_column)], errors="coerce")
 
             if age_column not in train.columns:
                 raise ValueError(
                     f"Age column is missing for {target}: {age_column}"
                 )
 
-            label_age = pd.to_numeric(train[age_column], errors="coerce")
+            label_age = pd.to_numeric(train[label_column(train, age_column)], errors="coerce")
 
             # time_join протягивает последнее значение ЛИМС вперёд.
             # Поэтому берём только строки, в которых возраст анализа
@@ -237,6 +243,7 @@ class QualityAVTModel:
                     reg_lambda=1.0,
                     random_state=42,
                     verbosity=-1,
+                    n_jobs=1,
                 )
                 model.fit(x, residual)
                 target_models[quantile] = model
@@ -256,6 +263,8 @@ class QualityAVTModel:
     def load(cls, path: str) -> "QualityAVTModel":
         with Path(path).open("rb") as file:
             artifact = pickle.load(file)
+        if artifact.get("trained") and artifact.get("reference_version") != "expert_xlsx_2026_09_17":
+            raise ValueError("Stale AVT artifact: rerun ml.training.train_all with expert references")
 
         return cls(artifact=artifact)
 
@@ -268,9 +277,13 @@ class QualityAVTModel:
 
     def predict(self, state: pd.DataFrame) -> QualityPrediction:
         self._validate_state(state)
+        validate_available_state(state)
 
         if not self.artifact.get("trained"):
-            return self._untrained_prediction()
+            result = self._untrained_prediction()
+            log.info("QualityAVTModel.predict input=%s result=%s",
+                     state.to_dict(orient="records")[0], asdict(result))
+            return result
 
         warnings: list[str] = []
         predictions: dict[str, Interval] = {}
@@ -345,19 +358,28 @@ class QualityAVTModel:
 
             changed_state.loc[:, column] = float(raw_value)
 
-        return self.predict(changed_state)
+        result = self.predict(changed_state)
+        result.confidence = "low"
+        result.warnings.append("AVT action effect is a static model scenario; transport to hydro is not instantaneous")
+        log.info("QualityAVTModel.predict_after_action input=%s action=%s result=%s",
+                 state.to_dict(orient="records")[0], action, asdict(result))
+        return result
 
     def explain(self, state: pd.DataFrame) -> Explanation:
         self._validate_state(state)
+        validate_available_state(state)
 
         if not self.artifact.get("trained"):
-            return Explanation(
+            result = Explanation(
                 top_features=[],
                 base_value=float("nan"),
             )
-
-        self._last_explanation = self._explain_t50(state)
-        return self._last_explanation
+        else:
+            result = self._explain_t50(state)
+        self._last_explanation = result
+        log.info("QualityAVTModel.explain input=%s result=%s",
+                 state.to_dict(orient="records")[0], asdict(result))
+        return result
 
     def _predict_target(
         self,
@@ -430,6 +452,10 @@ class QualityAVTModel:
                 mean,
                 mean + half_width,
             ]
+
+        if self.artifact["n_samples"].get(target, 0) == 0:
+            values[0], values[2] = float("nan"), float("nan")
+            warnings.append(f"{target}: no train labels; VAK point estimate only, interval is unknown")
 
         return (
             Interval(

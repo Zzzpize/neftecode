@@ -1,11 +1,12 @@
 # Прогноз серы, T50, T90, D15 после гидроочистки.
-# Таргет - ПАК Mg.Sulfur.Q (10-мин), ЛИМС используется как калибратор.
+# Сера: сырой ПАК (10-мин); ЛИМС точки 2 — независимый контроль.
 
 from __future__ import annotations
 
 import logging
 import math
 import pickle
+from statistics import NormalDist
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
@@ -15,8 +16,11 @@ import pandas as pd
 from lightgbm import LGBMRegressor
 
 from data_layer.feature_registry import model_feature_names
-from ml.feature_engineering import build_hydro_features
+from ml.feature_engineering import build_hydro_features, adjust_sulfur_history
 from ml.types import Explanation, Interval, QualityPrediction
+from ml.availability import label_column, validate_available_state, apply_lims_availability
+from ml.action_response import fit_response, response_factor
+from ml.envelope import fit_envelope
 from ml.vak import (
     VAKCatalog,
     VAKFormula,
@@ -35,6 +39,18 @@ TARGET_ENVELOPE_MARGIN = 3.0
 
 
 TARGET_CONFIG: dict[str, dict[str, Any]] = {
+    "T95": {
+        "target_column": "lims__гидроочистка__pt2__95_t",
+        "age_column": "lims__гидроочистка__pt2__95_t_age_h",
+        "vak_name": "24-2000:GODT:T95", "unit": "C",
+        "absolute_range": (150.0, 600.0),
+    },
+    "cetane_number": {
+        "target_column": "lims__гидроочистка__pt2__cetanenumber",
+        "age_column": "lims__гидроочистка__pt2__cetanenumber_age_h",
+        "vak_name": None, "unit": "dimensionless",
+        "absolute_range": (10.0, 100.0),
+    },
     "sulfur_ppm": {
         # ПАК — главный частый таргет согласно data_reference.md.
         "target_column": "pak_sulfur_ppm",
@@ -94,6 +110,10 @@ class QualityHydroModel:
     ):
         self.artifact = artifact or {}
         self._last_explanation: Explanation | None = None
+        self._sulfur_history = list(self.artifact.get("sulfur_online_history", []))
+        self._action_evaluation = False
+        from data_layer.feature_registry import controllable_ranges
+        self._controllable_ranges = controllable_ranges()
 
     @classmethod
     def fit(
@@ -114,7 +134,7 @@ class QualityHydroModel:
         cls._validate_training_frame(frame)
 
         train = build_hydro_features(
-            frame,
+            apply_lims_availability(frame),
             avt_delay_steps=avt_delay_steps,
         )
 
@@ -142,7 +162,10 @@ class QualityHydroModel:
         )
 
         artifact: dict[str, Any] = {
-            "version": 2,
+            "version": 3,
+            "reference_version": "expert_xlsx_2026_09_17",
+            "action_response": fit_response(train),
+            "joint_envelope": fit_envelope(train),
             "trained": True,
             "avt_delay_steps": avt_delay_steps,
             "feature_columns": feature_columns,
@@ -158,6 +181,8 @@ class QualityHydroModel:
         }
 
         for target, config in TARGET_CONFIG.items():
+            name = config.get("vak_name")
+            artifact["vak_formulas"][target] = vak_catalog.get(name) if name in vak_catalog.names else None
             y, label_mask = cls._make_target(
                 train=train,
                 target=target,
@@ -281,6 +306,7 @@ class QualityHydroModel:
                     reg_lambda=1.0,
                     random_state=42,
                     verbosity=-1,
+                    n_jobs=1,
                 )
                 model.fit(x, residual)
                 models[quantile] = model
@@ -304,6 +330,8 @@ class QualityHydroModel:
     ) -> "QualityHydroModel":
         with Path(path).open("rb") as file:
             artifact = pickle.load(file)
+        if artifact.get("trained") and artifact.get("reference_version") != "expert_xlsx_2026_09_17":
+            raise ValueError("Stale Hydro artifact: rerun ml.training.train_all with expert references")
 
         return cls(artifact=artifact)
 
@@ -322,6 +350,7 @@ class QualityHydroModel:
         state: pd.DataFrame,
     ) -> QualityPrediction:
         self._validate_state(state)
+        validate_available_state(state)
 
         if not self.artifact.get("trained"):
             result = self._untrained_prediction()
@@ -369,8 +398,14 @@ class QualityHydroModel:
             predictions[target] = interval
             warnings.extend(target_warnings)
 
+        predictions["sulfur_ppm"] = self._online_sulfur_interval(
+            state, predictions["sulfur_ppm"], commit=not self._action_evaluation)
+        if self.artifact.get("sulfur_online"):
+            warnings.append("Sulfur uses causal online calibration from previous PAK measurements; chronological state updates are required")
+            if not getattr(self, "_sulfur_online_ready", False):
+                warnings.append("Sulfur online calibration cold start: insufficient recent PAK history; fixed validation interval is used")
         sulfur_risk = self._sulfur_spec_risk(
-            predictions["sulfur_ppm"]
+            predictions["sulfur_ppm"], coverage=self.artifact.get("interval_coverage", .8)
         )
 
         confidence = self._calculate_confidence(
@@ -378,6 +413,11 @@ class QualityHydroModel:
             outside_ratio=outside_ratio,
             has_stale_lims=bool(stale_lims),
         )
+
+        if float(state.iloc[0].get("ml_feed_sulfur_multiplier", 1.0)) != 1.0:
+            confidence = "low"
+        if self.artifact.get("sulfur_online") and not getattr(self, "_sulfur_online_ready", False):
+            confidence = "low"
 
         result = QualityPrediction(
             predictions=predictions,
@@ -401,6 +441,34 @@ class QualityHydroModel:
         return result
 
     def predict_after_action(
+        self, state: pd.DataFrame, action: dict[str, float],
+    ) -> QualityPrediction:
+        previous = self._action_evaluation
+        self._action_evaluation = True
+        try:
+            return self._predict_after_action(state, action)
+        finally:
+            self._action_evaluation = previous
+
+    def _online_sulfur_interval(self, state, interval, *, commit=False):
+        config = self.artifact.get("sulfur_online")
+        if not config or "date" not in state:
+            return interval
+        multiplier = float(state.iloc[0].get("ml_feed_sulfur_multiplier", 1.))
+        timestamp = int(pd.Timestamp(state.iloc[0]["date"]).value)
+        recent = [r for r in self._sulfur_history
+                  if timestamp - pd.Timedelta(hours=6).value <= r["time"] < timestamp]
+        self._sulfur_online_ready = len(recent) >= config.get("min_samples", 5)
+        mean, low, high, records = adjust_sulfur_history(
+            state, [interval.mean / multiplier], [interval.low / multiplier],
+            [interval.high / multiplier], self._sulfur_history, **config)
+        if commit and multiplier == 1.:
+            if not self._sulfur_history or timestamp > max(r["time"] for r in self._sulfur_history):
+                self._sulfur_history = records
+        return Interval(mean=float(mean[0] * multiplier), low=float(low[0] * multiplier),
+                        high=float(high[0] * multiplier), unit=interval.unit)
+
+    def _predict_after_action(
         self,
         state: pd.DataFrame,
         action: dict[str, float],
@@ -453,7 +521,28 @@ class QualityHydroModel:
 
             changed_state.loc[:, column] = value
 
-        result = self.predict(changed_state)
+        response = self.artifact.get("action_response", {})
+        if response:
+            canonical_action = {next(c for c in (tag, f"hydro_{tag}", f"avt_{tag}")
+                                     if c in changed_state): float(value)
+                                for tag, value in action.items()}
+            allowed = self._controllable_ranges
+            if any(tag not in allowed for tag in canonical_action):
+                raise ValueError("Action contains a noncontrollable process tag")
+            result = self.predict(changed_state)
+            original, _ = self._predict_target(state=state, target="sulfur_ppm", unit="ppm")
+            original = self._online_sulfur_interval(state, original)
+            factor = response_factor(state, canonical_action, response)
+            result.predictions["sulfur_ppm"] = Interval(
+                mean=original.mean * factor, low=max(0., original.low * factor),
+                high=original.high * factor, unit=original.unit)
+            result.spec_risk["sulfur_over_10"] = self._sulfur_spec_risk(result.predictions["sulfur_ppm"], coverage=self.artifact.get("interval_coverage", .8))
+            result.confidence = "low"
+            result.warnings.append("Action effect is an observational model scenario, not causal validation; horizon 0..180 min")
+        else:
+            result = self.predict(changed_state)
+            result.confidence = "low"
+            result.warnings.append("Action response is unavailable; only a static what-if estimate is returned")
         log.info(
             "QualityHydroModel.predict_after_action "
             "input=%s action=%s result=%s",
@@ -468,6 +557,7 @@ class QualityHydroModel:
         state: pd.DataFrame,
     ) -> Explanation:
         self._validate_state(state)
+        validate_available_state(state)
 
         if not self.artifact.get("trained"):
             result = Explanation(
@@ -563,14 +653,14 @@ class QualityHydroModel:
             return empty, empty.notna()
 
         if target == "sulfur_ppm":
-            return cls._calibrated_sulfur_target(
-                train=train,
-                config=config,
-                artifact=artifact,
-            )
+            # Keep training/evaluation truth identical: raw PAK. Laboratory
+            # disagreement is reported separately, not silently added to labels.
+            y = pd.to_numeric(train[target_column], errors="coerce")
+            artifact["sulfur_target_source"] = "raw_pak"
+            return y, y.notna() & np.isfinite(y)
 
         y = pd.to_numeric(
-            train[target_column],
+            train[label_column(train, target_column)],
             errors="coerce",
         )
 
@@ -583,7 +673,7 @@ class QualityHydroModel:
             )
 
         age = pd.to_numeric(
-            train[age_column],
+            train[label_column(train, age_column)],
             errors="coerce",
         )
 
@@ -602,81 +692,13 @@ class QualityHydroModel:
 
     @staticmethod
     def _calibrated_sulfur_target(
-        *,
-        train: pd.DataFrame,
-        config: dict[str, Any],
-        artifact: dict[str, Any],
+        *, train: pd.DataFrame, config: dict[str, Any], artifact: dict[str, Any],
     ) -> tuple[pd.Series, pd.Series]:
-        """
-        Калибрует потоковый ПАК по последнему доступному анализу ЛИМС.
-
-        Поправка появляется только в момент получения ЛИМС и затем
-        распространяется вперёд. Будущий анализ не используется.
-        """
-
-        pak = pd.to_numeric(
-            train[str(config["target_column"])],
-            errors="coerce",
-        )
-
-        lab_column = str(
-            config["calibration_column"]
-        )
-        age_column = str(
-            config["calibration_age_column"]
-        )
-
-        if (
-            lab_column not in train.columns
-            or age_column not in train.columns
-        ):
-            artifact["sulfur_calibration_samples"] = 0
-            return pak, pak.notna()
-
-        lab = pd.to_numeric(
-            train[lab_column],
-            errors="coerce",
-        )
-        age = pd.to_numeric(
-            train[age_column],
-            errors="coerce",
-        )
-
-        fresh_lab = (
-            lab.notna()
-            & pak.notna()
-            & age.notna()
-            & age.le(MAX_LABEL_AGE_HOURS)
-            & (
-                age.shift().isna()
-                | age.diff().lt(0)
-                | age.eq(0)
-            )
-        )
-
-        correction = pd.Series(
-            np.nan,
-            index=train.index,
-            dtype="float64",
-        )
-        correction.loc[fresh_lab] = (
-            lab.loc[fresh_lab] - pak.loc[fresh_lab]
-        )
-
-        # ЛИМС имеет приоритет над ПАК, пока результат актуален. После 24
-        # часов поправка считается устаревшей и больше не применяется.
-        correction = correction.ffill()
-        correction = correction.where(
-            age.le(STALE_LIMS_HOURS),
-            0.0,
-        ).fillna(0.0)
-
-        artifact["sulfur_calibration_samples"] = int(
-            fresh_lab.sum()
-        )
-
-        calibrated = pak + correction
-        return calibrated, calibrated.notna()
+        """Compatibility helper: preserve raw PAK truth; LIMS is evaluated separately."""
+        pak = pd.to_numeric(train[str(config["target_column"])], errors="coerce")
+        artifact["sulfur_calibration_samples"] = 0
+        artifact["sulfur_target_source"] = "raw_pak"
+        return pak, pak.notna() & np.isfinite(pak)
 
     @staticmethod
     def _evaluate_baseline_series(
@@ -699,7 +721,7 @@ class QualityHydroModel:
         # Формула D15 содержит ссылку на ЛИМС D15.
         # При обучении на свежем лабораторном результате используем
         # предыдущее известное значение, иначе таргет попадёт в baseline.
-        if target_column in formula.required_columns:
+        if target_column in formula.required_columns and "ml_lims_delay_h" not in frame:
             baseline_frame[target_column] = (
                 baseline_frame[target_column].shift(1)
             )
@@ -829,6 +851,10 @@ class QualityHydroModel:
             for quantile in QUANTILES
         )
 
+        feed_multiplier = float(state.iloc[0].get("ml_feed_sulfur_multiplier", 1.0))
+        if not np.isfinite(feed_multiplier) or feed_multiplier <= 0:
+            raise ValueError("ml_feed_sulfur_multiplier must be positive and finite")
+
         calibrated_half_width = self.artifact.get(
             "interval_half_width",
             {},
@@ -842,6 +868,12 @@ class QualityHydroModel:
                 mean,
                 mean + half_width,
             ]
+
+        if target == "sulfur_ppm" and feed_multiplier != 1.0:
+            values = [value * feed_multiplier for value in values]
+            warnings.append("Feed sulfur multiplier is a synthetic proportional scenario, not a measured AVT sulfur prediction")
+        if target == "sulfur_ppm":
+            values = [max(0., value) if np.isfinite(value) else value for value in values]
 
         return (
             Interval(
@@ -931,6 +963,7 @@ class QualityHydroModel:
     @staticmethod
     def _sulfur_spec_risk(
         interval: Interval,
+        *, coverage: float = .8,
     ) -> float:
         """
         Оценивает вероятность sulfur > 10 ppm по q10/q50/q90.
@@ -950,7 +983,7 @@ class QualityHydroModel:
 
         sigma = (
             interval.high - interval.low
-        ) / (2.0 * 1.2815515655446004)
+        ) / (2.0 * NormalDist().inv_cdf((1 + coverage) / 2))
 
         if sigma <= 1e-9:
             return float(

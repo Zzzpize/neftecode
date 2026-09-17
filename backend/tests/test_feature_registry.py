@@ -28,11 +28,11 @@ def test_registry_has_complete_metadata_for_all_model_features():
 
 
 def test_optimizer_constraints_are_built_from_registry():
-    expected = controllable_ranges(["avt_T55", "hydro_T5"])
+    expected = controllable_ranges(["avt_T55", "hydro_T6"])
     constraints = ParetoOptimizer.constraints_from_registry(
         hard={"sulfur_ppm": (0.0, 10.0)},
         max_deviation_pct=5.0,
-        tags=["avt_T55", "hydro_T5"],
+        tags=["avt_T55", "hydro_T6"],
     )
 
     assert constraints.controllable_ranges == expected

@@ -6,13 +6,14 @@ from pathlib import Path
 import pandas as pd
 
 from data_layer.feature_registry import sync_feature_registry
+from ml.availability import inference_frame, LIMS_DELAY_HOURS
 from ml.feature_engineering import (
     build_quality_features,
     estimate_avt_hydro_delay,
 )
 
 
-DATA_DIR = Path("../data")
+from ml.paths import DATA_DIR
 
 MASTER_PATH = DATA_DIR / "master.parquet"
 FEATURES_PATH = DATA_DIR / "ml_features.parquet"
@@ -40,7 +41,7 @@ def prepare_features(
     avt_delay_steps = estimate_avt_hydro_delay(
         train,
         target_column="pak_sulfur_ppm",
-        min_delay_steps=1,
+        min_delay_steps=0,
         max_delay_steps=72,
     )
 
@@ -50,12 +51,13 @@ def prepare_features(
     )
 
     sync_feature_registry(
-        featured,
+        featured.loc[pd.to_datetime(featured["date"]).lt(TRAIN_END_EXCLUSIVE)],
         avt_delay_steps=avt_delay_steps,
     )
 
     if save:
-        featured.to_parquet(
+        featured.to_parquet(DATA_DIR / "ml_training.parquet", index=False)
+        inference_frame(featured).to_parquet(
             FEATURES_PATH,
             index=False,
         )
@@ -65,6 +67,11 @@ def prepare_features(
                 {
                     "avt_delay_steps": avt_delay_steps,
                     "step_minutes": 10,
+                    "lims_delay_hours": LIMS_DELAY_HOURS,
+                    "reference_version": "expert_xlsx_2026_09_17",
+                    "action_horizon_minutes": 180,
+                    "recommendation_step_minutes": 30,
+                    "transport_delay_search_minutes": [0, 720],
                     "generated_at": pd.Timestamp.now().isoformat(),
                 },
                 ensure_ascii=False,

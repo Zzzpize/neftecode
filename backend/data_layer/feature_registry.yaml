@@ -3880,13 +3880,15 @@ anomaly_z__60m__hydro_W7:
   - anomaly_context
 avt_D10:
   controllable: false
-  description: Плотность. Тр-д подачи обессолен. и обезвожен. Нефти
+  description: Плотность нефти на подаче
   installation: АВТ
   kind: density
+  physical_quantity: плотность, кг/м3
   range_max: 307.0
   range_min: 307.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: D10
   unit: kg/m3
   used_by:
@@ -3894,206 +3896,243 @@ avt_D10:
   - anomaly
 avt_F12:
   controllable: false
-  description: Расход 2 ЦО в К2
+  description: Расход 2-го ЦО в К-2
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 419.8
   range_min: 231.29
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F12
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F14:
   controllable: false
-  description: Расход 1 ЦО в К2
+  description: Расход 1-го ЦО в К-2
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 326.3
   range_min: 198.33
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F14
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F16:
   controllable: false
-  description: Расход бензина от Н4 в Е6
+  description: Расход бензина от Н-4 в Е-6
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 69.49
   range_min: 41.1
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F16
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F19:
   controllable: true
-  description: Расход остр.орошения К2
+  description: Расход острого орошения К-2
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 101.0
-  range_min: 44.67
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 103.83608955383296
+  range_min: 36.68248710632325
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F25:
   controllable: false
-  description: Расход бензина после Т26
+  description: Расход бензина после Т-26
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 33.28
   range_min: 10.44
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F25
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F26:
   controllable: true
-  description: Расход пара в К6
+  description: Расход пара в К-6
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
   range_max: 307.0
-  range_min: -6.33
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F27:
   controllable: true
-  description: Расход пара в К7
+  description: Расход пара в К-7
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 240.2
-  range_min: 99.75
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 307.0
+  range_min: 64.4023250579834
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F28:
   controllable: true
-  description: Расход пара в К9
+  description: Расход пара в К-9
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 374.69
-  range_min: 150.25
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 380.36692413330076
+  range_min: 149.28502029418945
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F29:
   controllable: true
-  description: Расход пара в К2
+  description: Расход пара в К-2
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 9.9
-  range_min: 6.24
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 10.858324298858642
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F3:
   controllable: true
-  description: Расход бензина на орошение К1
+  description: Расход бензина на орошение К-1
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 113.68
-  range_min: 56.27
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 251.0
+  range_min: 16.284802646636965
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F30:
   controllable: true
-  description: Расход фр.290-350°С с установки
+  description: Расход фр. 290-350 с установки
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 153.13
-  range_min: 95.07
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 179.7828404235837
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F31:
   controllable: false
-  description: Расход нефтепродукта в П3
+  description: Расход нефтепродукта в П-3
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 642.21
   range_min: 393.72
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F31
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F32:
   controllable: true
-  description: Расход фр.240-290°С с установки
+  description: Расход фр. 240-290 с установки
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 96.47
-  range_min: 53.03
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 307.0
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F34:
   controllable: true
-  description: Расход фр.150-250°С с установки
+  description: Расход фр. 150-250 с установки
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 112.97
-  range_min: 56.02
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 251.0
+  range_min: 16.84459239959717
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4101,13 +4140,15 @@ avt_F35:
   controllable: false
   description: Расход ВЦО в К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 162.71
   range_min: 93.06
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F35
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4115,13 +4156,15 @@ avt_F36:
   controllable: false
   description: Расход СЦО в К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 156.0
   range_min: 92.72
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F36
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4129,124 +4172,143 @@ avt_F41:
   controllable: false
   description: Расход доп. ВЦО в К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 84.88
   range_min: 7.98
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F41
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F45:
   controllable: false
-  description: Расход холодного гудрона в К10
+  description: Расход холодного гудрона в К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 20.11
   range_min: 13.91
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F45
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F46:
   controllable: false
-  description: Расход НЦО К10 фракции 350-560
+  description: Расход НЦО К-10 (фр. 350-560)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 131.38
   range_min: 94.91
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F46
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F5:
   controllable: true
-  description: Расход пара в К1
+  description: Расход пара в К-1
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
-  range_max: 166.8
-  range_min: -26.41
+  kind: flow_mass
+  physical_quantity: расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 445.0138153076162
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F53:
   controllable: false
-  description: Расход НЦО  К10 (Регулятор)
+  description: Расход НЦО К-10 (регулятор)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 88.92
   range_min: 75.2
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F53
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F54:
   controllable: false
-  description: Расход от Н-34/1,2  К10
+  description: Расход от Н-34/1,2 в К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 28.36
   range_min: 0.04
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F54
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F56:
   controllable: false
-  description: Расход в трубопроводе фракции до 350 с установки
+  description: Расход фр. до 350 с установки (реальный)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 48.05
   range_min: 10.47
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F56
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F57:
   controllable: false
-  description: Расход в трубопроводе фракции до 350 с установки
+  description: Расход фр. до 350 с установки (виртуальный)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 55.95
   range_min: 12.42
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F57
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F59:
   controllable: false
-  description: Расход фр.420-500°С с установки. Объемный расход
+  description: Расход фр. 420-500 с установки (объемный)
   installation: АВТ
   kind: flow_vol
+  physical_quantity: расход, м3/ч
   range_max: 238.26
   range_min: 153.71
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F59
   unit: m3/h
   used_by:
@@ -4254,15 +4316,17 @@ avt_F59:
   - anomaly
 avt_F60:
   controllable: false
-  description: Расход в трубопроводе фракции 350-560 с установки
+  description: Расход фр. 350-560 с установки
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 209.23
   range_min: 136.35
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F60
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4270,13 +4334,15 @@ avt_F62:
   controllable: false
   description: Расход НЦО К-10
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 138.3
   range_min: 97.25
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F62
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4284,27 +4350,31 @@ avt_F63:
   controllable: false
   description: Расход гудрона на битумную установку
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 225.42
   range_min: -0.17
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F63
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F64:
   controllable: false
-  description: Расход 3-го ЦО в К2
+  description: Расход 3-го ЦО в К-2
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 161.24
   range_min: 70.18
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F64
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
@@ -4313,249 +4383,285 @@ avt_F65:
   description: Производительность К-2 по отбензиненной нефти
   engineer_time_features: true
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 1085.09
   range_min: 403.4
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F68:
   controllable: false
-  description: Расход гудрона с установки
+  description: Расход гудрона с установки (реальный)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 87.08
   range_min: 5.33
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F68
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F69:
   controllable: false
-  description: Расход гудрона с установки
+  description: Расход гудрона с установки (виртуальный)
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 135.54
   range_min: 6.19
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F69
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F7:
   controllable: false
-  description: Расход обессоленной нефти (3-й ход) (Нефть обессоленная в Т-4/2)
+  description: Расход обессоленной нефти (3-й ход) в Т-4/2
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 311.39
   range_min: 180.61
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F7
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F8:
   controllable: false
-  description: Расход обессоленной нефти (1-й ход) (Нефть обессоленная в Т-6/1)
+  description: Расход обессоленной нефти (1-й ход) в Т-6/1
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 332.99
   range_min: 171.74
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F8
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_F9:
   controllable: false
-  description: Расход обессоленной нефти (2-й ход) (Нефть обессоленная в Т-10/2)
+  description: Расход обессоленной нефти (2-й ход) в Т-10/2
   installation: АВТ
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 307.0
   range_min: 122.03
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: F9
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
   - anomaly
 avt_L43:
   controllable: false
-  description: Уровень в К10
+  description: Уровень в К-10
   installation: АВТ
   kind: level
+  physical_quantity: уровень, %
   range_max: 62.38
   range_min: 56.97
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: L43
-  unit: pct
+  unit: '%'
   used_by:
   - quality_avt
   - anomaly
 avt_P2:
   controllable: false
-  description: Давление бензиновых паров верха К1
+  description: Давление бензиновых паров верха К-1
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 3.92
   range_min: 3.31
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P2
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P21:
   controllable: false
-  description: Давление бензиновых паров верха К2
+  description: Давление верха К-2 (измерительное)
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 1.21
   range_min: 1.01
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P21
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P22:
   controllable: false
-  description: Давление верха К2
+  description: Давление верха К-2 (регистрирующее)
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 1.2
   range_min: 1.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P22
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P23:
   controllable: false
-  description: Давление верха К-2
+  description: Давление верха К-2 (регулятор, ветка B)
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 1.19
   range_min: 1.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P23
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P4:
   controllable: false
-  description: Давление низа К1 в Е6
+  description: Давление низа К-1 в Е-6
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 4.13
   range_min: 3.51
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P4
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P44:
   controllable: false
-  description: Вакуум низа К10
+  description: Вакуум низа К-10
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 0.95
   range_min: -0.95
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P44
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P50:
   controllable: false
-  description: Вакуум верха К10
+  description: Вакуум верха К-10
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 0.97
   range_min: 0.92
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P50
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P51:
   controllable: false
-  description: Вакуум верха К-10 (пересчёт на мм рт.ст. с кгс/см2 от AVT6:PIR0825.P)
+  description: Вакуум верха К-10 (пересчёт в мм рт.ст.)
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, мм рт.ст.
   range_max: 59.4
   range_min: 42.01
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P51
-  unit: atm
+  unit: mmHg
   used_by:
   - quality_avt
   - anomaly
 avt_P52:
   controllable: false
-  description: Перепад давления над 4-й пак.насад. К10
+  description: Перепад давления над 4-й пак. насадки К-10
   installation: АВТ
   kind: pressure
+  physical_quantity: перепад, МПа
   range_max: 0.0
   range_min: -0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P52
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_P67:
   controllable: false
-  description: Давление верха К2.
+  description: Давление верха К-2 (доп. точка)
   installation: АВТ
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 1.19
   range_min: 1.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: P67
-  unit: atm
+  unit: MPa
   used_by:
   - quality_avt
   - anomaly
 avt_T1:
   controllable: false
-  description: Температура верха К1. Выход на FIRC0955
+  description: Температура верха К-1 (выход на FIRC0955)
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 139.35
   range_min: 119.07
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T1
   unit: C
   used_by:
@@ -4566,10 +4672,12 @@ avt_T11:
   description: 3-е ЦО после Т-46
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 88.95
   range_min: 38.18
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T11
   unit: C
   used_by:
@@ -4580,10 +4688,12 @@ avt_T13:
   description: 1-е ЦО К-2 после Т-30
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 96.87
   range_min: 77.7
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T13
   unit: C
   used_by:
@@ -4591,13 +4701,15 @@ avt_T13:
   - anomaly
 avt_T15:
   controllable: false
-  description: 3 -е ЦО К-2
+  description: 3-е ЦО К-2
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 162.76
   range_min: 103.65
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T15
   unit: C
   used_by:
@@ -4608,10 +4720,12 @@ avt_T17:
   description: 2-е ЦО из К-2
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 219.42
   range_min: 202.47
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T17
   unit: C
   used_by:
@@ -4622,10 +4736,12 @@ avt_T18:
   description: 1-е ЦО из К-2
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 162.69
   range_min: 146.5
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T18
   unit: C
   used_by:
@@ -4633,13 +4749,15 @@ avt_T18:
   - anomaly
 avt_T20:
   controllable: false
-  description: Температура верха К2. Выход на FIRC0953
+  description: Температура верха К-2 (выход на FIRC0953)
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 116.84
   range_min: 112.49
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T20
   unit: C
   used_by:
@@ -4647,13 +4765,15 @@ avt_T20:
   - anomaly
 avt_T24:
   controllable: false
-  description: Переток из К-2 в К-6
+  description: Температура перетока К-2 в К-6
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 146.95
   range_min: 130.7
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T24
   unit: C
   used_by:
@@ -4665,10 +4785,12 @@ avt_T33:
   engineer_time_features: true
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 340.27
   range_min: 333.21
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T33
   unit: C
   used_by:
@@ -4679,10 +4801,12 @@ avt_T37:
   description: Температура ВЦО в К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 71.09
   range_min: 47.96
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T37
   unit: C
   used_by:
@@ -4690,13 +4814,15 @@ avt_T37:
   - anomaly
 avt_T38:
   controllable: false
-  description: Температура доп. ВЦО К10
+  description: Температура доп. ВЦО К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 187.32
   range_min: 155.23
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T38
   unit: C
   used_by:
@@ -4704,13 +4830,15 @@ avt_T38:
   - anomaly
 avt_T39:
   controllable: false
-  description: Температура в К10 (над секцией рег.насадки 1а)
+  description: Температура в К-10 над секцией насадки 1а
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 252.0
   range_min: 186.87
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T39
   unit: C
   used_by:
@@ -4718,13 +4846,15 @@ avt_T39:
   - anomaly
 avt_T40:
   controllable: false
-  description: Температура ВЦО из К10
+  description: Температура ВЦО из К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 188.47
   range_min: 156.05
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T40
   unit: C
   used_by:
@@ -4732,13 +4862,15 @@ avt_T40:
   - anomaly
 avt_T42:
   controllable: false
-  description: Температура фр.420-500°С из К10 в Е12
+  description: Температура фр. 420-500 из К-10 в Е-12
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 296.12
   range_min: 268.49
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T42
   unit: C
   used_by:
@@ -4746,13 +4878,15 @@ avt_T42:
   - anomaly
 avt_T47:
   controllable: false
-  description: Температура фр.350-560 °C после Т-40
+  description: Температура фр. 350-560 после Т-40
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 201.56
   range_min: 163.65
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T47
   unit: C
   used_by:
@@ -4760,13 +4894,15 @@ avt_T47:
   - anomaly
 avt_T48:
   controllable: false
-  description: 'Описание: Температура низа К10'
+  description: Температура низа К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 360.25
   range_min: 346.38
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T48
   unit: C
   used_by:
@@ -4774,13 +4910,15 @@ avt_T48:
   - anomaly
 avt_T49:
   controllable: false
-  description: 'Описание: Температура верха К10'
+  description: Температура верха К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 143.35
   range_min: 114.53
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T49
   unit: C
   used_by:
@@ -4788,14 +4926,17 @@ avt_T49:
   - anomaly
 avt_T55:
   controllable: true
-  description: Температура на выходе из печи П3 (общ. Выход на FIRC2470)
+  description: Температура на выходе из П-3 (на FIRC2470)
   engineer_time_features: true
   installation: АВТ
   kind: temperature
-  range_max: 385.01
-  range_min: 375.8
+  physical_quantity: температура, °C
+  range_basis: historical_train_not_technological_limit
+  range_max: 386.5550961303711
+  range_min: 6.330820240974426
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T55
   unit: C
   used_by:
@@ -4803,13 +4944,15 @@ avt_T55:
   - anomaly
 avt_T58:
   controllable: false
-  description: Температура фракции до 350 С от Т-37
+  description: Температура фр. до 350 от Т-37
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 68.79
   range_min: 22.73
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T58
   unit: C
   used_by:
@@ -4817,13 +4960,15 @@ avt_T58:
   - anomaly
 avt_T6:
   controllable: false
-  description: Температура низ К1
+  description: Температура низа К-1
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 235.09
   range_min: 221.75
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T6
   unit: C
   used_by:
@@ -4834,10 +4979,12 @@ avt_T61:
   description: Температура НЦО в К-10
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 192.36
   range_min: 170.1
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T61
   unit: C
   used_by:
@@ -4845,13 +4992,15 @@ avt_T61:
   - anomaly
 avt_T66:
   controllable: false
-  description: Переток в К-9
+  description: Температура перетока в К-9
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 265.73
   range_min: 241.26
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T66
   unit: C
   used_by:
@@ -4859,13 +5008,15 @@ avt_T66:
   - anomaly
 avt_T71:
   controllable: false
-  description: Фр.290-350°С из К-2
+  description: Температура фр. 290-350 из К-2
   installation: АВТ
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 311.44
   range_min: 296.6
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: T71
   unit: C
   used_by:
@@ -4873,13 +5024,15 @@ avt_T71:
   - anomaly
 avt_W70:
   controllable: false
-  description: Массовый расход фр.290-350°С с установки
+  description: Массовый расход фр. 290-350 с установки
   installation: АВТ
   kind: flow_mass
+  physical_quantity: масс.расход, т/ч
   range_max: 118.86
   range_min: 72.39
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: avt_tags.csv
+  source: expert_reference.json
   tag: W70
   unit: t/h
   used_by:
@@ -4888,118 +5041,118 @@ avt_W70:
 avt_lag_10m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.63044891357423
-  range_min: 35.09462718963623
+  range_max: 103.8361955261231
+  range_min: 36.68241348266602
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.392630100250244
+  range_min: -6.413534164428711
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 51.24544544219971
+  range_min: 64.40217361450196
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 380.05501861572264
-  range_min: 149.38215713500978
+  range_max: 380.3669244384766
+  range_min: 149.28501373291016
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.125567197799686
+  range_max: 10.858325233459473
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 24.998602199554444
+  range_min: 16.284651069641114
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 170.61400070190467
-  range_min: -0.5808892846107483
+  range_max: 179.783432312012
+  range_min: -0.2012815824151038
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.1890209197998
-  range_min: -0.1658681035041809
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.598683166503907
+  range_min: 16.84453742980957
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 407.0673248291036
-  range_min: -166.68798828125
+  range_max: 445.01595458984474
+  range_min: -166.9689178466797
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.107666015625
-  range_min: 20.979396057128906
+  range_max: 1189.8605200195314
+  range_min: 14.36777416229248
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_10m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.19490203857424
-  range_min: 8.291878700256348
+  range_max: 341.3814678955078
+  range_min: 5.00547142982483
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5008,8 +5161,8 @@ avt_lag_10m__T33:
 avt_lag_10m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.1613021850586
-  range_min: 9.262058019638062
+  range_max: 386.5551104736328
+  range_min: 6.33079119682312
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5018,118 +5171,118 @@ avt_lag_10m__T55:
 avt_lag_30m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.63046905517578
-  range_min: 35.094595680236814
+  range_max: 103.83640747070307
+  range_min: 36.68226623535157
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.392654705047608
+  range_min: -6.413534164428711
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 51.244443931579596
+  range_min: 64.40187072753906
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 380.05501922607425
-  range_min: 149.38214889526367
+  range_max: 380.36692504882814
+  range_min: 149.28500061035157
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.125571298599244
+  range_max: 10.858327102661132
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 24.998567066192628
+  range_min: 16.284347915649413
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 170.61530654907196
-  range_min: -0.5808892846107483
+  range_max: 179.78461608886684
+  range_min: -0.2012896567583084
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.18902565002442
-  range_min: -0.1658681035041809
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.59868179321289
+  range_min: 16.844427490234374
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 406.7660922241211
-  range_min: -166.68798828125
+  range_max: 445.0202331542956
+  range_min: -166.9689178466797
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.107666015625
-  range_min: 20.979385986328126
+  range_max: 1189.8605224609375
+  range_min: 14.367770004272462
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_30m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.1949038696289
-  range_min: 8.291878700256348
+  range_max: 341.3814758300781
+  range_min: 5.0053871154785154
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5138,8 +5291,8 @@ avt_lag_30m__T33:
 avt_lag_30m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.1613284301758
-  range_min: 9.26204686164856
+  range_max: 386.5551391601562
+  range_min: 6.330733108520508
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5148,118 +5301,118 @@ avt_lag_30m__T55:
 avt_lag_60m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.63049926757812
-  range_min: 35.0945484161377
+  range_max: 103.83672538757317
+  range_min: 36.68204536437989
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.392691612243652
+  range_min: -6.413534164428711
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 51.24294166564942
+  range_min: 64.40141639709472
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 380.0550201416016
-  range_min: 149.38213653564452
+  range_max: 380.36692596435546
+  range_min: 149.28498092651367
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.125577449798584
+  range_max: 10.858329906463622
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 24.9985143661499
+  range_min: 16.283893184661864
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 170.61726531982384
-  range_min: -0.5808892846107483
+  range_max: 179.78639175414997
+  range_min: -0.20130176827311513
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.18903274536133
-  range_min: -0.1658681035041809
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.598679733276366
+  range_min: 16.844262580871582
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 406.2324829101561
-  range_min: -166.68798828125
+  range_max: 445.02665100097505
+  range_min: -166.9689178466797
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.107666015625
-  range_min: 20.979370880126954
+  range_max: 1189.8605261230468
+  range_min: 14.367763767242433
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_lag_60m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.1949066162109
-  range_min: 8.291878700256348
+  range_max: 341.3814877319336
+  range_min: 5.005260643959045
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5268,8 +5421,8 @@ avt_lag_60m__T33:
 avt_lag_60m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.16136779785154
-  range_min: 9.262030124664307
+  range_max: 386.5551821899414
+  range_min: 6.330645976066589
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5278,118 +5431,118 @@ avt_lag_60m__T55:
 avt_lag_65__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.63556457519522
-  range_min: 35.09254970550537
+  range_max: 103.84328399658214
+  range_min: 36.67779899597168
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.39293800354004
+  range_min: -6.413534164428711
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 50.93693283081054
+  range_min: 64.39260513305663
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 380.05530731201173
-  range_min: 149.38181869506835
+  range_max: 380.366943359375
+  range_min: 149.28460571289062
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.125692348480223
+  range_max: 10.8583837890625
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 24.993171291351317
+  range_min: 16.27507553100586
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 170.63197418212874
-  range_min: -0.5808892846107483
+  range_max: 179.82102905273456
+  range_min: -0.2015745532512664
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.18906761169433
-  range_min: -0.1658681035041809
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.598523330688476
+  range_min: 16.84110595703125
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 400.3788146972656
-  range_min: -166.6880256652832
+  range_max: 445.18040710449867
+  range_min: -166.9689178466797
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.1077258300782
-  range_min: 20.978227977752685
+  range_max: 1189.8606030273438
+  range_min: 14.367538375854494
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
 avt_lag_65__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.19496063232424
-  range_min: 8.291878700256348
+  range_max: 341.38171752929685
+  range_min: 5.002840194702149
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5398,8 +5551,8 @@ avt_lag_65__T33:
 avt_lag_65__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.16227661132814
-  range_min: 9.258910245895384
+  range_max: 386.5560272216797
+  range_min: 6.328920421600342
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5408,118 +5561,118 @@ avt_lag_65__T55:
 avt_roll_mean_120m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.01522670745844
-  range_min: 35.69216487884522
+  range_max: 104.0564352162679
+  range_min: 38.033770367304484
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.368894249598185
+  range_min: -6.378087630669276
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 59.418422838846844
+  range_min: 67.08965803146363
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 379.9859602355957
-  range_min: 149.82649866739908
+  range_max: 380.0674334462484
+  range_min: 149.78210384368896
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.143291385968524
+  range_max: 10.873189763228098
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 27.230071773529055
+  range_min: 18.179758818944304
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 169.62093503316223
-  range_min: -0.579156080186367
+  range_max: 178.6257607014974
+  range_min: -0.17334367763251055
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.0726070022583
-  range_min: -0.16775667391717433
+  range_max: 307.0
+  range_min: -0.19261959260950479
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.770534019470215
+  range_min: 17.156648771762846
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 411.85687352498365
-  range_min: -166.70352559407553
+  range_max: 464.93334721883144
+  range_min: -166.89490823109946
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.0041591389975
-  range_min: 21.152664931615192
+  range_max: 1189.961526184082
+  range_min: 14.936366549332938
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_120m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 340.9870390319824
-  range_min: 8.417794553438823
+  range_max: 341.1418905131022
+  range_min: 5.17853944738706
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5528,8 +5681,8 @@ avt_roll_mean_120m__T33:
 avt_roll_mean_120m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 385.9807477315267
-  range_min: 9.29519591887792
+  range_max: 386.2414609018962
+  range_min: 6.475944437583289
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5538,118 +5691,118 @@ avt_roll_mean_120m__T55:
 avt_roll_mean_30m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.6195697021484
-  range_min: 35.174256006876625
+  range_max: 103.82009984334312
+  range_min: 36.931330362955734
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.385819867451982
+  range_min: -6.396443492571515
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 58.53979888916023
+  range_min: 65.81010382334398
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 380.0117687988281
-  range_min: 149.63844868977864
+  range_max: 380.19741994222005
+  range_min: 149.54987731933593
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.128808676401775
+  range_max: 10.86202910105387
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 26.20567258199056
+  range_min: 16.66743761062623
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 170.2620780436193
-  range_min: -0.5808892846107483
+  range_max: 178.9216246032713
+  range_min: -0.20010120535899725
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.12409006754554
-  range_min: -0.1658681035041809
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.741798566182457
+  range_min: 17.05666238149007
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 409.13373718261545
-  range_min: -166.70050465901693
+  range_max: 461.17283060709616
+  range_min: -166.9390411376953
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.0438411458333
-  range_min: 20.999786376953125
+  range_max: 1189.9174377441407
+  range_min: 14.380321502685549
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_30m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.13318135579425
-  range_min: 8.31342742284139
+  range_max: 341.32308705647785
+  range_min: 5.0601679070790615
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5658,8 +5811,8 @@ avt_roll_mean_30m__T33:
 avt_roll_mean_30m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.09326131184895
-  range_min: 9.284145666758219
+  range_max: 386.4577440388997
+  range_min: 6.361989652315776
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5668,118 +5821,118 @@ avt_roll_mean_30m__T55:
 avt_roll_mean_60m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 113.38145612080892
-  range_min: 35.32826796213786
+  range_max: 103.87830988566078
+  range_min: 37.285671908060706
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
   range_max: 307.0
-  range_min: -26.377634773254396
+  range_min: -6.389744446277619
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
   range_max: 307.0
-  range_min: 59.66510726928711
+  range_min: 66.6203386815389
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 379.997922668457
-  range_min: 149.7502315266927
+  range_max: 380.11862792968753
+  range_min: 149.67524391174317
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 11.133207089106238
+  range_max: 10.86797591050466
   range_min: -0.4222235679626465
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
   range_max: 251.0
-  range_min: 26.793152980804443
+  range_min: 16.894133745829265
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 169.90340199788412
-  range_min: -0.5800987492005031
+  range_max: 178.76401692708333
+  range_min: -0.1963560879230499
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 105.13699712117513
-  range_min: -0.166473024636507
+  range_max: 307.0
+  range_min: -0.1933347582817077
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
   range_max: 251.0
-  range_min: 19.76321934382121
+  range_min: 17.122659974098205
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 410.16548767089836
-  range_min: -166.71612635294596
+  range_max: 462.9308981831868
+  range_min: -166.9183268737793
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 1190.017717285156
-  range_min: 21.08377391179403
+  range_max: 1189.9484208170572
+  range_min: 14.434175874392192
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_mean_60m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 341.0625382486979
-  range_min: 8.35950540860494
+  range_max: 341.22068013509113
+  range_min: 5.096486439704895
   role: feature
   source: derived:avt_T33
   unit: C
@@ -5788,8 +5941,8 @@ avt_roll_mean_60m__T33:
 avt_roll_mean_60m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 386.0260798136393
-  range_min: 9.287621434529623
+  range_max: 386.33382664998373
+  range_min: 6.409085349241894
   role: feature
   source: derived:avt_T55
   unit: C
@@ -5798,118 +5951,118 @@ avt_roll_mean_60m__T55:
 avt_roll_slope_120m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 1.0023046562888402
-  range_min: -1.0404280679876154
+  range_max: 0.9322747664018108
+  range_min: -0.9549653486772017
   role: feature
   source: derived:avt_F19
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.026951844908974343
-  range_min: -0.02788334326310591
+  range_max: 0.02362800077958532
+  range_min: -0.02452336224642667
   role: feature
   source: derived:avt_F26
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 0.48711754538796387
-  range_min: -0.45040097323330736
+  range_max: 0.42786948464133706
+  range_min: -0.4153459028764199
   role: feature
   source: derived:avt_F27
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 0.579173237193714
-  range_min: -0.5724412814053638
+  range_max: 0.5387490012428966
+  range_min: -0.5801316694779829
   role: feature
   source: derived:avt_F28
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.03547304890372524
-  range_min: -0.03208352565765381
+  range_max: 0.03946033824573854
+  range_min: -0.037015134638006035
   role: feature
   source: derived:avt_F29
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 0.6233349262584332
-  range_min: -0.6397248354825107
+  range_max: 0.6143784956498551
+  range_min: -0.6437167080965905
   role: feature
   source: derived:avt_F3
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 0.7014630265669386
-  range_min: -0.6960961359197443
+  range_max: 0.7226151899857938
+  range_min: -0.7389257257634949
   role: feature
   source: derived:avt_F30
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 0.5326412339643998
-  range_min: -0.5191399418223988
+  range_max: 0.5712281660600129
+  range_min: -0.5677468733354043
   role: feature
   source: derived:avt_F32
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 0.4971465093439236
-  range_min: -0.46529111688787417
+  range_max: 0.551034129749644
+  range_min: -0.5617624456232244
   role: feature
   source: derived:avt_F34
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 7.19790192907507
-  range_min: -7.047432264848189
+  range_max: 11.102068831703784
+  range_min: -11.869076650792902
   role: feature
   source: derived:avt_F5
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 3.616685152920808
-  range_min: -3.5018620161576703
+  range_max: 3.570555530894887
+  range_min: -3.5975386186079548
   role: feature
   source: derived:avt_F65
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_120m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 0.3244097345525596
-  range_min: -0.27337746360085224
+  range_max: 0.40468971946022675
+  range_min: -0.31863125887784094
   role: feature
   source: derived:avt_T33
   unit: C/10min
@@ -5918,8 +6071,8 @@ avt_roll_slope_120m__T33:
 avt_roll_slope_120m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 0.3518334406072434
-  range_min: -0.3306979092684659
+  range_max: 0.3816961115056774
+  range_min: -0.38093983043323865
   role: feature
   source: derived:avt_T55
   unit: C/10min
@@ -5928,118 +6081,118 @@ avt_roll_slope_120m__T55:
 avt_roll_slope_30m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 3.154699764251708
-  range_min: -3.2115087890624996
+  range_max: 2.924975585937483
+  range_min: -3.025208282470705
   role: feature
   source: derived:avt_F19
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.09455835342407215
-  range_min: -0.09721772909164447
+  range_max: 0.09074134826660132
+  range_min: -0.09610095024108888
   role: feature
   source: derived:avt_F26
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 1.6861445617675506
-  range_min: -1.7705945587158203
+  range_max: 1.4146545410156155
+  range_min: -1.3959503173828212
   role: feature
   source: derived:avt_F27
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 2.143685073852562
-  range_min: -2.0727130889892575
+  range_max: 1.9557525634765618
+  range_min: -1.9639755249023438
   role: feature
   source: derived:avt_F28
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.0707879590988158
-  range_min: -0.06918927907943687
+  range_max: 0.08113307952880856
+  range_min: -0.07898845672607423
   role: feature
   source: derived:avt_F29
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 1.9192836761474608
-  range_min: -1.9097948265075684
+  range_max: 1.9303695678710902
+  range_min: -1.9322189331054689
   role: feature
   source: derived:avt_F3
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 1.988481178283687
-  range_min: -1.9933081436157165
+  range_max: 2.1358886718749908
+  range_min: -2.1382537841796876
   role: feature
   source: derived:avt_F30
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 1.5038305282592774
-  range_min: -1.4501472854614257
+  range_max: 1.634867858886714
+  range_min: -1.5440109252929688
   role: feature
   source: derived:avt_F32
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 0.8212862777709966
-  range_min: -0.642125434875483
+  range_max: 1.0215705871581895
+  range_min: -0.9485305786132814
   role: feature
   source: derived:avt_F34
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 15.200476150512635
-  range_min: -14.938430786132812
+  range_max: 20.858666229247575
+  range_min: -19.96744842529298
   role: feature
   source: derived:avt_F5
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 4.923389587402273
-  range_min: -4.761981506347656
+  range_max: 4.7062988281249005
+  range_min: -4.8341087341308615
   role: feature
   source: derived:avt_F65
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_30m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 0.8056793212890625
-  range_min: -0.7388993072509756
+  range_max: 0.9402252197265586
+  range_min: -0.853617858886716
   role: feature
   source: derived:avt_T33
   unit: C/10min
@@ -6048,8 +6201,8 @@ avt_roll_slope_30m__T33:
 avt_roll_slope_30m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 1.2422320556640614
-  range_min: -1.1789750671386718
+  range_max: 1.4095306396484217
+  range_min: -1.3196990966796875
   role: feature
   source: derived:avt_T55
   unit: C/10min
@@ -6058,118 +6211,118 @@ avt_roll_slope_30m__T55:
 avt_roll_slope_60m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 1.8096898803710963
-  range_min: -1.801803092956543
+  range_max: 1.6663031005859317
+  range_min: -1.6431011962890625
   role: feature
   source: derived:avt_F19
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.05061573028564448
-  range_min: -0.05108358287811279
+  range_max: 0.04598939895629862
+  range_min: -0.04724155426025391
   role: feature
   source: derived:avt_F26
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 0.8787559509277341
-  range_min: -0.865536865234375
+  range_max: 0.7183197021484354
+  range_min: -0.723070068359375
   role: feature
   source: derived:avt_F27
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 1.0780296325683576
-  range_min: -1.0908959350585936
+  range_max: 1.02388427734375
+  range_min: -1.0639051818847658
   role: feature
   source: derived:avt_F28
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.04937448120117156
-  range_min: -0.04730131721496581
+  range_max: 0.05640808105468698
+  range_min: -0.05429901123046875
   role: feature
   source: derived:avt_F29
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 1.1746094207763653
-  range_min: -1.1913340301513673
+  range_max: 1.1368830871582025
+  range_min: -1.1640795898437502
   role: feature
   source: derived:avt_F3
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 1.1177659454345679
-  range_min: -1.0995411987304686
+  range_max: 1.2007025146484251
+  range_min: -1.1904693603515626
   role: feature
   source: derived:avt_F30
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 0.8545372238159179
-  range_min: -0.8323742218017602
+  range_max: 0.931522216796872
+  range_min: -0.918527526855467
   role: feature
   source: derived:avt_F32
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 0.6228965759277394
-  range_min: -0.5983432312011718
+  range_max: 0.7983573913574218
+  range_min: -0.8288504028320296
   role: feature
   source: derived:avt_F34
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 9.546163952872151
-  range_min: -9.565971001386641
+  range_max: 15.57738911926741
+  range_min: -15.49742492675781
   role: feature
   source: derived:avt_F5
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 4.081219970703112
-  range_min: -4.028833374023415
+  range_max: 3.9643749999999986
+  range_min: -4.0609912109375
   role: feature
   source: derived:avt_F65
-  unit: m3/h/10min
+  unit: t/h/10min
   used_by:
   - quality_avt
 avt_roll_slope_60m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 0.5275519409179771
-  range_min: -0.4734176330566431
+  range_max: 0.6320422363281208
+  range_min: -0.5479425048828114
   role: feature
   source: derived:avt_T33
   unit: C/10min
@@ -6178,8 +6331,8 @@ avt_roll_slope_60m__T33:
 avt_roll_slope_60m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 0.7186712646484367
-  range_min: -0.6722957153320297
+  range_max: 0.7938757324218744
+  range_min: -0.7492132568359386
   role: feature
   source: derived:avt_T55
   unit: C/10min
@@ -6188,118 +6341,118 @@ avt_roll_slope_60m__T55:
 avt_roll_std_120m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 7.692888289540237
-  range_min: 0.017999509478911036
+  range_max: 8.07520757921207
+  range_min: 0.01726798880684259
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.2181224308352755
+  range_max: 0.16316102257313034
   range_min: 0.0
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 7.9126025667710795
+  range_max: 6.793810369328119
   range_min: 0.0
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 16.085378336698852
+  range_max: 7.48394894647357
   range_min: 0.0
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.2270091285416248
+  range_max: 0.26008566229731905
   range_min: 0.0
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 4.416493343386447
+  range_max: 4.217010710519118
   range_min: 0.0
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 5.691665025079737
-  range_min: 0.0028327259053818545
+  range_max: 6.038502055346809
+  range_min: 0.0022585712374202497
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 4.3226028582434814
+  range_max: 4.565117389154028
   range_min: 0.0
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 4.885312256832179
+  range_max: 5.440685737010302
   range_min: 0.0
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 74.25669698536873
+  range_max: 108.0451620029263
   range_min: 0.0
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 34.90900268109511
+  range_max: 34.70059349324851
   range_min: 0.0
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_120m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 3.7229979372011015
-  range_min: 0.02326225889441378
+  range_max: 4.177458473306235
+  range_min: 0.03769054849632352
   role: feature
   source: derived:avt_T33
   unit: C
@@ -6308,8 +6461,8 @@ avt_roll_std_120m__T33:
 avt_roll_std_120m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 3.7732613341767363
-  range_min: 0.059443671061403865
+  range_max: 3.9541265770681537
+  range_min: 0.06756752411622717
   role: feature
   source: derived:avt_T55
   unit: C
@@ -6318,117 +6471,117 @@ avt_roll_std_120m__T55:
 avt_roll_std_30m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 4.280084885865625
-  range_min: 0.0031280543681400266
+  range_max: 4.313190286535881
+  range_min: 0.003095630895997622
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.1330216402928933
+  range_max: 0.12903609000183316
   range_min: 0.0
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 4.357302997634742
+  range_max: 2.4982937741019953
   range_min: 0.0
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 6.182146030904844
+  range_max: 3.7530071265559473
   range_min: 0.0
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.10296528626617112
+  range_max: 0.12059801947324386
   range_min: 0.0
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 2.6070426184664766
+  range_max: 2.5870799576417087
   range_min: 0.0
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 3.8871253110137167
+  range_max: 4.22470748941271
   range_min: 0.0
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 2.6160567076619246
+  range_max: 2.776187563569831
   range_min: 0.0
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 1.9905092094007075
+  range_max: 2.658942100901609
   range_min: 0.0
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 40.94458816639358
+  range_max: 54.69464385762759
   range_min: 0.0
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 9.609042294867347
+  range_max: 9.370490085704198
   range_min: 0.0
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_30m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 1.5631758997136014
+  range_max: 1.8874011414083072
   range_min: 0.0
   role: feature
   source: derived:avt_T33
@@ -6438,8 +6591,8 @@ avt_roll_std_30m__T33:
 avt_roll_std_30m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 1.9676647028710907
-  range_min: 0.0032344080983078573
+  range_max: 2.1448846179452175
+  range_min: 0.00331084707930942
   role: feature
   source: derived:avt_T55
   unit: C
@@ -6448,118 +6601,118 @@ avt_roll_std_30m__T55:
 avt_roll_std_60m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 5.900844174564
-  range_min: 0.008689009830931531
+  range_max: 6.0655683372638345
+  range_min: 0.00808020850059889
   role: feature
   source: derived:avt_F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.16660835020496817
+  range_max: 0.14531081086203243
   range_min: 0.0
   role: feature
   source: derived:avt_F26
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 5.3655614744172615
+  range_max: 3.8046143840356677
   range_min: 0.0
   role: feature
   source: derived:avt_F27
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 9.705793282668658
+  range_max: 5.04854052353397
   range_min: 0.0
   role: feature
   source: derived:avt_F28
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.15165469859394715
+  range_max: 0.17750257706436343
   range_min: 0.0
   role: feature
   source: derived:avt_F29
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 3.555620610984383
+  range_max: 3.418651055508475
   range_min: 0.0
   role: feature
   source: derived:avt_F3
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 4.893364483975656
-  range_min: 0.0001664143161740237
+  range_max: 5.246818765384437
+  range_min: 0.0
   role: feature
   source: derived:avt_F30
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 3.2881513276064362
+  range_max: 3.4786381715351684
   range_min: 0.0
   role: feature
   source: derived:avt_F32
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 3.0539342574938084
+  range_max: 3.745282049559568
   range_min: 0.0
   role: feature
   source: derived:avt_F34
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 54.5824047772542
+  range_max: 77.01814991433295
   range_min: 0.0
   role: feature
   source: derived:avt_F5
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 16.219316863297646
+  range_max: 17.025912117469176
   range_min: 0.0
   role: feature
   source: derived:avt_F65
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_avt
 avt_roll_std_60m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 2.5482876131708183
-  range_min: 0.0054104413037248085
+  range_max: 2.838547189853527
+  range_min: 0.011127790559544874
   role: feature
   source: derived:avt_T33
   unit: C
@@ -6568,8 +6721,8 @@ avt_roll_std_60m__T33:
 avt_roll_std_60m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 2.8037638719788918
-  range_min: 0.01596060814472234
+  range_max: 2.983835602241113
+  range_min: 0.017970322969194014
   role: feature
   source: derived:avt_T55
   unit: C
@@ -6578,8 +6731,8 @@ avt_roll_std_60m__T55:
 avt_runtime_proxy_h:
   controllable: false
   description: Causal derived feature from date
-  range_max: 31220.640000084106
-  range_min: 315.3600000000009
+  range_max: 17368.394999983317
+  range_min: 175.4383333333321
   role: feature
   source: derived:date
   unit: h
@@ -6587,42 +6740,48 @@ avt_runtime_proxy_h:
   - quality_avt
 hydro_F1:
   controllable: false
-  description: Расход бензина c установки
+  description: Расход бензина с установки, объемный
   installation: 24-2000
   kind: flow_vol
+  physical_quantity: расход, м³/ч
   range_max: 6.01
   range_min: -0.01
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F1
   unit: m3/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F14:
-  controllable: true
-  description: Блок стабилизации. Температура верха колонны К-201 /бензин,УВГ,Н2S
+  controllable: false
+  description: Полисеп. Расход квенча в реактор Р-202
   engineer_time_features: true
   installation: 24-2000
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 10.56
   range_min: 2.97
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F14
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F15:
   controllable: false
-  description: Полисеп. Расход квенча в реактор Р-202
+  description: Расход сырья на установку, объемный
   installation: 24-2000
   kind: flow_vol
+  physical_quantity: расход, м³/ч
   range_max: 3609.81
   range_min: 2399.01
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F15
   unit: m3/h
   used_by:
@@ -6630,130 +6789,151 @@ hydro_F15:
   - anomaly
 hydro_F17:
   controllable: false
-  description: Расход гидроочищенного ДТ в цех №8 c установки
+  description: Расход гидроочищенного ДТ в цех №8, массовый
   installation: 24-2000
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: масс.расход, т/ч
   range_max: 306.89
   range_min: 164.25
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F17
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F19:
   controllable: false
-  description: Полисеп. Реактор Р-202. Давление на входе
+  description: К-201. Расход бензина в колонну
   installation: 24-2000
-  kind: flow_vol
+  kind: flow_mass
+  physical_quantity: расход, т/ч
   range_max: 248.86
   range_min: 127.42
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F19
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F2:
   controllable: false
-  description: Газовая схема. Расход на линии от ЦК-201
+  description: Газовая схема. Расход газа на линии от ЦК-201
   installation: 24-2000
-  kind: flow_vol
+  kind: gas_flow_normal
+  physical_quantity: расход газа, нм³/ч
   range_max: 102997.09
   range_min: 80123.62
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F2
-  unit: m3/h
+  unit: Nm3/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F22:
   controllable: false
-  description: Блок стабилизации. Расход газа поддува на входе в К-201Температура
-    в сепараторе С-205
+  description: К-201. Расход газа поддува на входе, объемный
   installation: 24-2000
-  kind: flow_vol
+  kind: gas_flow_normal
+  physical_quantity: расход газа, нм³/ч
   range_max: 16097.26
   range_min: 3882.49
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F22
-  unit: m3/h
+  unit: Nm3/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F25:
   controllable: false
-  description: APC. Показания виртуального анализатора "Температура вспышки ГОДТ"
+  description: Расход свежего ВСГ с КЦА на установку
   installation: 24-2000
-  kind: flow_vol
+  kind: gas_flow_normal
+  physical_quantity: расход ВСГ, нм³/ч
   range_max: 14892.19
   range_min: 5548.07
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F25
-  unit: m3/h
+  unit: Nm3/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F26:
   controllable: false
-  description: Расход сырья на установку (объемный)
+  description: Расход гидроочищенного ДТ в цех №8, объемный
   installation: 24-2000
   kind: flow_vol
+  physical_quantity: расход, м³/ч
   range_max: 297.19
   range_min: 151.68
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F26
   unit: m3/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_F9:
-  controllable: false
-  description: Блок стабилизации. Расход газа поддува на входе в К-201. Массовый расход
-    (АС КУБ)
+  controllability_basis: model_assumption_from_updated_tag_mapping
+  controllable: true
+  description: Расход сырья на установку, массовый
+  engineer_time_features: true
   installation: 24-2000
-  kind: flow_vol
-  range_max: 253.69
-  range_min: 137.5
+  kind: flow_mass
+  physical_quantity: масс.расход, т/ч
+  range_basis: historical_train_not_technological_limit
+  range_max: 307.0
+  range_min: 0.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: F9
-  unit: m3/h
+  unit: t/h
   used_by:
   - quality_hydro
   - anomaly
 hydro_P13:
-  controllable: false
-  description: 'Трубопровод на выходе из реактора Р-202: Качество продукции по S'
+  controllability_basis: model_assumption_from_updated_tag_mapping
+  controllable: true
+  description: Полисеп. Р-202. Давление на входе
   engineer_time_features: true
   installation: 24-2000
   kind: pressure
-  range_max: 4.01
-  range_min: 3.4
+  physical_quantity: давление, МПа
+  range_basis: historical_train_not_technological_limit
+  range_max: 4.036502990722656
+  range_min: 0.006763569759204919
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
   - anomaly
 hydro_P24:
   controllable: false
-  description: Расход свежего ВСГ с КЦА на установку
+  description: К-201. Давление на выходе колонны
   installation: 24-2000
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 0.61
   range_min: 0.55
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: P24
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
   - anomaly
@@ -6762,69 +6942,79 @@ hydro_P3:
   description: Полисеп. Сепаратор С-201. Давление на входе
   installation: 24-2000
   kind: pressure
+  physical_quantity: давление, МПа
   range_max: 3.79
   range_min: 0.95
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: P3
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
   - anomaly
 hydro_P8:
   controllable: false
-  description: Полисеп. Реактор Р-202. Температура гсс на входе
+  description: Реактор Р-202. Перепад давления
   installation: 24-2000
   kind: pressure
+  physical_quantity: перепад, МПа
   range_max: 0.22
   range_min: 0.09
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: P8
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
   - anomaly
 hydro_Q20:
   controllable: false
-  description: Блок стабилизации. Расход бензина в колонну К-201
+  description: Поточный анализатор серы в ДТ, Н-202/1,2
   engineer_time_features: true
   installation: 24-2000
-  kind: null
+  kind: quality
+  physical_quantity: сера, ppm
   range_max: 10856.39
   range_min: 307.0
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
   - anomaly
 hydro_Q21:
   controllable: false
-  description: Блок стабилизации. Расход газа поддува на входе в К-201
+  description: Поточный анализатор серы в г/о ДТ
   engineer_time_features: true
   installation: 24-2000
-  kind: null
+  kind: quality
+  physical_quantity: сера, ppm
   range_max: 24.83
   range_min: 5.37
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
   - anomaly
 hydro_T11:
-  controllable: true
-  description: Расход сырья на установку (массовый)
+  controllable: false
+  description: Полисеп. Трубопровод на выходе из Р-202. Температура ГСС / продукта
   engineer_time_features: true
   installation: 24-2000
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 378.9
   range_min: 294.37
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T11
   unit: C
   used_by:
@@ -6832,13 +7022,15 @@ hydro_T11:
   - anomaly
 hydro_T12:
   controllable: false
-  description: Расход бензина c установки
+  description: К-201. Температура верха колонны, бензин, УВГ, H2S
   installation: 24-2000
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 209.99
   range_min: 138.69
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T12
   unit: C
   used_by:
@@ -6846,14 +7038,15 @@ hydro_T12:
   - anomaly
 hydro_T16:
   controllable: false
-  description: Блок стабилизации. Колонна К-201. Температура стабильного гидрогенизата
-    низ
+  description: Блок стабилизации. Температура в сепараторе С-205
   installation: 24-2000
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 45.57
   range_min: 25.26
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T16
   unit: C
   used_by:
@@ -6861,13 +7054,15 @@ hydro_T16:
   - anomaly
 hydro_T18:
   controllable: false
-  description: Блок стабилизации. Колонна К-201. Давление на выходе
+  description: ВАК. Температура вспышки ГОДТ, аналитический показатель
   installation: 24-2000
   kind: temperature
+  physical_quantity: °C
   range_max: 98.68
   range_min: 60.41
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T18
   unit: C
   used_by:
@@ -6875,44 +7070,51 @@ hydro_T18:
   - anomaly
 hydro_T23:
   controllable: false
-  description: Расход гидроочищенного ДТ в цех №8 c установки
+  description: К-201. Температура низа колонны, стабилизированный гидрогенизат
   installation: 24-2000
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 250.67
   range_min: 224.91
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T23
   unit: C
   used_by:
   - quality_hydro
   - anomaly
 hydro_T5:
-  controllable: true
-  description: Полисеп. Реактор Р-201. Температура ГСС на выходе
+  controllable: false
+  description: Полисеп. Р-201. Температура ГСС на выходе
   engineer_time_features: true
   installation: 24-2000
   kind: temperature
+  physical_quantity: температура, °C
   range_max: 384.39
   range_min: 293.32
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T5
   unit: C
   used_by:
   - quality_hydro
   - anomaly
 hydro_T6:
+  controllability_basis: model_assumption_from_updated_tag_mapping
   controllable: true
-  description: Поточный анализатор серы в дизельном топливе между коллекторами нагнетания
-    и приёма Н-202/1,2
+  description: Полисеп. Р-202. Температура ГСС на входе
   engineer_time_features: true
   installation: 24-2000
   kind: temperature
-  range_max: 380.24
-  range_min: 285.25
+  physical_quantity: температура, °C
+  range_basis: historical_train_not_technological_limit
+  range_max: 386.51234130859376
+  range_min: 4.57763671875
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: T6
   unit: C
   used_by:
@@ -6920,13 +7122,15 @@ hydro_T6:
   - anomaly
 hydro_W10:
   controllable: false
-  description: Реактор Р-202. Перепад давления.
+  description: Расход бензина с установки, массовый
   installation: 24-2000
   kind: flow_mass
+  physical_quantity: масс.расход, т/ч
   range_max: 4.67
   range_min: 0.72
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: W10
   unit: t/h
   used_by:
@@ -6934,13 +7138,15 @@ hydro_W10:
   - anomaly
 hydro_W4:
   controllable: false
-  description: Блок стабилизации. Массовый расход бензина в колонну К-206
+  description: К-206. Массовый расход бензина в колонну
   installation: 24-2000
   kind: flow_mass
+  physical_quantity: масс.расход, т/ч
   range_max: 4.75
   range_min: 0.7
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: W4
   unit: t/h
   used_by:
@@ -6948,14 +7154,15 @@ hydro_W4:
   - anomaly
 hydro_W7:
   controllable: false
-  description: Блок стабилизации. Поточный анализатор содержания серы в гидроочищенном
-    ДТ
+  description: К-201. Расход газа поддува на входе, массовый
   installation: 24-2000
   kind: flow_mass
+  physical_quantity: масс.расход газа, т/ч
   range_max: 0.2
   range_min: 0.14
+  reference_version: expert_xlsx_2026_09_17
   role: feature
-  source: hydro_tags.csv
+  source: expert_reference.json
   tag: W7
   unit: t/h
   used_by:
@@ -6964,8 +7171,8 @@ hydro_W7:
 hydro_catalyst_runtime_proxy_h:
   controllable: false
   description: Causal derived feature from date
-  range_max: 31220.640000084106
-  range_min: 315.3600000000009
+  range_max: 17368.394999983317
+  range_min: 175.4383333333321
   role: feature
   source: derived:date
   unit: h
@@ -6974,48 +7181,58 @@ hydro_catalyst_runtime_proxy_h:
 hydro_lag_10m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.27180204391481
+  range_max: 15.452717990875248
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_lag_10m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.16226975530385965
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_lag_10m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.032129335403442
-  range_min: 0.00759033421054478
+  range_max: 4.036503162384033
+  range_min: 0.006763564907014306
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_lag_10m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.375
-  range_min: 85.1615650177002
+  range_max: 12988.5798828125
+  range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_10m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.047392225265503
+  range_min: 3.499310102462769
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_10m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.90635833740237
-  range_min: 6.378368377685547
+  range_max: 383.83439086914063
+  range_min: 4.575529031753541
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7024,8 +7241,8 @@ hydro_lag_10m__T11:
 hydro_lag_10m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 388.0721435546875
-  range_min: 6.188693642616272
+  range_max: 388.3027313232422
+  range_min: 4.029253463745118
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7034,8 +7251,8 @@ hydro_lag_10m__T5:
 hydro_lag_10m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.5326919555664
-  range_min: 6.317309570312501
+  range_max: 386.51234741210936
+  range_min: 4.57763671875
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7044,48 +7261,58 @@ hydro_lag_10m__T6:
 hydro_lag_30m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.271849460601796
+  range_max: 15.45272979736328
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_lag_30m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.1622723519802093
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_lag_30m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.032129392623902
-  range_min: 0.007590325418859676
+  range_max: 4.036503505706787
+  range_min: 0.0067635552026330805
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_lag_30m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.375
-  range_min: 85.1615389251709
+  range_max: 12988.580078125
+  range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_30m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.0473617267608644
+  range_min: 3.4992949485778806
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_30m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.906360168457
-  range_min: 6.378368377685547
+  range_max: 383.83439941406255
+  range_min: 4.575410747528076
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7094,8 +7321,8 @@ hydro_lag_30m__T11:
 hydro_lag_30m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 388.0721435546875
-  range_min: 6.188693499565124
+  range_max: 388.302734375
+  range_min: 4.029244327545166
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7104,8 +7331,8 @@ hydro_lag_30m__T5:
 hydro_lag_30m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.53273162841793
-  range_min: 6.317219009399415
+  range_max: 386.5123596191406
+  range_min: 4.57763671875
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7114,48 +7341,58 @@ hydro_lag_30m__T6:
 hydro_lag_60m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.271920585632312
+  range_max: 15.452747507095335
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_lag_60m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.16227624699473375
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_lag_60m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.03212947845459
-  range_min: 0.0075903122313320205
+  range_max: 4.036504020690918
+  range_min: 0.006763540646061241
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_lag_60m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.375
-  range_min: 85.16149978637695
+  range_max: 12988.58037109375
+  range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_60m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.0473159790039066
+  range_min: 3.499272217750549
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_lag_60m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.90636291503904
-  range_min: 6.378368377685547
+  range_max: 383.83441223144536
+  range_min: 4.57523332118988
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7164,8 +7401,8 @@ hydro_lag_60m__T11:
 hydro_lag_60m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 388.0721435546875
-  range_min: 6.188693284988403
+  range_max: 388.30273895263673
+  range_min: 4.0292306232452395
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7174,8 +7411,8 @@ hydro_lag_60m__T5:
 hydro_lag_60m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.5327911376953
-  range_min: 6.317083168029787
+  range_max: 386.5123779296875
+  range_min: 4.57763671875
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7184,48 +7421,58 @@ hydro_lag_60m__T6:
 hydro_roll_mean_120m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.346058840751635
-  range_min: 0.0
+  range_max: 15.762490515708924
+  range_min: 0.28359711584361064
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_mean_120m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.1577428636948267
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_mean_120m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.020445233980815
-  range_min: 0.007637489693394509
+  range_max: 4.022342488368352
+  range_min: 0.006737737997512609
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_mean_120m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.671212565105
+  range_max: 12337.210057779945
   range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_120m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.3271018556753793
+  range_min: 3.904156573613485
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_120m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.8259764607747
-  range_min: 6.427549650669098
+  range_max: 383.7286402638753
+  range_min: 4.637945868174235
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7234,8 +7481,8 @@ hydro_roll_mean_120m__T11:
 hydro_roll_mean_120m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 387.9875715128581
-  range_min: 6.203991342385611
+  range_max: 388.161492767334
+  range_min: 4.029887863000234
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7244,8 +7491,8 @@ hydro_roll_mean_120m__T5:
 hydro_roll_mean_120m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.42339767456053
-  range_min: 6.363601946036021
+  range_max: 386.4497253163656
+  range_min: 4.605344075361888
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7254,48 +7501,58 @@ hydro_roll_mean_120m__T6:
 hydro_roll_mean_30m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.282224648793534
-  range_min: 0.0
+  range_max: 15.511058966318762
+  range_min: 0.0012339416365527165
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_mean_30m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.16028847975020344
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_mean_30m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.029369160334269
-  range_min: 0.007574983316788199
+  range_max: 4.03272738615672
+  range_min: 0.00673181133655618
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_mean_30m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.674108072917
-  range_min: 159.2946103922526
+  range_max: 12491.386341145833
+  range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_30m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.1265247440338135
+  range_min: 3.563738984266917
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_30m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.87987365722654
-  range_min: 6.386370369593302
+  range_max: 383.8139360555013
+  range_min: 4.602382427851359
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7304,8 +7561,8 @@ hydro_roll_mean_30m__T11:
 hydro_roll_mean_30m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 388.0533477783203
-  range_min: 6.187379290262858
+  range_max: 388.2809126790365
+  range_min: 4.036148616472881
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7314,8 +7571,8 @@ hydro_roll_mean_30m__T5:
 hydro_roll_mean_30m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.51581726074215
-  range_min: 6.332700459162395
+  range_max: 386.5018001302083
+  range_min: 4.583339700698853
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7324,48 +7581,58 @@ hydro_roll_mean_30m__T6:
 hydro_roll_mean_60m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 15.297337869008373
-  range_min: 0.0
+  range_max: 15.604310916264852
+  range_min: 0.06653532554783609
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_mean_60m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 307.0
+  range_min: -0.15853219926357265
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_mean_60m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 4.0258413680394485
-  range_min: 0.007604791463042238
+  range_max: 4.028728431860606
+  range_min: 0.006721402377200593
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_mean_60m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 15039.6748046875
+  range_max: 12426.270056966147
   range_min: 307.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_60m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
   range_max: 307.0
-  range_min: 3.1964083552360534
+  range_min: 3.6925027974446616
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_mean_60m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 382.84529897054034
-  range_min: 6.389046659469605
+  range_max: 383.77787231445313
+  range_min: 4.6156900008519495
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7374,8 +7641,8 @@ hydro_roll_mean_60m__T11:
 hydro_roll_mean_60m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 388.0172744750977
-  range_min: 6.198128231366475
+  range_max: 388.22190063476563
+  range_min: 4.029505287408829
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7384,8 +7651,8 @@ hydro_roll_mean_60m__T5:
 hydro_roll_mean_60m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 385.4843861897786
-  range_min: 6.3311803340911865
+  range_max: 386.4688608296712
+  range_min: 4.5890868051846825
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7394,48 +7661,58 @@ hydro_roll_mean_60m__T6:
 hydro_roll_slope_120m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.12135832786560041
-  range_min: -0.12218386124480847
+  range_max: 0.1341915450090626
+  range_min: -0.13811543204567647
   role: feature
   source: derived:hydro_F14
-  unit: m3/h/10min
+  unit: t/h/10min
+  used_by:
+  - quality_hydro
+hydro_roll_slope_120m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 2.3247295032847894
+  range_min: -2.330423251065341
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_120m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.02318742166865946
-  range_min: -0.021188762187957764
+  range_max: 0.02524330399253142
+  range_min: -0.022762758081609578
   role: feature
   source: derived:hydro_P13
-  unit: atm/10min
+  unit: MPa/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_120m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 256.24320534445945
-  range_min: -268.4875545987216
+  range_max: 162.04012251420207
+  range_min: -157.87149325284093
   role: feature
   source: derived:hydro_Q20
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_120m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 0.46518613468516956
-  range_min: -0.5121318043362009
+  range_max: 0.483872032165525
+  range_min: -0.5299523440274325
   role: feature
   source: derived:hydro_Q21
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_120m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 0.7008523559570304
-  range_min: -0.6275367043235086
+  range_max: 0.7163735129616496
+  range_min: -0.6450295188210228
   role: feature
   source: derived:hydro_T11
   unit: C/10min
@@ -7444,8 +7721,8 @@ hydro_roll_slope_120m__T11:
 hydro_roll_slope_120m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 0.7702319890802534
-  range_min: -0.670842477625066
+  range_max: 0.7987887295809657
+  range_min: -0.7003417968750021
   role: feature
   source: derived:hydro_T5
   unit: C/10min
@@ -7454,8 +7731,8 @@ hydro_roll_slope_120m__T5:
 hydro_roll_slope_120m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 0.8155669611150574
-  range_min: -0.7182566972212358
+  range_max: 0.8454828435724449
+  range_min: -0.7425664728338068
   role: feature
   source: derived:hydro_T6
   unit: C/10min
@@ -7464,48 +7741,58 @@ hydro_roll_slope_120m__T6:
 hydro_roll_slope_30m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.24580000817775727
-  range_min: -0.25247921943664553
+  range_max: 0.2801944732666015
+  range_min: -0.294022274017334
   role: feature
   source: derived:hydro_F14
-  unit: m3/h/10min
+  unit: t/h/10min
+  used_by:
+  - quality_hydro
+hydro_roll_slope_30m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 3.8121475219726557
+  range_min: -3.8381011962890454
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_30m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.044480346441269095
-  range_min: -0.041046441793441774
+  range_max: 0.04714610576629636
+  range_min: -0.044458317756652745
   role: feature
   source: derived:hydro_P13
-  unit: atm/10min
+  unit: MPa/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_30m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 881.6628881835937
-  range_min: -837.6598437499999
+  range_max: 468.29589843749994
+  range_min: -468.74912109375
   role: feature
   source: derived:hydro_Q20
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_30m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 0.8247439789772033
-  range_min: -0.8369407081604003
+  range_max: 0.9445157527923583
+  range_min: -0.9128552436828608
   role: feature
   source: derived:hydro_Q21
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_30m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 1.1810282897949218
-  range_min: -1.1351889038085938
+  range_max: 1.2327423095702945
+  range_min: -1.19947509765625
   role: feature
   source: derived:hydro_T11
   unit: C/10min
@@ -7514,8 +7801,8 @@ hydro_roll_slope_30m__T11:
 hydro_roll_slope_30m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 1.403717041015625
-  range_min: -1.338216552734375
+  range_max: 1.484646606445275
+  range_min: -1.4314239501953012
   role: feature
   source: derived:hydro_T5
   unit: C/10min
@@ -7524,8 +7811,8 @@ hydro_roll_slope_30m__T5:
 hydro_roll_slope_30m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 1.336947479248069
-  range_min: -1.2476844024658222
+  range_max: 1.4386749267578194
+  range_min: -1.3507080078125002
   role: feature
   source: derived:hydro_T6
   unit: C/10min
@@ -7534,48 +7821,58 @@ hydro_roll_slope_30m__T6:
 hydro_roll_slope_60m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.18164137935638397
-  range_min: -0.18590046691894546
+  range_max: 0.20683654785156252
+  range_min: -0.21449842453002932
   role: feature
   source: derived:hydro_F14
-  unit: m3/h/10min
+  unit: t/h/10min
+  used_by:
+  - quality_hydro
+hydro_roll_slope_60m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 3.101781005859364
+  range_min: -3.0728729248046944
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_60m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.03432213068008399
-  range_min: -0.030730461597442638
+  range_max: 0.036948366165161076
+  range_min: -0.033314666748046874
   role: feature
   source: derived:hydro_P13
-  unit: atm/10min
+  unit: MPa/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_60m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 443.481685546875
-  range_min: -437.9641611328125
+  range_max: 262.287499999999
+  range_min: -263.012890625
   role: feature
   source: derived:hydro_Q20
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_60m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 0.6582745923995955
-  range_min: -0.6994652137756348
+  range_max: 0.7344649887084952
+  range_min: -0.768858528137207
   role: feature
   source: derived:hydro_Q21
-  unit: unknown/10min
+  unit: ppm/10min
   used_by:
   - quality_hydro
 hydro_roll_slope_60m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 0.9436796874999914
-  range_min: -0.8835466308593749
+  range_max: 0.9917919921874958
+  range_min: -0.958282470703125
   role: feature
   source: derived:hydro_T11
   unit: C/10min
@@ -7584,8 +7881,8 @@ hydro_roll_slope_60m__T11:
 hydro_roll_slope_60m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 1.07735168457031
-  range_min: -1.0082525024414062
+  range_max: 1.1332812499999918
+  range_min: -1.0661767578125
   role: feature
   source: derived:hydro_T5
   unit: C/10min
@@ -7594,8 +7891,8 @@ hydro_roll_slope_60m__T5:
 hydro_roll_slope_60m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 1.0893980102539054
-  range_min: -0.9998089599609374
+  range_max: 1.1507220458984337
+  range_min: -1.0777499389648437
   role: feature
   source: derived:hydro_T6
   unit: C/10min
@@ -7604,48 +7901,58 @@ hydro_roll_slope_60m__T6:
 hydro_roll_std_120m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.9141565099291503
+  range_max: 0.9740854892898212
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_std_120m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 15.169822230274134
+  range_min: 0.0
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_std_120m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.1561572280563394
-  range_min: 0.00024353494205292065
+  range_max: 0.16885561029297708
+  range_min: 0.00021021313788303024
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_std_120m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 2975.4775597735543
+  range_max: 2814.105168853736
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_120m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 3.7074455551862933
+  range_max: 3.4033928911804634
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_120m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 5.647814419791047
-  range_min: 0.08076208808418395
+  range_max: 4.854536895342808
+  range_min: 0.09423318941432746
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7654,8 +7961,8 @@ hydro_roll_std_120m__T11:
 hydro_roll_std_120m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 5.953694163602807
-  range_min: 0.08868612474487786
+  range_max: 4.983741784651587
+  range_min: 0.10415764208908994
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7664,8 +7971,8 @@ hydro_roll_std_120m__T5:
 hydro_roll_std_120m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 5.856377406265115
-  range_min: 0.07200515339627238
+  range_max: 5.1666958898381905
+  range_min: 0.08494053657989482
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7674,48 +7981,58 @@ hydro_roll_std_120m__T6:
 hydro_roll_std_30m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.38756834472238216
+  range_max: 0.43871460226066383
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_std_30m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 5.7629389831921465
+  range_min: 0.0
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_std_30m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.061872509032124864
-  range_min: 8.436576959887663e-05
+  range_max: 0.06560032415931148
+  range_min: 5.126369846506402e-05
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_std_30m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 2541.2422310394563
+  range_max: 1704.1054727088722
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_30m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 1.2587272228774964
+  range_max: 1.4545405053049296
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_30m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 1.7941800956635163
-  range_min: 0.015556294485596332
+  range_max: 1.7126670748641315
+  range_min: 0.017579261810510678
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7724,8 +8041,8 @@ hydro_roll_std_30m__T11:
 hydro_roll_std_30m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 2.11570189344999
-  range_min: 0.01774109325959996
+  range_max: 2.077074745060572
+  range_min: 0.01977392122466654
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7734,8 +8051,8 @@ hydro_roll_std_30m__T5:
 hydro_roll_std_30m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 2.0101141133670937
-  range_min: 0.007135823059457135
+  range_max: 1.9960597104604265
+  range_min: 0.009134903272477096
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7744,48 +8061,58 @@ hydro_roll_std_30m__T6:
 hydro_roll_std_60m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.6116681347035077
+  range_max: 0.6567317217721859
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
-  unit: m3/h
+  unit: t/h
+  used_by:
+  - quality_hydro
+hydro_roll_std_60m__F9:
+  controllable: false
+  description: Causal derived feature from hydro_F9
+  range_max: 9.338696697591448
+  range_min: 0.0
+  role: feature
+  source: derived:hydro_F9
+  unit: t/h
   used_by:
   - quality_hydro
 hydro_roll_std_60m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.09936959816771321
-  range_min: 0.0001594629173343782
+  range_max: 0.10674280993834091
+  range_min: 0.00014864029175947694
   role: feature
   source: derived:hydro_P13
-  unit: atm
+  unit: MPa
   used_by:
   - quality_hydro
 hydro_roll_std_60m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 2951.0021747590804
+  range_max: 2658.6830443886065
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_60m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 2.0623603501949903
+  range_max: 2.1894019684006913
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
-  unit: unknown
+  unit: ppm
   used_by:
   - quality_hydro
 hydro_roll_std_60m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 3.071428141456692
-  range_min: 0.04706991510043226
+  range_max: 2.838666572770629
+  range_min: 0.05290588755229115
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7794,8 +8121,8 @@ hydro_roll_std_60m__T11:
 hydro_roll_std_60m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 3.3626284550092795
-  range_min: 0.05351437712185055
+  range_max: 3.1696951198178285
+  range_min: 0.0596152917294329
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7804,18 +8131,990 @@ hydro_roll_std_60m__T5:
 hydro_roll_std_60m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 3.290777334051188
-  range_min: 0.02896048210188495
+  range_max: 3.1342953490425702
+  range_min: 0.03405193216312284
   role: feature
   source: derived:hydro_T6
   unit: C
   used_by:
   - quality_hydro
+label__lims__авт__pt1__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 323.0
+  range_min: 291.0
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__авт__pt1__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 784.7749999999991
+  range_min: 0.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 360.0
+  range_min: 322.0
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__авт__pt1__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 784.7749999999991
+  range_min: 0.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 370.0
+  range_min: 330.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 784.7749999999991
+  range_min: 0.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__cfpp:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: null
+  range_min: null
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__авт__pt1__cfpp_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: null
+  range_min: null
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 7.0
+  range_min: -10.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__cloudpoint_1:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: null
+  range_min: null
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__cloudpoint_1_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: null
+  range_min: null
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 3562.0550000000003
+  range_min: 10.833333333333334
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 884.0
+  range_min: 869.0
+  role: target
+  source: derived:ml_availability
+  unit: kg/m3
+  used_by: []
+label__lims__авт__pt1__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 832.7749999999991
+  range_min: 1.3333333333333333
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__ebp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 371.0
+  range_min: 338.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__ebp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 784.7749999999991
+  range_min: 0.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__i350:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 98.0
+  range_min: 0.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__i350_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 5794.535000000001
+  range_min: 10.833333333333334
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 236.0
+  range_min: 110.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 784.7749999999991
+  range_min: 0.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt1__pourpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1.0
+  range_min: -15.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt1__pourpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 760.5349999999986
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 315.0
+  range_min: 220.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 943.1949999999997
+  range_min: 2.6666666666666665
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 368.0
+  range_min: 283.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 943.1949999999997
+  range_min: 2.6666666666666665
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 370.0
+  range_min: 0.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 999.6666666666666
+  range_min: 3.0
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 7.0
+  range_min: -1.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 4586.195
+  range_min: 8.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 862.3
+  range_min: 843.8
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__ebp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 371.0
+  range_min: 337.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__ebp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2_1__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 212.0
+  range_min: 120.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2_1__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 943.1949999999997
+  range_min: 2.6666666666666665
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 277.0
+  range_min: 205.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 291.0
+  range_min: 245.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 312.0
+  range_min: 267.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 999.6666666666666
+  range_min: 3.1666666666666665
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: -19.0
+  range_min: -30.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 4579.096666666667
+  range_min: 8.0
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 838.5
+  range_min: 784.7000122070312
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 3.0
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__ebp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 324.0
+  range_min: 261.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__ebp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt2__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 217.0
+  range_min: 128.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt2__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 906.9750000000009
+  range_min: 2.8333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 289.0
+  range_min: 267.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 724.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 350.0
+  range_min: 319.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 724.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 367.0
+  range_min: 331.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 724.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 2.0
+  range_min: -10.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 698.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 853.2999877929688
+  range_min: 836.5
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 820.7350000000006
+  range_min: 1.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__ebp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 371.0
+  range_min: 343.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__ebp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 724.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__filterabilitylimit_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: -3.0
+  range_min: -10.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__filterabilitylimit_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1056.894999999999
+  range_min: 3.6666666666666665
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__авт__pt3__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 210.0
+  range_min: 184.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__авт__pt3__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 724.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 288.0
+  range_min: 248.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 649.1616666666669
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 350.0
+  range_min: 315.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 649.1616666666669
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 366.0
+  range_min: 334.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 649.1616666666669
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1.0
+  range_min: -10.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 738.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 853.9000244140625
+  range_min: 839.5999755859375
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 3476.355000000001
+  range_min: 6.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__ebp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 371.0
+  range_min: 345.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__ebp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 649.1616666666669
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 211.0
+  range_min: 137.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 649.1616666666669
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt1__mass_sulfur:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1.0627000331878662
+  range_min: 0.7649999856948853
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt1__mass_sulfur_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1364.475000000001
+  range_min: 2.3333333333333335
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__50_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 282.0
+  range_min: 245.0
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__гидроочистка__pt2__50_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__90_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 343.0
+  range_min: 308.0
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__гидроочистка__pt2__90_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__95_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 360.0
+  range_min: 326.0
+  role: target
+  source: derived:ml_availability
+  unit: C
+  used_by: []
+label__lims__гидроочистка__pt2__95_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__cetanenumber:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 57.79999923706055
+  range_min: 53.099998474121094
+  role: target
+  source: derived:ml_availability
+  unit: dimensionless
+  used_by: []
+label__lims__гидроочистка__pt2__cetanenumber_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 1338.894999999999
+  range_min: 6.833333333333333
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__cfpp:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: -3.0
+  range_min: -11.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__cfpp_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 819.2950000000008
+  range_min: 0.8333333333333334
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__cloudpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 0.0
+  range_min: -10.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__cloudpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4150000000009
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__d15:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 844.2999877929688
+  range_min: 821.5999755859375
+  role: target
+  source: derived:ml_availability
+  unit: kg/m3
+  used_by: []
+label__lims__гидроочистка__pt2__d15_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__flashpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 85.0
+  range_min: 53.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__flashpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__i250:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 54.0
+  range_min: 16.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__i250_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__i350:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 98.0
+  range_min: 0.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__i350_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__ibp_t:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 209.0
+  range_min: 170.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__ibp_t_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 736.4950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__mg_sulfur:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 13.100000381469727
+  range_min: 3.200000047683716
+  role: target
+  source: derived:ml_availability
+  unit: ppm
+  used_by: []
+label__lims__гидроочистка__pt2__mg_sulfur_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 732.9950000000002
+  range_min: 0.16666666666666666
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
+label__lims__гидроочистка__pt2__pourpoint:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: -5.0
+  range_min: -16.0
+  role: target
+  source: derived:ml_availability
+  unit: unknown
+  used_by: []
+label__lims__гидроочистка__pt2__pourpoint_age_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 2385.295000000001
+  range_min: 7.5
+  role: target
+  source: derived:ml_availability
+  unit: h
+  used_by: []
 lims__авт__pt1__50_t:
   controllable: false
   description: Laboratory target lims__авт__pt1__50_t
-  range_max: 339.0
-  range_min: 292.0
+  range_max: 323.0
+  range_min: 291.0
   role: target
   source: lims_long.parquet
   unit: C
@@ -7824,8 +9123,8 @@ lims__авт__pt1__50_t:
 lims__авт__pt1__50_t_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__авт__pt1__50_t
-  range_max: 644.8533333333326
-  range_min: 0.3333333333333333
+  range_max: 788.8149999999999
+  range_min: 4.5
   role: feature
   source: derived:time_join
   unit: h
@@ -7834,8 +9133,8 @@ lims__авт__pt1__50_t_age_h:
 lims__авт__pt1__90_t:
   controllable: false
   description: Laboratory target lims__авт__pt1__90_t
-  range_max: 365.0
-  range_min: 0.0
+  range_max: 360.0
+  range_min: 322.0
   role: target
   source: lims_long.parquet
   unit: C
@@ -7844,8 +9143,8 @@ lims__авт__pt1__90_t:
 lims__авт__pt1__90_t_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__авт__pt1__90_t
-  range_max: 742.8533333333326
-  range_min: 0.5
+  range_max: 788.8149999999999
+  range_min: 4.5
   role: feature
   source: derived:time_join
   unit: h
@@ -7854,8 +9153,8 @@ lims__авт__pt1__90_t_age_h:
 lims__авт__pt1__cfpp:
   controllable: false
   description: Laboratory target lims__авт__pt1__cfpp
-  range_max: 4.0
-  range_min: -3.0
+  range_max: null
+  range_min: null
   role: target
   source: lims_long.parquet
   unit: C
@@ -7864,8 +9163,8 @@ lims__авт__pt1__cfpp:
 lims__авт__pt1__cfpp_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__авт__pt1__cfpp
-  range_max: 1455.5200000000004
-  range_min: 1.6577222222222223
+  range_max: null
+  range_min: null
   role: feature
   source: derived:time_join
   unit: h
@@ -7874,8 +9173,8 @@ lims__авт__pt1__cfpp_age_h:
 lims__авт__pt1__d15:
   controllable: false
   description: Laboratory target lims__авт__pt1__d15
-  range_max: 888.2000122070312
-  range_min: 842.7000122070312
+  range_max: 884.0
+  range_min: 869.0
   role: target
   source: lims_long.parquet
   unit: kg/m3
@@ -7884,8 +9183,8 @@ lims__авт__pt1__d15:
 lims__авт__pt1__d15_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__авт__pt1__d15
-  range_max: 692.8533333333326
-  range_min: 1.3333333333333333
+  range_max: 836.8149999999999
+  range_min: 5.333333333333333
   role: feature
   source: derived:time_join
   unit: h
@@ -7894,7 +9193,7 @@ lims__авт__pt1__d15_age_h:
 lims__гидроочистка__pt2__50_t:
   controllable: false
   description: Laboratory target lims__гидроочистка__pt2__50_t
-  range_max: 285.0
+  range_max: 282.0
   range_min: 245.0
   role: target
   source: lims_long.parquet
@@ -7904,8 +9203,8 @@ lims__гидроочистка__pt2__50_t:
 lims__гидроочистка__pt2__50_t_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__гидроочистка__pt2__50_t
-  range_max: 778.2400000000004
-  range_min: 0.16666666666666666
+  range_max: 740.5349999999986
+  range_min: 4.166666666666667
   role: feature
   source: derived:time_join
   unit: h
@@ -7914,7 +9213,7 @@ lims__гидроочистка__pt2__50_t_age_h:
 lims__гидроочистка__pt2__90_t:
   controllable: false
   description: Laboratory target lims__гидроочистка__pt2__90_t
-  range_max: 347.0
+  range_max: 343.0
   range_min: 308.0
   role: target
   source: lims_long.parquet
@@ -7924,8 +9223,48 @@ lims__гидроочистка__pt2__90_t:
 lims__гидроочистка__pt2__90_t_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__гидроочистка__pt2__90_t
-  range_max: 778.2400000000004
-  range_min: 0.16666666666666666
+  range_max: 740.5349999999986
+  range_min: 4.166666666666667
+  role: feature
+  source: derived:time_join
+  unit: h
+  used_by:
+  - quality_hydro
+lims__гидроочистка__pt2__95_t:
+  controllable: false
+  description: Laboratory target lims__гидроочистка__pt2__95_t
+  range_max: 360.0
+  range_min: 326.0
+  role: target
+  source: lims_long.parquet
+  unit: C
+  used_by:
+  - quality_hydro
+lims__гидроочистка__pt2__95_t_age_h:
+  controllable: false
+  description: Age of latest laboratory value for lims__гидроочистка__pt2__95_t
+  range_max: 740.5349999999986
+  range_min: 4.166666666666667
+  role: feature
+  source: derived:time_join
+  unit: h
+  used_by:
+  - quality_hydro
+lims__гидроочистка__pt2__cetanenumber:
+  controllable: false
+  description: Laboratory target lims__гидроочистка__pt2__cetanenumber
+  range_max: 57.79999923706055
+  range_min: 53.099998474121094
+  role: target
+  source: lims_long.parquet
+  unit: dimensionless
+  used_by:
+  - quality_hydro
+lims__гидроочистка__pt2__cetanenumber_age_h:
+  controllable: false
+  description: Age of latest laboratory value for lims__гидроочистка__pt2__cetanenumber
+  range_max: 1342.9350000000002
+  range_min: 10.833333333333334
   role: feature
   source: derived:time_join
   unit: h
@@ -7934,7 +9273,7 @@ lims__гидроочистка__pt2__90_t_age_h:
 lims__гидроочистка__pt2__d15:
   controllable: false
   description: Laboratory target lims__гидроочистка__pt2__d15
-  range_max: 844.5
+  range_max: 844.2999877929688
   range_min: 821.5999755859375
   role: target
   source: lims_long.parquet
@@ -7944,8 +9283,8 @@ lims__гидроочистка__pt2__d15:
 lims__гидроочистка__pt2__d15_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__гидроочистка__pt2__d15
-  range_max: 596.5733333333337
-  range_min: 0.16666666666666666
+  range_max: 740.5349999999986
+  range_min: 4.166666666666667
   role: feature
   source: derived:time_join
   unit: h
@@ -7954,8 +9293,8 @@ lims__гидроочистка__pt2__d15_age_h:
 lims__гидроочистка__pt2__mg_sulfur:
   controllable: false
   description: Laboratory target lims__гидроочистка__pt2__mg_sulfur
-  range_max: 12.600000381469727
-  range_min: 2.700000047683716
+  range_max: 13.100000381469727
+  range_min: 3.200000047683716
   role: target
   source: lims_long.parquet
   unit: ppm
@@ -7964,13 +9303,22 @@ lims__гидроочистка__pt2__mg_sulfur:
 lims__гидроочистка__pt2__mg_sulfur_age_h:
   controllable: false
   description: Age of latest laboratory value for lims__гидроочистка__pt2__mg_sulfur
-  range_max: 593.0733333333337
-  range_min: 0.16666666666666666
+  range_max: 737.0349999999986
+  range_min: 4.166666666666667
   role: feature
   source: derived:time_join
   unit: h
   used_by:
   - quality_hydro
+ml_lims_delay_h:
+  controllable: false
+  description: Training truth only; never an inference feature
+  range_max: 4.0
+  range_min: 4.0
+  role: feature
+  source: derived:ml_availability
+  unit: h
+  used_by: []
 pak_d15:
   controllable: false
   description: Плотность при 15°C, поточный анализатор (расчётный)

@@ -1,0 +1,14 @@
+{
+  "basis": "synthetic_reservoirs_not_historical_validation",
+  "tanks": [
+    {"name": "low_sulfur_tank", "properties": {"sulfur_ppm": 3.0, "T95": 330.0, "cetane_number": 53.0}, "mass_flow": 40.0},
+    {"name": "economy_tank", "properties": {"sulfur_ppm": 15.0, "T95": 360.0, "cetane_number": 47.0}, "mass_flow": 40.0}
+  ],
+  "hydro_mass_flow": 100.0,
+  "max_stored_fraction": 0.5,
+  "max_additive_fraction": 0.03,
+  "cetane_gain_per_additive_pct": 1.0,
+  "additive_cost_ratio": 100.0,
+  "desulfurization_cost_weight": 0.2,
+  "notes": "Tank properties, additive efficiency, flow and cost slope are adjustable assumptions. Hard product limits must be supplied by the caller."
+}

@@ -6,19 +6,19 @@ from ml.models.quality_avt import QualityAVTModel
 from ml.vak import VAKCatalog
 
 
-DATA_DIR = Path("../data")
-ARTIFACT_PATH = Path("ml/artifacts/quality_avt.pkl")
+from ml.paths import DATA_DIR, ARTIFACT_DIR
+ARTIFACT_PATH = ARTIFACT_DIR / "quality_avt.pkl"
 
 TRAIN_START = pd.Timestamp("2023-01-01")
 TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")
 
 
 def main() -> None:
-    feature_path = DATA_DIR / "ml_features.parquet"
+    feature_path = DATA_DIR / "ml_training.parquet"
 
     if not feature_path.exists():
         raise FileNotFoundError(
-            "ml_features.parquet is missing; "
+            "ml_training.parquet is missing; "
             "run python -m ml.training.prepare_features"
         )
 
@@ -30,9 +30,7 @@ def main() -> None:
         & frame["date"].lt(TRAIN_END_EXCLUSIVE)
     ].copy()
 
-    vak_catalog = VAKCatalog.load(
-        DATA_DIR / "vac_formulas.parquet"
-    )
+    vak_catalog = VAKCatalog.load_expert()
 
     model = QualityAVTModel.fit(
         frame=train,

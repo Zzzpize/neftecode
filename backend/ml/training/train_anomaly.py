@@ -5,13 +5,9 @@ from data_layer.feature_registry import model_feature_names
 from ml.models.anomaly import AnomalyDetector
 
 
-DATA_DIR = Path("../data")
-REGISTRY_PATH = Path(
-    "data_layer/feature_registry.yaml"
-)
-ARTIFACT_PATH = Path(
-    "ml/artifacts/anomaly.pkl"
-)
+from ml.paths import DATA_DIR, ARTIFACT_DIR, ML_DIR
+REGISTRY_PATH = ML_DIR.parent / "data_layer" / "feature_registry.yaml"
+ARTIFACT_PATH = ARTIFACT_DIR / "anomaly.pkl"
 
 TRAIN_START = pd.Timestamp("2023-01-01")
 TRAIN_END_EXCLUSIVE = pd.Timestamp("2025-01-01")

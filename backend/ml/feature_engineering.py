@@ -7,6 +7,7 @@ import pandas as pd
 
 from collections.abc import Sequence
 from data_layer.feature_registry import engineered_time_feature_sources
+from ml.availability import apply_lims_availability
 
 
 LAG_STEPS: dict[str, int] = {
@@ -20,6 +21,39 @@ ROLLING_STEPS: dict[str, int] = {
     "60m": 6,
     "120m": 12,
 }
+
+
+def adjust_sulfur_history(frame, mean, low, high, history=(), *, window=30, min_samples=5):
+    """Causal online calibration against past PAK, identical in serving/reporting.
+
+    A measurement at T is committed only AFTER its prediction. No LIMS
+    publication assumption is used here: this calibrator consumes only PAK.
+    Returned records are plain numbers, suitable for artifact serialization.
+    """
+    times = pd.to_datetime(frame["date"]).astype("int64").to_numpy()
+    truth = pd.to_numeric(frame.get("pak_sulfur_ppm", pd.Series(np.nan, index=frame.index)),
+                          errors="coerce").to_numpy(dtype=float)
+    means, lows, highs = (np.asarray(a, dtype=float).copy() for a in (mean, low, high))
+    records = sorted((dict(r) for r in history if times.size and r["time"] < int(times[0])),
+                     key=lambda r: r["time"])[-(window + 1):]
+    six_hours_ns = int(pd.Timedelta(hours=6).value)
+    for i, timestamp in enumerate(times):
+        timestamp = int(timestamp)
+        records = [r for r in records if timestamp - six_hours_ns <= r["time"] < timestamp]
+        recent = records[-window:]
+        base = means[i]
+        if len(recent) >= min_samples and np.isfinite(base):
+            bias = float(np.median([r["base_error"] for r in recent]))
+            errors = np.asarray([abs(r["error"]) for r in recent])
+            level = min(1., np.ceil((len(errors) + 1) * .9) / len(errors))
+            radius = float(np.quantile(errors, level, method="higher"))
+            means[i] = max(0., base + bias)
+            lows[i], highs[i] = max(0., means[i] - radius), means[i] + radius
+        if np.isfinite(truth[i]) and np.isfinite(base) and truth[i] >= 0:
+            records.append({"time": timestamp, "base_error": float(truth[i] - base),
+                            "error": float(truth[i] - means[i])})
+            records = records[-(window + 1):]
+    return means, lows, highs, records
 
 def _key_features(prefix: str) -> tuple[str, ...]:
     """Registry is authoritative for lag/rolling source selection."""
@@ -173,7 +207,7 @@ def build_quality_features(
     """
 
     result = add_causal_time_features(
-        frame,
+        apply_lims_availability(frame),
         feature_columns=(
             *_key_features("avt_"),
             *_key_features("hydro_"),
@@ -194,7 +228,7 @@ def estimate_avt_hydro_delay(
     frame: pd.DataFrame,
     *,
     target_column: str = "pak_sulfur_ppm",
-    min_delay_steps: int = 1,
+    min_delay_steps: int = 0,
     max_delay_steps: int = 72,
 ) -> int:
     """
@@ -215,8 +249,8 @@ def estimate_avt_hydro_delay(
             f"Target column is missing: {target_column}"
         )
 
-    if min_delay_steps < 1:
-        raise ValueError("min_delay_steps must be positive")
+    if min_delay_steps < 0:
+        raise ValueError("min_delay_steps must be nonnegative")
 
     if max_delay_steps < min_delay_steps:
         raise ValueError(
@@ -301,8 +335,8 @@ def build_hydro_features(
     if "date" not in frame.columns:
         raise ValueError("frame must contain the date column")
 
-    if avt_delay_steps < 1:
-        raise ValueError("avt_delay_steps must be positive")
+    if avt_delay_steps < 0:
+        raise ValueError("avt_delay_steps must be nonnegative")
 
     result = (
         frame.sort_values("date")

@@ -170,6 +170,12 @@ def sync_feature_registry(
         else:
             metadata.setdefault("range_min", None)
             metadata.setdefault("range_max", None)
+        if metadata["controllable"] and name in frame:
+            numeric = pd.to_numeric(frame[name], errors="coerce").dropna()
+            if not numeric.empty:
+                metadata["range_min"] = max(0., float(numeric.quantile(.01)))
+                metadata["range_max"] = float(numeric.quantile(.99))
+                metadata["range_basis"] = "historical_train_not_technological_limit"
 
     for name, metadata in registry.items():
         used_by: list[str] = []
@@ -192,6 +198,8 @@ def sync_feature_registry(
         "lims__гидроочистка__pt2__50_t": ("C", "quality_hydro"),
         "lims__гидроочистка__pt2__90_t": ("C", "quality_hydro"),
         "lims__гидроочистка__pt2__d15": ("kg/m3", "quality_hydro"),
+        "lims__гидроочистка__pt2__95_t": ("C", "quality_hydro"),
+        "lims__гидроочистка__pt2__cetanenumber": ("dimensionless", "quality_hydro"),
     }
 
     for name, (unit, model) in target_specs.items():
@@ -218,6 +226,14 @@ def sync_feature_registry(
             )
 
     for name in frame.columns:
+        if name.startswith("label__") or name == "ml_lims_delay_h":
+            registry[name] = _metadata_for_series(
+                frame[name], source="derived:ml_availability", unit=(
+                    "h" if name.endswith("_age_h") or name == "ml_lims_delay_h"
+                    else registry.get(name.removeprefix("label__"), {}).get("unit", "unknown")
+                ), role="target" if name.startswith("label__") else "feature",
+                used_by=[], description="Training truth only; never an inference feature",
+            )
         used_by = _derived_feature_consumers(name, avt_delay_steps)
         if not used_by:
             continue

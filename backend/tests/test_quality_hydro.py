@@ -93,7 +93,7 @@ def test_hydro_selects_only_transport_delayed_avt_features():
     assert transport_feature in selected
     assert "avt_lag_10m__T55" not in selected
 
-def test_sulfur_calibration_is_forward_only():
+def test_lims_does_not_silently_change_pak_training_truth():
     frame = pd.DataFrame(
         {
             "pak_sulfur_ppm": [
@@ -137,15 +137,11 @@ def test_sulfur_calibration_is_forward_only():
     # использоваться не должна.
     assert target.iloc[0] == pytest.approx(8.0)
 
-    # После ЛИМС=10 поправка равна +2.
-    assert target.iloc[1] == pytest.approx(10.0)
-    assert target.iloc[2] == pytest.approx(10.0)
-
-    # Новый ЛИМС=12 меняет поправку только с этого момента.
-    assert target.iloc[3] == pytest.approx(12.0)
+    assert target.tolist() == [8.0, 8.0, 8.0, 8.0]
 
     assert mask.all()
-    assert artifact["sulfur_calibration_samples"] == 2
+    assert artifact["sulfur_calibration_samples"] == 0
+    assert artifact["sulfur_target_source"] == "raw_pak"
 
 
 def test_sulfur_risk_increases_above_limit():

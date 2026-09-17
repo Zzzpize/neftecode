@@ -4,8 +4,8 @@ from typing import Literal
 @dataclass
 class Interval:
     mean: float
-    low: float          # квантиль 0.1
-    high: float         # квантиль 0.9
+    low: float          # q10 до калибровки; нижняя 90%-граница после неё
+    high: float         # q90 до калибровки; верхняя 90%-граница после неё
     unit: str
 
 @dataclass
