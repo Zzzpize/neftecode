@@ -6341,8 +6341,8 @@ avt_roll_slope_60m__T55:
 avt_roll_std_120m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 8.07520757921207
-  range_min: 0.01726798880684259
+  range_max: 8.075207579211908
+  range_min: 0.0172679888029054
   role: feature
   source: derived:avt_F19
   unit: t/h
@@ -6351,7 +6351,7 @@ avt_roll_std_120m__F19:
 avt_roll_std_120m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.16316102257313034
+  range_max: 0.1631610225740459
   range_min: 0.0
   role: feature
   source: derived:avt_F26
@@ -6361,7 +6361,7 @@ avt_roll_std_120m__F26:
 avt_roll_std_120m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 6.793810369328119
+  range_max: 6.7938103693276375
   range_min: 0.0
   role: feature
   source: derived:avt_F27
@@ -6371,7 +6371,7 @@ avt_roll_std_120m__F27:
 avt_roll_std_120m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 7.48394894647357
+  range_max: 7.483948946473723
   range_min: 0.0
   role: feature
   source: derived:avt_F28
@@ -6381,7 +6381,7 @@ avt_roll_std_120m__F28:
 avt_roll_std_120m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.26008566229731905
+  range_max: 0.26008566231151836
   range_min: 0.0
   role: feature
   source: derived:avt_F29
@@ -6391,7 +6391,7 @@ avt_roll_std_120m__F29:
 avt_roll_std_120m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 4.217010710519118
+  range_max: 4.217010710519012
   range_min: 0.0
   role: feature
   source: derived:avt_F3
@@ -6402,7 +6402,7 @@ avt_roll_std_120m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
   range_max: 6.038502055346809
-  range_min: 0.0022585712374202497
+  range_min: 0.002258571150059627
   role: feature
   source: derived:avt_F30
   unit: t/h
@@ -6411,7 +6411,7 @@ avt_roll_std_120m__F30:
 avt_roll_std_120m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 4.565117389154028
+  range_max: 4.565117389153442
   range_min: 0.0
   role: feature
   source: derived:avt_F32
@@ -6421,7 +6421,7 @@ avt_roll_std_120m__F32:
 avt_roll_std_120m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 5.440685737010302
+  range_max: 5.440685737009912
   range_min: 0.0
   role: feature
   source: derived:avt_F34
@@ -6431,7 +6431,7 @@ avt_roll_std_120m__F34:
 avt_roll_std_120m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 108.0451620029263
+  range_max: 108.04516200290472
   range_min: 0.0
   role: feature
   source: derived:avt_F5
@@ -6441,7 +6441,7 @@ avt_roll_std_120m__F5:
 avt_roll_std_120m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 34.70059349324851
+  range_max: 34.70059349324869
   range_min: 0.0
   role: feature
   source: derived:avt_F65
@@ -6451,8 +6451,8 @@ avt_roll_std_120m__F65:
 avt_roll_std_120m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 4.177458473306235
-  range_min: 0.03769054849632352
+  range_max: 4.177458473307234
+  range_min: 0.037690548563558926
   role: feature
   source: derived:avt_T33
   unit: C
@@ -6461,8 +6461,8 @@ avt_roll_std_120m__T33:
 avt_roll_std_120m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 3.9541265770681537
-  range_min: 0.06756752411622717
+  range_max: 3.9541265770685143
+  range_min: 0.06756752412494446
   role: feature
   source: derived:avt_T55
   unit: C
@@ -6471,8 +6471,8 @@ avt_roll_std_120m__T55:
 avt_roll_std_30m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 4.313190286535881
-  range_min: 0.003095630895997622
+  range_max: 4.313190286535887
+  range_min: 0.003095630900289121
   role: feature
   source: derived:avt_F19
   unit: t/h
@@ -6481,7 +6481,7 @@ avt_roll_std_30m__F19:
 avt_roll_std_30m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.12903609000183316
+  range_max: 0.12903608998997187
   range_min: 0.0
   role: feature
   source: derived:avt_F26
@@ -6491,7 +6491,7 @@ avt_roll_std_30m__F26:
 avt_roll_std_30m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 2.4982937741019953
+  range_max: 2.4982937741020503
   range_min: 0.0
   role: feature
   source: derived:avt_F27
@@ -6501,7 +6501,7 @@ avt_roll_std_30m__F27:
 avt_roll_std_30m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 3.7530071265559473
+  range_max: 3.7530071265563905
   range_min: 0.0
   role: feature
   source: derived:avt_F28
@@ -6511,7 +6511,7 @@ avt_roll_std_30m__F28:
 avt_roll_std_30m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.12059801947324386
+  range_max: 0.1205980194672167
   range_min: 0.0
   role: feature
   source: derived:avt_F29
@@ -6521,7 +6521,7 @@ avt_roll_std_30m__F29:
 avt_roll_std_30m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 2.5870799576417087
+  range_max: 2.5870799576420995
   range_min: 0.0
   role: feature
   source: derived:avt_F3
@@ -6531,7 +6531,7 @@ avt_roll_std_30m__F3:
 avt_roll_std_30m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 4.22470748941271
+  range_max: 4.224707489412723
   range_min: 0.0
   role: feature
   source: derived:avt_F30
@@ -6541,7 +6541,7 @@ avt_roll_std_30m__F30:
 avt_roll_std_30m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 2.776187563569831
+  range_max: 2.776187563569489
   range_min: 0.0
   role: feature
   source: derived:avt_F32
@@ -6551,7 +6551,7 @@ avt_roll_std_30m__F32:
 avt_roll_std_30m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 2.658942100901609
+  range_max: 2.658942100901373
   range_min: 0.0
   role: feature
   source: derived:avt_F34
@@ -6561,7 +6561,7 @@ avt_roll_std_30m__F34:
 avt_roll_std_30m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 54.69464385762759
+  range_max: 54.69464385759865
   range_min: 0.0
   role: feature
   source: derived:avt_F5
@@ -6571,7 +6571,7 @@ avt_roll_std_30m__F5:
 avt_roll_std_30m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 9.370490085704198
+  range_max: 9.37049008570964
   range_min: 0.0
   role: feature
   source: derived:avt_F65
@@ -6581,7 +6581,7 @@ avt_roll_std_30m__F65:
 avt_roll_std_30m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 1.8874011414083072
+  range_max: 1.887401141407704
   range_min: 0.0
   role: feature
   source: derived:avt_T33
@@ -6591,8 +6591,8 @@ avt_roll_std_30m__T33:
 avt_roll_std_30m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 2.1448846179452175
-  range_min: 0.00331084707930942
+  range_max: 2.1448846179438497
+  range_min: 0.0033108464988024122
   role: feature
   source: derived:avt_T55
   unit: C
@@ -6601,8 +6601,8 @@ avt_roll_std_30m__T55:
 avt_roll_std_60m__F19:
   controllable: false
   description: Causal derived feature from avt_F19
-  range_max: 6.0655683372638345
-  range_min: 0.00808020850059889
+  range_max: 6.065568337264062
+  range_min: 0.008080208505938569
   role: feature
   source: derived:avt_F19
   unit: t/h
@@ -6611,7 +6611,7 @@ avt_roll_std_60m__F19:
 avt_roll_std_60m__F26:
   controllable: false
   description: Causal derived feature from avt_F26
-  range_max: 0.14531081086203243
+  range_max: 0.14531081087393005
   range_min: 0.0
   role: feature
   source: derived:avt_F26
@@ -6621,7 +6621,7 @@ avt_roll_std_60m__F26:
 avt_roll_std_60m__F27:
   controllable: false
   description: Causal derived feature from avt_F27
-  range_max: 3.8046143840356677
+  range_max: 3.804614384036269
   range_min: 0.0
   role: feature
   source: derived:avt_F27
@@ -6631,7 +6631,7 @@ avt_roll_std_60m__F27:
 avt_roll_std_60m__F28:
   controllable: false
   description: Causal derived feature from avt_F28
-  range_max: 5.04854052353397
+  range_max: 5.048540523534314
   range_min: 0.0
   role: feature
   source: derived:avt_F28
@@ -6641,7 +6641,7 @@ avt_roll_std_60m__F28:
 avt_roll_std_60m__F29:
   controllable: false
   description: Causal derived feature from avt_F29
-  range_max: 0.17750257706436343
+  range_max: 0.17750257708071354
   range_min: 0.0
   role: feature
   source: derived:avt_F29
@@ -6651,7 +6651,7 @@ avt_roll_std_60m__F29:
 avt_roll_std_60m__F3:
   controllable: false
   description: Causal derived feature from avt_F3
-  range_max: 3.418651055508475
+  range_max: 3.418651055507878
   range_min: 0.0
   role: feature
   source: derived:avt_F3
@@ -6661,7 +6661,7 @@ avt_roll_std_60m__F3:
 avt_roll_std_60m__F30:
   controllable: false
   description: Causal derived feature from avt_F30
-  range_max: 5.246818765384437
+  range_max: 5.246818765384572
   range_min: 0.0
   role: feature
   source: derived:avt_F30
@@ -6671,7 +6671,7 @@ avt_roll_std_60m__F30:
 avt_roll_std_60m__F32:
   controllable: false
   description: Causal derived feature from avt_F32
-  range_max: 3.4786381715351684
+  range_max: 3.478638171534808
   range_min: 0.0
   role: feature
   source: derived:avt_F32
@@ -6681,7 +6681,7 @@ avt_roll_std_60m__F32:
 avt_roll_std_60m__F34:
   controllable: false
   description: Causal derived feature from avt_F34
-  range_max: 3.745282049559568
+  range_max: 3.745282049559438
   range_min: 0.0
   role: feature
   source: derived:avt_F34
@@ -6691,7 +6691,7 @@ avt_roll_std_60m__F34:
 avt_roll_std_60m__F5:
   controllable: false
   description: Causal derived feature from avt_F5
-  range_max: 77.01814991433295
+  range_max: 77.01814991429431
   range_min: 0.0
   role: feature
   source: derived:avt_F5
@@ -6701,7 +6701,7 @@ avt_roll_std_60m__F5:
 avt_roll_std_60m__F65:
   controllable: false
   description: Causal derived feature from avt_F65
-  range_max: 17.025912117469176
+  range_max: 17.02591211746978
   range_min: 0.0
   role: feature
   source: derived:avt_F65
@@ -6711,8 +6711,8 @@ avt_roll_std_60m__F65:
 avt_roll_std_60m__T33:
   controllable: false
   description: Causal derived feature from avt_T33
-  range_max: 2.838547189853527
-  range_min: 0.011127790559544874
+  range_max: 2.838547189853529
+  range_min: 0.011127790560014077
   role: feature
   source: derived:avt_T33
   unit: C
@@ -6721,8 +6721,8 @@ avt_roll_std_60m__T33:
 avt_roll_std_60m__T55:
   controllable: false
   description: Causal derived feature from avt_T55
-  range_max: 2.983835602241113
-  range_min: 0.017970322969194014
+  range_max: 2.9838356022441195
+  range_min: 0.017970323278707935
   role: feature
   source: derived:avt_T55
   unit: C
@@ -7512,7 +7512,7 @@ hydro_roll_mean_30m__F9:
   controllable: false
   description: Causal derived feature from hydro_F9
   range_max: 307.0
-  range_min: -0.16028847975020344
+  range_min: -0.16028847975016555
   role: feature
   source: derived:hydro_F9
   unit: t/h
@@ -7901,7 +7901,7 @@ hydro_roll_slope_60m__T6:
 hydro_roll_std_120m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.9740854892898212
+  range_max: 0.9740854892865195
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
@@ -7911,7 +7911,7 @@ hydro_roll_std_120m__F14:
 hydro_roll_std_120m__F9:
   controllable: false
   description: Causal derived feature from hydro_F9
-  range_max: 15.169822230274134
+  range_max: 15.169822230268682
   range_min: 0.0
   role: feature
   source: derived:hydro_F9
@@ -7921,8 +7921,8 @@ hydro_roll_std_120m__F9:
 hydro_roll_std_120m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.16885561029297708
-  range_min: 0.00021021313788303024
+  range_max: 0.16885561029297702
+  range_min: 0.0002102131382202658
   role: feature
   source: derived:hydro_P13
   unit: MPa
@@ -7931,7 +7931,7 @@ hydro_roll_std_120m__P13:
 hydro_roll_std_120m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 2814.105168853736
+  range_max: 2814.1051688537336
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
@@ -7941,7 +7941,7 @@ hydro_roll_std_120m__Q20:
 hydro_roll_std_120m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 3.4033928911804634
+  range_max: 3.4033928911802684
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
@@ -7951,8 +7951,8 @@ hydro_roll_std_120m__Q21:
 hydro_roll_std_120m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 4.854536895342808
-  range_min: 0.09423318941432746
+  range_max: 4.854536895341958
+  range_min: 0.09423318941347145
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -7961,8 +7961,8 @@ hydro_roll_std_120m__T11:
 hydro_roll_std_120m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 4.983741784651587
-  range_min: 0.10415764208908994
+  range_max: 4.983741784651557
+  range_min: 0.10415764208717106
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -7971,8 +7971,8 @@ hydro_roll_std_120m__T5:
 hydro_roll_std_120m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 5.1666958898381905
-  range_min: 0.08494053657989482
+  range_max: 5.166695889839408
+  range_min: 0.08494053602186248
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -7981,7 +7981,7 @@ hydro_roll_std_120m__T6:
 hydro_roll_std_30m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.43871460226066383
+  range_max: 0.4387146022765965
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
@@ -7991,7 +7991,7 @@ hydro_roll_std_30m__F14:
 hydro_roll_std_30m__F9:
   controllable: false
   description: Causal derived feature from hydro_F9
-  range_max: 5.7629389831921465
+  range_max: 5.762938983207234
   range_min: 0.0
   role: feature
   source: derived:hydro_F9
@@ -8001,8 +8001,8 @@ hydro_roll_std_30m__F9:
 hydro_roll_std_30m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.06560032415931148
-  range_min: 5.126369846506402e-05
+  range_max: 0.06560032415931726
+  range_min: 5.126371922377133e-05
   role: feature
   source: derived:hydro_P13
   unit: MPa
@@ -8011,7 +8011,7 @@ hydro_roll_std_30m__P13:
 hydro_roll_std_30m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 1704.1054727088722
+  range_max: 1704.1054727088801
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
@@ -8021,7 +8021,7 @@ hydro_roll_std_30m__Q20:
 hydro_roll_std_30m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 1.4545405053049296
+  range_max: 1.454540505315685
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
@@ -8031,8 +8031,8 @@ hydro_roll_std_30m__Q21:
 hydro_roll_std_30m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 1.7126670748641315
-  range_min: 0.017579261810510678
+  range_max: 1.7126670748641273
+  range_min: 0.01757926182573745
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -8041,8 +8041,8 @@ hydro_roll_std_30m__T11:
 hydro_roll_std_30m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 2.077074745060572
-  range_min: 0.01977392122466654
+  range_max: 2.077074745060588
+  range_min: 0.019773921224232743
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -8051,8 +8051,8 @@ hydro_roll_std_30m__T5:
 hydro_roll_std_30m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 1.9960597104604265
-  range_min: 0.009134903272477096
+  range_max: 1.9960597104604554
+  range_min: 0.009134903270924474
   role: feature
   source: derived:hydro_T6
   unit: C
@@ -8061,7 +8061,7 @@ hydro_roll_std_30m__T6:
 hydro_roll_std_60m__F14:
   controllable: false
   description: Causal derived feature from hydro_F14
-  range_max: 0.6567317217721859
+  range_max: 0.6567317217724393
   range_min: 0.0
   role: feature
   source: derived:hydro_F14
@@ -8071,7 +8071,7 @@ hydro_roll_std_60m__F14:
 hydro_roll_std_60m__F9:
   controllable: false
   description: Causal derived feature from hydro_F9
-  range_max: 9.338696697591448
+  range_max: 9.338696697591901
   range_min: 0.0
   role: feature
   source: derived:hydro_F9
@@ -8081,8 +8081,8 @@ hydro_roll_std_60m__F9:
 hydro_roll_std_60m__P13:
   controllable: false
   description: Causal derived feature from hydro_P13
-  range_max: 0.10674280993834091
-  range_min: 0.00014864029175947694
+  range_max: 0.10674280993834112
+  range_min: 0.00014864029159375358
   role: feature
   source: derived:hydro_P13
   unit: MPa
@@ -8091,7 +8091,7 @@ hydro_roll_std_60m__P13:
 hydro_roll_std_60m__Q20:
   controllable: false
   description: Causal derived feature from hydro_Q20
-  range_max: 2658.6830443886065
+  range_max: 2658.683044388609
   range_min: 0.0
   role: feature
   source: derived:hydro_Q20
@@ -8101,7 +8101,7 @@ hydro_roll_std_60m__Q20:
 hydro_roll_std_60m__Q21:
   controllable: false
   description: Causal derived feature from hydro_Q21
-  range_max: 2.1894019684006913
+  range_max: 2.1894019684013766
   range_min: 0.0
   role: feature
   source: derived:hydro_Q21
@@ -8111,8 +8111,8 @@ hydro_roll_std_60m__Q21:
 hydro_roll_std_60m__T11:
   controllable: false
   description: Causal derived feature from hydro_T11
-  range_max: 2.838666572770629
-  range_min: 0.05290588755229115
+  range_max: 2.83866657277063
+  range_min: 0.0529058875318856
   role: feature
   source: derived:hydro_T11
   unit: C
@@ -8121,8 +8121,8 @@ hydro_roll_std_60m__T11:
 hydro_roll_std_60m__T5:
   controllable: false
   description: Causal derived feature from hydro_T5
-  range_max: 3.1696951198178285
-  range_min: 0.0596152917294329
+  range_max: 3.169695119817769
+  range_min: 0.05961529172946931
   role: feature
   source: derived:hydro_T5
   unit: C
@@ -8131,8 +8131,8 @@ hydro_roll_std_60m__T5:
 hydro_roll_std_60m__T6:
   controllable: false
   description: Causal derived feature from hydro_T6
-  range_max: 3.1342953490425702
-  range_min: 0.03405193216312284
+  range_max: 3.134295349042592
+  range_min: 0.03405193216380116
   role: feature
   source: derived:hydro_T6
   unit: C
